@@ -1,0 +1,18 @@
+CACHE MANIFEST
+# 2017-10-30 08:18:58
+
+CACHE:
+data/program.js
+data/people.js
+data/title.png
+# skin/fonts.css is missing
+skin/skin.css
+skin/icons.png
+skin/Roboto300.ttf
+skin/Roboto500.ttf
+skin/Oswald400.ttf
+favicon.ico
+konopas.min.js
+
+NETWORK:
+*
