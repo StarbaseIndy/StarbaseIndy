@@ -112,12 +112,13 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 #map a, #map span { font-family: 'Oswald'; font-weight: 400; font-size: 1.2em; cursor: pointer; }
 #map a:hover, #map span:hover { text-decoration: underline; }
 #map tr:hover, .quick-ref tr:hover { background: inherit !important; }
-.quick-ref dt { margin: 6px 0 3px; }
+.quick-ref dt { margin: 6px 0 3px; font-weight: bold; font-size: 120%; }
 .quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
 .quick-ref td { text-align: left !important; }
 #info_view .quick-ref td.c { text-align: center !important; }
-.quick-ref td:nth-child(2) { text-align: right !important; padding: 0 0 0 5px; }
+.quick-ref td:nth-child(2) { text-align: right !important; vertical-align: top !important; padding: 0 0 0 5px; }
 .quick-ref td:nth-child(3) { padding-left: 0; }
+.quick-ref td.location { text-align: left !important; font-weight: bold; }
 </style>
 
 <h2>Maps</h2>
@@ -132,45 +133,51 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 
 <h2>Quick Reference</h2>
 <dl class="quick-ref">
-<dt><b>Access/Handicapped Services</b>: see Hotel Front Desk
+<dt>Access/Handicapped Services: see Hotel Front Desk
 
-<dt><b>Welcome Deck (Registration)</b>: Convention Center Entrance	 	
+<dt>Welcome Deck (Registration):
 <dd><table>
-<tr><td>Friday<td>12:00pm-<td>9:00pm (Pre-Reg Badge Pickup Opens @ 11:00am)
-<tr><td>Saturday<td>9:00am-<td>5:00pm	 	
-<tr><td>Sunday<td>9:00am-<td>4:30pm	 	 	 	 	 
+<tr><td>Location:<td colspan="2" class="location">Convention Center Entrance
+<tr><td>Friday<td>12:00pm-<td>8:00pm (Star Badge and Volunteer Pickup @ 11:00am)
+<tr><td>Saturday<td>10:00am-<td>7:00pm
+<tr><td>Sunday<td>10:00am-<td>4:00pm
 </table>
 
-<dt><b>Ready Room (Operations)</b>: Director's Row: #4
+<dt>Ready Room (Operations & Security):
 <dd><table>
+<tr><td>Location:<td colspan="2" class="location">Director's Row: #4
 <tr><td>Friday<td>11:00am-<td>10:00pm
 <tr><td>Saturday<td>10:00am-<td>10:00pm
 <tr><td>Sunday<td>10:00am-<td>3:00pm
 </table>
 
-<dt><b>Promenade (Dealers' Room)</b>: Golden Ballroom: Salons 4 & 5	 	
+<dt>Promenade (Dealers' Room):
 <dd><table>
-<tr><td>Friday<td>12:00pm-<td>7:00pm	 	
-<tr><td>Saturday<td>10:00am-<td>6:00pm	 	
-<tr><td>Sunday<td>10:00am-<td>3:00pm	 	
+<tr><td>Location:<td colspan="2" class="location">Hall of Champions
+<tr><td>Friday<td>12:00pm-<td>7:00pm
+<tr><td>Saturday<td>10:00am-<td>6:00pm
+<tr><td>Sunday<td>10:00am-<td>3:00pm
 </table>
-
-<dt><b>Constable's Office (Security)</b>: Director's Row: #3
+<!--
+<dt>Constable's Office (Security):
 <dd><table>
+<tr><td>Location:<td colspan="2" class="location">Director's Row: #3
 <tr><td>Friday<td>11:00am-<td>10:00pm
 <tr><td>Saturday<td>10:00am-<td>10:00pm
 <tr><td>Sunday<td>10:00am-<td>3:00pm
 </table>
-
-<dt><b>Replimat (Con Suite)</b>: Nic's	 	
+-->
+<dt>Replimat (Con Suite):
 <dd><table>
-<tr><td>Friday<td>1:00pm-<td>1:00am	 	
-<tr><td>Saturday<td>9:00am-<td>1:00am	 	
-<tr><td>Sunday<td>10:00am-<td>3:00pm	 	
+<tr><td>Location:<td colspan="2" class="location">Nic's
+<tr><td>Friday<td>1:00pm-<td>1:00am
+<tr><td>Saturday<td>9:00am-<td>1:00am
+<tr><td>Sunday<td>10:00am-<td>3:00pm
 </table>
 
-<dt><b>Acoustics Dampening (Quiet Room)</b>: Fortune Square: Salon D
+<dt>Acoustics Dampening (Quiet Room):
 <dd><table>
+<tr><td>Location:<td colspan="2" class="location">Director's Row: #1
 <tr><td>Friday<td>12:00pm-<td>10:00pm
 <tr><td>Saturday<td>10:00am-<td>10:00pm
 <tr><td>Sunday<td>10:00am-<td>3:00pm
