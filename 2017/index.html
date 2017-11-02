@@ -114,7 +114,7 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 #map tr:hover, .quick-ref tr:hover { background: inherit !important; }
 .quick-ref dt { margin: 6px 0 3px; font-weight: bold; font-size: 120%; }
 .quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
-.quick-ref td { text-align: left !important; }
+.quick-ref td { text-align: left !important; vertical-align: top !important; }
 #info_view .quick-ref td.c { text-align: center !important; }
 .quick-ref td:nth-child(2) { text-align: right !important; vertical-align: top !important; padding: 0 0 0 5px; }
 .quick-ref td:nth-child(3) { padding-left: 0; }
@@ -133,7 +133,10 @@ if (navigator.standalone) document.getElementById('install-instructions').style.
 
 <h2>Quick Reference</h2>
 <dl class="quick-ref">
-<dt>Access/Handicapped Services: see Hotel Front Desk
+<dt>Access/Handicapped Services:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Hotel Front Desk
+</table>
 
 <dt>Welcome Deck (Registration):
 <dd><table>
