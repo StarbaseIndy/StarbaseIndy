@@ -367,8 +367,10 @@ class parseCSV {
 			
 			// open and closing quotes
 			if ( $ch == $this->enclosure && (!$enclosed || $nch != $this->enclosure) ) {
+				// echo "Enclosure: ch: ", $ch, " enclosed: ", $enclosed ? 1:0, " nch: ", $nch, " was_enclosed: ", $was_enclosed, "\n";
 				$enclosed = ( $enclosed ) ? false : true ;
 				if ( $enclosed ) $was_enclosed = true;
+				
 			
 			// inline quotes	
 			} elseif ( $ch == $this->enclosure && $enclosed ) {
@@ -377,8 +379,15 @@ class parseCSV {
 
 			// end of field/row
 			} elseif ( ($ch == $this->delimiter || ($ch == "\n" && $pch != "\r") || $ch == "\r") && !$enclosed ) {
-				if ( !$was_enclosed ) $current = trim($current);
+				//if ( !$was_enclosed ) 
+				$current = trim($current);
 				$key = ( !empty($head[$col]) ) ? $head[$col] : $col ;
+				
+				// if($key == 'id') {
+				// 	$current = trim($current);
+				// 	// echo "was_enclosed:", $was_enclosed, " key:", $key, " current:", $current, "\n";
+				// }
+				
 				$row[$key] = $current;
 				$current = '';
 				$col++;
@@ -396,7 +405,10 @@ class parseCSV {
 									for ( $sn=1; isset($rows[$row[$this->sort_by].'_'.$sn]); $sn++ ) {}
 									$rows[$row[$this->sort_by].'_'.$sn] = $row;
 								} else $rows[$row[$this->sort_by]] = $row;
-							} else $rows[] = $row;
+							} else {
+								// echo "Row:", $row['id'];
+							    $rows[] = $row;
+							}
 						}
 					}
 					$row = array();
