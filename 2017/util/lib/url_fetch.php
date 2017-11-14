@@ -43,6 +43,7 @@ function url_fetch($url, &$data, $headers=FALSE, $cookiefile=FALSE) {
 			curl_setopt($curl_handle, CURLOPT_COOKIEJAR, $cookiefile);
 		} else {
 			curl_setopt($curl_handle, CURLOPT_COOKIEFILE, '');
+			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, FALSE);
 		}
 		$data = curl_exec($curl_handle);
 		if (empty($data)) $err = curl_error($curl_handle);
