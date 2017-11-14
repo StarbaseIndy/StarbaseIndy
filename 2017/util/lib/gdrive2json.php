@@ -47,7 +47,7 @@ function gdrive2json($key, $gid = '0', $version = 'ccc') {
 	if ($rc) exit("URL fetch error: $rc");
 
 // DPM: DEBUGGING
-$csv_file = "$key.$gid.csv";
+$csv_file = "../util/$key.$gid.csv";
 $handle = fopen($csv_file, 'w') or die('Cannot open file:' + $csv_file);
 fwrite($handle, $csv_str);
 fclose($handle);
