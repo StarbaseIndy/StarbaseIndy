@@ -1,0 +1,10 @@
+.item .status {
+  float: left;
+  background-color: darkorange;
+  margin-right: 5px;
+}
+
+.item .status:empty
+{
+  display:none;
+}
