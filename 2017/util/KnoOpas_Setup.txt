@@ -29,4 +29,5 @@ Configure KonOpas:
    Change "'id': ''," to "'id': 'SBI',
    TODO: add times for reg, con suite, dealer's hall, and ops/security
    TODO: add map
+   TODO: explain how to modify the konopas.min.js to support status column in spreadsheet, and add canceled.css file.
 4. Copy all .png and .ico files from the demo folder to the data/SBI_2017 folder
