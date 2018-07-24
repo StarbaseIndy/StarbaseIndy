@@ -3,18 +3,18 @@ var Wreck = require('wreck');
 var Fs = require('fs');
 var Promise = require('bluebird');
 
-const key = '1lM2W52BqQCc249g3NhRiIBvKllJTc0f6z_ES-QBpqrs';
+const key = '107zQ3ozkJuck4KQQnOXRGu4hQGpGVIClXgKNNCot7ds';
 const config = [
   {
     key,
     gid: 0,
-    path: '../StarbaseIndy/2017/data',
+    path: '../data',
     name: 'program',
   },
   {
     key,
-    gid: 1,
-    path: '../StarbaseIndy/2017/data',
+    gid: 958660582,
+    path: '../data',
     name: 'people',
   }
 ];
@@ -40,8 +40,8 @@ function processPage(key, gid, processFn) {
   const wreckOptions = {
     headers: { 'If-Modified-Since': 'Sun, 12 Feb 2018 01:16:45 GMT' },
   };
-  return Wreck.get(getUri(key, gid), wreckOptions)
-    .then((response) => { console.log('Response status:', response.statusCode); return response; })
+  return Promise.resolve(Wreck.get(getUri(key, gid), wreckOptions))
+    .tap((response) => console.log('Response status:', response.res.statusCode))
     .then((response) => response.payload)
     .then((payload) => csvParse(payload, parseOptions))
     .then((data) => processFn(gid, data));
