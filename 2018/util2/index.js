@@ -23,6 +23,9 @@ const config = [
 // No need to touch anything below this line
 // ====================================================================
 
+// TODO: Use Google APIs to read the spreadsheet directly, and not download/parse the CSV
+// TODO: Update the konopas.appcache timestamp when done generating the output files.
+
 const fsWriteFile = Promise.promisify(Fs.writeFile);
 const csvParse = Promise.promisify(csv.parse);
 
