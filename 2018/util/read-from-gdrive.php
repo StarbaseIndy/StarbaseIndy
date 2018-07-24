@@ -51,7 +51,7 @@ require_once('lib/gdrive2json.php');
 require_once('update-cache-manifest.php');
 
 function gdrive2konopas($name, $set) {
-	$json = gdrive2json($set['key'], $set['gid']);
+	$json = gdrive2json($set['key'], $set['gid'], 'd');
 	if (strlen($json) == 0) exit("JSON length 0! Error!");
 	$js = "var $name = $json;";
 	$dir = dirname($set['tgt']);

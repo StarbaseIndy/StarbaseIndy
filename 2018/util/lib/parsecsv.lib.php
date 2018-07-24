@@ -174,7 +174,7 @@ class parseCSV {
 			if ( $offset !== null ) $this->offset = $offset;
 			if ( $limit !== null ) $this->limit = $limit;
 			if ( count($conditions) > 0 ) $this->conditions = $conditions;
-			if ( is_readable($input) ) {
+			if ( strpos($input, "\n") === false && is_readable($input) ) {
 				$this->data = $this->parse_file($input);
 			} else {
 				$this->file_data = &$input;
