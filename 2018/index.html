@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html manifest="konopas.appcache">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="skin/skin.css">
+<link rel="stylesheet" href="skin/canceled.css">
+<meta name="HandheldFriendly" content="true">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Android + favicon -->
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="shortcut icon" sizes="196x196" href="data/favicon.192.png">
+
+<!-- iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<!--
+<link rel="apple-touch-icon"                 href="data/icon.apple.60.png">
+<link rel="apple-touch-icon" sizes="76x76"   href="data/icon.apple.76.png">
+<link rel="apple-touch-icon" sizes="120x120" href="data/icon.apple.120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="data/icon.apple.152.png">
+<link rel="apple-touch-startup-image" href="data/start.apple.1536x2008.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.2048x1496.png" media="(device-width: 1536px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.768x1004.png"  media="(device-width: 768px) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="data/start.apple.1024x748.png"  media="(device-width: 768px) and (orientation: landscape)">
+<link rel="apple-touch-startup-image" href="data/start.apple.640x920.png"   media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.320x460.png"   media="(device-width: 320px)">
+-->
+
+<!-- Windows Phone 8.1 -->
+<!--
+<meta name="msapplication-TileColor"         content="#ffffff">
+<meta name="msapplication-square70x70logo"   content="data/icon.ie.png">
+<meta name="msapplication-square150x150logo" content="data/icon.ie.png">
+<meta name="msapplication-square310x310logo" content="data/icon.ie.png">
+-->
+
+<title>SBI 2018 Program Guide</title>
+
+<body><div id="top"></div>
+<div id="load_disable"></div>
+
+<div id="time"></div>
+<div id="scroll"><a href="#top" id="scroll_link" data-txt>Scroll up</a></div>
+
+<div id="banner">
+<div id="server_connect"></div>
+
+<h1><a href="#info" alt="Starbase Indy 2018" title="Starbase Indy 2018">
+<img id="title-small" src="data/title.jpg" style="width: 240px;">
+<img id="title" src="data/title.jpg" style="width: 200px;"></a></h1>
+
+<ul id="tabs">
+<li id="tab_star"><a href="#star" data-txt>My con</a>
+<li id="tab_prog"><a href="#" data-txt>Program</a><div id="day-sidebar" class="sub-side"></div>
+<li id="tab_part"><a href="#part" data-txt>People</a><div id="part-sidebar" class="sub-side"></div>
+<li id="tab_info"><a href="#info" data-txt>Info</a>
+</ul>
+
+<div id="refresh"><i class="refresh_icon"></i><span data-txt>Refresh data</span></div>
+</div>
+
+<div id="main">
+
+<div id="star_view" class="view">
+	<div id="star_data"></div>
+</div>
+
+<div id="prog_view" class="view">
+	<div id="prog_filters" class="filters">
+		<div id="prog_lists"></div>
+		<form name="search" id="search">
+			<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
+			<div id="q_ctrl">
+			<input type="submit" id="q_submit" data-txt="Go" data-txt-attr="value">
+			<input type="reset" id="q_clear" data-txt="Clear all" data-txt-attr="value">
+			</div>
+			<div id="q_hint" class="hint"></div>
+		</form>
+		<div id="filter_sum"></div>
+	</div>
+	<div id="day-narrow" class="sub-narrow"></div>
+</div>
+
+<div id="part_view" class="view">
+	<div id="part-narrow" class="sub-narrow"></div>
+	<ul id="part_names"></ul>
+	<div id="part_info"></div>
+</div>
+
+<div id="info_view" class="view">
+<p>This is the programme guide for <a href="http://starbaseindy.org">Starbase Indy 2018</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
+
+<p><div id="last-updated">Programme and participant data were last updated <span></span>.</div>
+
+<div id="install-instructions">
+<p>This guide will work in your browser even when you don't have an internet connection.
+<h4 class="collapse">You can also install it as a home screen app</h4>
+<dl class="compact-dl">
+<dt>Safari on iPhone/iPad<dd>Tap on <i class="ios_share_icon"></i> (share), then tap <b>Add to Home Screen</b>.
+<dt>Chrome on Android<dd>Tap on <i class="android_menu_icon"></i> (menu), then tap <b>Add to Home Screen</b>.
+<dt>Firefox on Android<dd>Tap on <i class="android_menu_icon"></i> (menu), then tap <b>Bookmark</b> and select <b>Options</b>, and <b>Add to Home Screen</b>.
+<dt>IE on Windows Phone<dd>Tap on <i class="ie_menu_icon"></i> (menu), then tap <b>Pin to Start</b>
+</dl>
+</div>
+<script>
+if (navigator.standalone) document.getElementById('install-instructions').style.display = 'none';
+</script>
+
+<!-- SAMPLE SECTIONS FOR "INFO" VIEW, UNCOMMENT TO SEE -->
+<style>
+#map { width: 100% !important; }
+#map td { text-align: center !important; padding: 6px 32px; }
+#map a, #map span { font-family: 'Oswald'; font-weight: 400; font-size: 1.2em; cursor: pointer; }
+#map a:hover, #map span:hover { text-decoration: underline; }
+#map tr:hover, .quick-ref tr:hover { background: inherit !important; }
+.quick-ref dt { margin: 6px 0 3px; font-weight: bold; font-size: 120%; }
+.quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
+.quick-ref td { text-align: left !important; vertical-align: top !important; }
+#info_view .quick-ref td.c { text-align: center !important; }
+.quick-ref td:nth-child(2) { text-align: right !important; vertical-align: top !important; padding: 0 0 0 5px; }
+.quick-ref td:nth-child(3) { padding-left: 0; }
+.quick-ref td.location { text-align: left !important; font-weight: bold; }
+</style>
+
+<h2>Maps</h2>
+<table id="map">
+<tr><td><a class="popup-link" href="data/OnlineMap.jpg">Wyndham Indianapolis West</a></td></tr>
+</table>
+
+<h2>Share this app!</h2>
+<table>
+<tr><td><a class="popup-link" href="data/qr-code.png">QR code</a></td></tr>
+</table>
+
+
+<h2>Links</h2>
+<ul>
+<li><a href="http://starbaseindy.com/">Starbase Indy</a>
+</ul>
+
+<h2>Quick Reference</h2>
+<dl class="quick-ref">
+<dt>Access/Handicapped Services:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Hotel Front Desk
+</table>
+
+<dt>Welcome Deck (Registration):
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Convention Center Entrance
+<tr><td>Friday<td>12:00pm-<td>8:00pm (Star Badge and Volunteer Pickup @ 11:00am)
+<tr><td>Saturday<td>10:00am-<td>7:00pm
+<tr><td>Sunday<td>10:00am-<td>4:00pm
+</table>
+
+<dt>Ready Room (Operations & Security):
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Director's Row: #4
+<tr><td>Friday<td>11:00am-<td>10:00pm
+<tr><td>Saturday<td>10:00am-<td>10:00pm
+<tr><td>Sunday<td>10:00am-<td>3:00pm
+</table>
+
+<dt>Promenade (Dealers' Room):
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Hall of Champions
+<tr><td>Friday<td>2:00pm-<td>7:00pm
+<tr><td>Saturday<td>10:00am-<td>7:00pm
+<tr><td>Sunday<td>10:00am-<td>4:00pm
+</table>
+<!--
+<dt>Constable's Office (Security):
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Director's Row: #3
+<tr><td>Friday<td>11:00am-<td>10:00pm
+<tr><td>Saturday<td>10:00am-<td>10:00pm
+<tr><td>Sunday<td>10:00am-<td>3:00pm
+</table>
+-->
+<dt>Replimat (Con Suite):
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Nic's
+<tr><td>Friday<td>1:00pm-<td>8:00pm
+<tr><td>Saturday<td>9:00am-<td>8:00pm
+<tr><td>Sunday<td>9:00am-<td>2:00pm
+</table>
+
+<dt>Acoustics Dampening (Quiet Room):
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Director's Row: #1
+<tr><td>Friday<td>12:00pm-<td>10:00pm
+<tr><td>Saturday<td>10:00am-<td>10:00pm
+<tr><td>Sunday<td>10:00am-<td>3:00pm
+</table>
+
+</dl>
+
+<h2>StarbaseIndy Protocols</h2>
+<div>
+  <h3>Terms of Attendance</h3>
+  <p>By purchasing a membership to the Starbase Indy (SBI) convention, attendee agrees to comply with the following rules and regulations:</p>
+  <ul>
+  	<li>Each membership admits one person to the convention; no shapeshifting is allowed. NO autographs are included with membership.</li>
+    <li>Con badges must be worn on the outside of all clothing/costumes and presented when entering any part of the convention.</li>
+    <li>Your SBI badge is non-refundable, non-exchangeable and non-transferrable, no matter what the reason. SBI will not be responsible for lost or stolen ID badges. A badge can only be replaced by purchasing an additional admission.</li>
+    <li>All members hereby release SBI, its organizers and agents from any liability for loss or damage to persons or property, or infringement of any right, claim or course of action of any kind.</li>
+    <li>The organizers, staff and agents of SBI reserve the right to deny entry to, or remove from, the convention facilities any person behaving, or threatening to behave, in a manner reasonably considered to be disruptive.</li>
+    <li>Actors and guests are people too; please don’t harass them, and be respectful, especially when they are away from their autograph table. Everyone deserves some down time.</li>
+    <li>Children 12 and under must be accompanied by an adult at all times. Any children dropped off at Starbase Indy and found wandering unattended will be turned over to hotel staff.</li>
+    <li>By accepting the conditions of membership, you may be videotaped or photographed for future promotion of SBI.</li>
+  </ul>
+  <h3>Code of Conduct</h3>
+  <p>Attendees must respect common sense rules for public behavior, personal interaction, common courtesy and respect for private property. Harassing or offensive behavior will not be tolerated. Starbase Indy reserves the right to revoke, without refund, the membership and badge of any attendee not in compliance with this policy. Persons finding themselves in a situation where they feel their safety is at risk or who become aware of an attendee not in compliance with this policy should immediately locate the nearest member of security, or staff member, so that the matter can be handled in an expeditious manner.</p>
+  <h3>Weapons</h3>
+  <p>Keep it peaceful, folks. No functional weapons are allowed at Starbase Indy.</p>
+  <p>Simulated or costume weapons are allowed as a part of your costume, subject to prior approval by Masquerade officials and compliance with the following:</p>
+  <ul>
+  	<li>All costume weapons are subject to inspection by members of Masquerade staff.</li>
+    <li>All costume weapons must conform to state and federal law.</li>
+    <li>Projectile costume weapons must be rendered inoperable.</li>
+    <li>Functional (real) arrows must have their tips removed and be bundled and zip-tied to a quiver.</li>
+    <li>Weapons must be sheathed and holstered or peace-bonded.</li>
+  </ul>
+  <p>NO assassin or similar games will be allowed on hotel premises. Masquerade officials will be spot-checking costumes throughout the convention. Anyone not conforming to the rules will be required to leave.</p>
+  <h3>Harassment</h3>
+  <p>Starbase Indy is committed to providing a harassment-free conference experience for everyone, regardless of gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age or religion. We do not tolerate harassment of conference participants in any form. Convention participants violating these rules may be sanctioned or expelled from the conference (without a refund) at the discretion of the convention organizers.</p>
+  <p>Harassment includes, but is not limited to:</p>
+  <ul>
+  	<li>Verbal comments that reinforce social structures of domination related to gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, religion, etc.</li>
+  	<li>Sexual images in public spaces</li>
+  	<li>Deliberate intimidation, stalking, or following</li>
+  	<li>Harassing photography or recording</li>
+  	<li>Sustained disruption of talks or other events</li>
+  	<li>Inappropriate physical contact</li>
+  	<li>Unwelcome sexual attention</li>
+  	<li>Advocating for, or encouraging, any of the above behavior</li>
+  </ul>
+  <h3>Leash Policy</h3>
+  <p>Any animal must be attached to a fixed-length leash no more than five feet in length when not in cages or crates.</p>
+</div>
+
+
+<!-- END SAMPLE SECTIONS FOR "INFO" VIEW -->
+
+</div>
+
+
+<div id="prog_ls" class="ls"><br><div class="ls_loading">Loading programme data&hellip;</div></div>
+
+</div><!-- /main -->
+
+<script> var konopas_set = {
+	'id': 'SBI2018',
+	'default_duration': 0,
+	'time_show_am_pm': true,
+	'show_all_days_by_default': true,
+	'use_server': false,
+	'filters': {
+		'day': {},
+		'area': {},
+		'tag': {}
+	}
+};
+</script>
+<script src="data/program.js"></script>
+<script src="data/people.js"></script>
+<script src="konopas.min.js"></script>

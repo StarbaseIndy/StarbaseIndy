@@ -1,0 +1,56 @@
+Notes for setting up KonOpas:
+
+If you're using github static web page hosting to serve your content:
+1. Register an account at github.com (if you haven't already)
+2. Also register an account with shared organization credentials at github.com
+3. Use your organization credentials to create a new repository
+4. Navigate to Repository -> Settings -> Collaborators and add all contributors via username.
+5. On the main Repository page, click on the "Clone or Download" button to copy the https URL for the repository
+1. Download the git client from https://git-scm.com/downloads (Windows/Mac/Linux)
+2. Install the git client (follow instructions on the download page and installer)
+3. Configure the git client with YOUR credentials (not the organization credentials)
+4. Clone the repo using the https URL copied from step 5.  Note the local folder to which the repository was cloned.
+
+
+Configure PHP on your system:
+1. Download PHP 7.1 
+1a Windows: 
+   Download from: from http://windows.php.net/download
+   unzip to c:\php
+   Copy php.ini-development to php.ini
+1b: Mac: 
+   Follow installation instructions
+   Run this command to find the "Loaded Configuratoin File": /usr/local/php5/bin/php --ini
+2. Edit php.ini
+   Uncomment: extension=php_openssl.dll
+   Uncomment: extension_dir = "ext"
+   Change line: 
+     from: error_reporting = E_ALL
+	 to:   error_reporting = E_ALL ^ E_DEPRECATED
+3. Open command prompt / terminal in the project util folder (under the folder to which the repository was cloned, if you're using github)
+4. Run: c:\php\php.exe read-from-gdrive.php
+4a. Windows: c:\php\php.exe read-from-gdrive.php
+4b. Mac: /usr/local/php5/bin/php read-from-gdrive.php
+
+   You should see three "... ok." messages and then an "All done." messages
+   This shows that your system is now configured properly to run the script.
+
+
+Configure your KonOpas project (if you've copied directly from the KonOpas project template):
+1. Edit konopas.appcache to include skin/fonts.css
+2. Edit util/read-from-gdrive.php
+   Change txt path segment:
+     from: finncon2013
+	 to:   SBI_2017
+   Change key to refer to the SBI 2017 google spreadsheet
+   1lM2W52BqQCc249g3NhRiIBvKllJTc0f6z_ES-QBpqrs
+3. Edit index.html
+   Change "demo" to "data/SBI_2017" everywhere
+   Change "<title>KonOpas Sample Guide</title>" to "<title>SBI 2017 Program Guide</title>"
+   Change "http://example.org/" to "http://starbaseindy.org"
+   Change "CONVENTION" to "Starbase Indy 2017"
+   Change "'id': ''," to "'id': 'SBI2017',
+   TODO: add times for reg, con suite, dealer's hall, and ops/security
+   TODO: add map
+   TODO: explain how to modify the konopas.min.js to support status column in spreadsheet, and add canceled.css file.
+4. Copy all .png and .ico files from the demo folder to the data/SBI_2017 folder
