@@ -1,2 +1,5 @@
+# .gitignore
+
+**/node_modules
 *.bak
 2017/public/**
