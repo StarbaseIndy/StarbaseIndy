@@ -1,1 +1,1 @@
-var people = [{"id":"1","name":["David","Mott"],"prog":["1"]},{"id":"2","name":["Lisa","Meece"],"prog":["1"]}]
+var people = [{"id":"1","bio":"Nifty Bio!","name":["David","Mott"],"links":{"img":"https://starbaseindy.github.io/StarbaseIndy/2018/images/dpmott.jpg","url":"https://www.holdingspacellc.com/","fb":"dpmott","twitter":"dpmott"},"prog":["1"]},{"id":"2","name":["Lisa","Meece"],"prog":["1"]}];
