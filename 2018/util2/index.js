@@ -24,7 +24,6 @@ const config = [
 // ====================================================================
 
 // TODO: Use Google APIs to read the spreadsheet directly, and not download/parse the CSV
-// TODO: Update the konopas.appcache timestamp when done generating the output files.
 
 const fsWriteFile = Promise.promisify(Fs.writeFile);
 const csvParse = Promise.promisify(csv.parse);
@@ -99,79 +98,14 @@ function processCSV(gid, data) {
     // console.log('ROW:', row);
   });
   return Promise.resolve(data);
-
-/*
-  // $rows = csv->data;
-	foreach ($rows as &$row) {
-		foreach ($row as $colName => $colValue) {
-			if (strpos($colName, '.')) {
-				if ($colValue && preg_match('/^([^.]+)\.([^.]+)(\.([^.]+))?$/', $colName, $matches)) {
-					if (!isset($row[$matches[1]])) $row[$matches[1]] = array();
-					$x =& $row[$matches[1]];
-					if ((count($matches) >= 5) && $matches[4]) {
-						if (!isset($x[$matches[2]])) $x[$matches[2]] = array();
-						$x[$matches[2]][$matches[4]] = $colValue;
-					} else {
-						$x[$matches[2]] = $colValue;
-					}
-				}
-				unset($row[$colName]);
-			} else if (!$colValue) {
-				unset($row[$colName]);
-			}
-		}
-	}
-
-  // json_encode($rows);
-*/
-
-/*
-var people = [
-  {
-    "id":"1",
-    "bio":"Alan is a fluent Klingon speaker ...",
-    "name":["Alan","Anderson"],
-    "prog":["2"]
-  },{
-    "id":"2",
-    "bio":"Alton Jackson moved to Indiana ...",
-    "name":["Alton","Jackson"],
-    "prog":["101"]
-  },{
-    "id":"3","bio":"Ann Yvette Burton MD i...
-
-
-var program = [
-  {
-    "id":"2",
-    "title":"Klingon science through the lens of language",
-    "date":"2017-11-24",
-    "time":"14:00",
-    "mins":"60",
-    "desc":"We can explore Klingon science and...",
-    "loc":["tlhIngan rlvSo' (Intl Boardroom)"],
-    "tags":["Discussion","Klingon","STEM"],
-    "people":[
-      {
-        "id":"1",
-        "name":"Alan Anderson"
-      }
-    ]
-  },{
-    "id":"13",
-    "title":"Plus Size Cosplay - No Limits, No Restrictions",
-    "date":"2017-11-24",
-    "time":"14:00",
-    "mins":"60",
-    "desc":"I'll be going over some of the common misconceptions about \"appropriate\" body types to cosplay. I'll be
-*/
 }
 
 function processSheet(config) {
   const promises = [];
   config.forEach((item) => {
     const promise = processPage(item.key, item.gid, processCSV)
-      .then((data) => fsWriteFile(`${item.path}/${item.name}.js`, `var ${item.name} = ` + JSON.stringify(data)));
+      .then((data) => fsWriteFile(
+        `${item.path}/${item.name}.js`, `var ${item.name} = ${JSON.stringify(data)};`));
     promises.push(promise);
   });
 
