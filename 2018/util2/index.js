@@ -171,7 +171,8 @@ function processSheet(config) {
   const promises = [];
   config.forEach((item) => {
     const promise = processPage(item.key, item.gid, processCSV)
-      .then((data) => fsWriteFile(`${item.path}/${item.name}.js`, `var ${item.name} = ` + JSON.stringify(data)));
+      .then((data) => fsWriteFile(
+        `${item.path}/${item.name}.js`, `var ${item.name} = ${JSON.stringify(data)};`));
     promises.push(promise);
   });
 
