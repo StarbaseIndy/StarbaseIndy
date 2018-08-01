@@ -33,6 +33,14 @@ function getUri(key, gid) {
   return `https://docs.google.com/spreadsheets/d/${key}/export?format=csv&gid=${gid}`;
 };
 
+function checkForValidPayload(payload) {
+  const regex = new RegExp('<html.*<head.*</head>.*<body.*</body>.*</html>', 's');
+  if (regex.test(payload.toString('utf8'))) {
+    throw('ERROR: CSV content appears to be an HTML page.\n' + 
+          'Please set document permissions to be  publically accessible via link without any username or password.');
+  }
+}
+
 function processPage(key, gid, processFn) {
   const parseOptions = {
     relax_column_count: true,
@@ -46,6 +54,7 @@ function processPage(key, gid, processFn) {
   return Promise.resolve(Wreck.get(getUri(key, gid), wreckOptions))
     .tap((response) => console.log('Response status:', response.res.statusCode))
     .then((response) => response.payload)
+    .tap((payload) => checkForValidPayload(payload))
     .then((payload) => csvParse(payload, parseOptions))
     .then((data) => processFn(gid, data));
 }
@@ -59,17 +68,25 @@ function processCSV(gid, data) {
   const init = (obj, key, value) => obj[key] = obj[key] || value;
 
   data.forEach((row) => {
+    const meta = {};
     // console.log('ROW:', row);
     Object.entries(row).forEach(([name, value]) => {
       value = value.trim();
       if (name.includes('.')) {
         const nameSegments = name.match(/^([^.]+)\.([^.]+)(\.([^.]+))?$/);
         if (value && nameSegments) {
-          const item = init(row, nameSegments[1], []);
-          if (nameSegments.length >= 5 && nameSegments[4]) {
-            init(item, nameSegments[2], {})[nameSegments[4]] = value;
+          const [_skip, column, index, _wrap, field] = nameSegments;
+          const isIndexed = index.match(/^\d+$/);
+          const item = init(row, column, isIndexed ? [] : {});
+          
+          if (nameSegments.length >= 5 && field) {
+            // Calculate the next index, to keep arrays sequential.
+            // This allows the spreadsheet to be more user-friendly by allowing gaps.
+            meta[column] = meta[column] || {};
+            meta[column][index] = meta[column][index] || `${item.length}`; // Note: '0' is truthy
+            init(item, +meta[column][index], {})[field] = value;
           } else {
-            item[nameSegments[2]] = value;
+            item[index] = value;
           }
         }
         delete row[name];
@@ -161,8 +178,15 @@ function processSheet(config) {
   return Promise.all(promises);
 }
 
+function updateAppCache(filename) {
+  const content = Fs.readFileSync(filename, 'utf8');
+  const now = (new Date()).toISOString().slice(0,19).replace('T', ' ');
+  const output = content.replace(/[\n\r]+#.*/, `\n# ${now}`);
+  Fs.writeFileSync(filename, output);
+}
 
 // do the work
 processSheet(config)
-  .then((values) => { console.log('Done!'); })
+  .then(() => updateAppCache('../konopas.appcache'))
+  .then(() => { console.log('Done!'); })
   .catch((err) => { console.log('Error:', err); });
