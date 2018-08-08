@@ -1,1 +1,1 @@
-var program = [{"id":"1","title":"Opening Ceremonies","date":"2018-11-23","time":"19:00","mins":"60","desc":"Opening ceremonies!","loc":["Main Stage"],"people":[{"id":"1","name":"David Mott"},{"id":"2","name":"Lisa Meece"}]}];
+var program = [{"id":"1","title":"Opening Ceremonies","date":"2018-11-23","time":"19:00","mins":"60","desc":"Opening ceremonies!","loc":["Main Stage"],"people":[{"id":"1","name":"David Mott MD"},{"id":"2","name":"Lisa Meece"}]}];
