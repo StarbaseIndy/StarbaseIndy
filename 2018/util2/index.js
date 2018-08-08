@@ -97,7 +97,7 @@ function processCSV(gid, data) {
     });
     // console.log('ROW:', row);
   });
-  return Promise.resolve(data);
+  return Promise.resolve(data.filter(row => Object.keys(row).length));
 }
 
 function processSheet(config) {
