@@ -102,10 +102,11 @@ function processCSV(gid, data) {
 
 function processSheet(config) {
   const promises = [];
+  const replacerFn = (key, val) => val == null ? '' : val;
   config.forEach((item) => {
     const promise = processPage(item.key, item.gid, processCSV)
       .then((data) => fsWriteFile(
-        `${item.path}/${item.name}.js`, `var ${item.name} = ${JSON.stringify(data)};`));
+        `${item.path}/${item.name}.js`, `var ${item.name} = ${JSON.stringify(data, replacerFn)};`));
     promises.push(promise);
   });
 
