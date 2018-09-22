@@ -1,7 +1,9 @@
-var csv = require('csv');
-var Wreck = require('wreck');
-var Fs = require('fs');
-var Promise = require('bluebird');
+'use strict;'
+
+const csv = require('csv');
+const Wreck = require('wreck');
+const Fs = require('fs');
+const Promise = require('bluebird');
 
 const key = '107zQ3ozkJuck4KQQnOXRGu4hQGpGVIClXgKNNCot7ds';
 const config = [
