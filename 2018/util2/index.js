@@ -57,15 +57,10 @@ function processPage(key, gid, processFn) {
     .then((response) => response.payload)
     .tap((payload) => checkForValidPayload(payload))
     .then((payload) => csvParse(payload, parseOptions))
-    .then((data) => processFn(gid, data));
+    .then((data) => processFn(data));
 }
 
-function dummyFn(gid, data) {
-  // console.log(`data ${gid}:`, data);
-  return Promise.resolve(gid);
-}
-
-function processCSV(gid, data) {
+function processCSV(data) {
   const init = (obj, key, value) => obj[key] = obj[key] || value;
 
   data.forEach((row) => {

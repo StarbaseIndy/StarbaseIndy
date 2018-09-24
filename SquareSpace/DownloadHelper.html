@@ -5,12 +5,12 @@
       // Why download this way?  Because the SquareSpace Commerce API costs extra.
       // https://developers.squarespace.com/commerce-api
 
-      function getUrl(productId) {
+      function getUrl(productId = '') {
         return 'https://heather-cottingham-r34y.squarespace.com/api/commerce/orders/export' +
                '?orderStates=PENDING' +
                '&productType=' +
-               '&includeProductForm=true' +
-			   '&productId=' + productId;
+               '&includeProductForm=' + (productId ? 'true' : 'false') +
+			         '&productId=' + productId;
       }
       
       function get2018Url(productId) {
@@ -28,6 +28,9 @@
         document.getElementById('2018SundayBadge').href = get2018Url('5a9b05cc71c10b1a7d192bb4');
         document.getElementById('2018StudentBadge').href = get2018Url('5b43fe24aa4a9907985a6406');
         document.getElementById('2018ShoppingWristband').href = get2018Url('5a9b018af9619a44982d5255');
+        document.getElementById('2018Summary').href = get2018Url(); 
+        
+        document.getElementById('2018Vendor').href = 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034';
 
         // TODO: add next year href initialization here.
       }
@@ -38,16 +41,19 @@
     <h3>Instructions:</h3>
     <ul>
       <li>Log into <a target="_blank" href="https://heather-cottingham-r34y.squarespace.com/config">SBI SquareSpace</a> (will open in new tab)</li>
+      <li>Log into <a target="_blank" href="https://drive.google.com/drive/u/1/folders/16nKCDo2RRU2M6T502mD1Rl38nOW3R2fm">SBI Google Drive</a> (will open in new tab)</li>
       <li>Right-click each link below, and select 'Save link as...'</li>
       <li>Rename the file before saving</li>
     </ul>
-    <a href="#" id="2018WeekendBadge" download="WeekendBadge.csv">2018 Weekend Badge</a><br/>
-    <a href="#" id="2018StarBadge" download="StarBadge.csv">2018 Star Badge</a><br/>
-    <a href="#" id="2018SaturdayBadge" download="SaturdayBadge.csv">2018 Saturday Badge</a><br/>
-    <a href="#" id="2018ChildrensBadge" download="ChildrensBadge.csv">2018 Children's Badge</a><br/>
-    <a href="#" id="2018SundayBadge" download="SundayBadge.csv">2018 Sunday Badge</a><br/>
-    <a href="#" id="2018StudentBadge" download="StudentBadge.csv">2018 Student Badge</a><br/>
-    <a href="#" id="2018ShoppingWristband" download="ShoppingWristband.csv">2018 Shopping Wristband</a><br/>
+    <a href="#" id="2018Summary"           download="2018 Summary.csv"          >2018 All Orders.csv</a><br/>
+    <a href="#" id="2018WeekendBadge"      download="2018 WeekendBadge.csv"     >2018 Weekend Badge.csv</a><br/>
+    <a href="#" id="2018StarBadge"         download="2018 StarBadge.csv"        >2018 Star Badge.csv</a><br/>
+    <a href="#" id="2018SaturdayBadge"     download="2018 SaturdayBadge.csv"    >2018 Saturday Badge.csv</a><br/>
+    <a href="#" id="2018ChildrensBadge"    download="2018 ChildrensBadge.csv"   >2018 Children's Badge.csv</a><br/>
+    <a href="#" id="2018SundayBadge"       download="2018 SundayBadge.csv"      >2018 Sunday Badge.csv</a><br/>
+    <a href="#" id="2018StudentBadge"      download="2018 StudentBadge.csv"     >2018 Student Badge.csv</a><br/>
+    <a href="#" id="2018ShoppingWristband" download="2018 ShoppingWristband.csv">2018 Shopping Wristband.csv</a><br/>
+    <a href="#" id="2018Vendor"            download="2018 Vendor.csv"           >2018 Vendors.csv</a><br/>
   </body>
 </html>
 

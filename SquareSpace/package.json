@@ -5,8 +5,7 @@
   "main": "process_badge_data.js",
   "dependencies": {
     "bluebird": "^3.5.2",
-    "csv": "^3.1.0",
-    "fs": "0.0.1-security"
+    "csv": "^3.1.0"
   },
   "devDependencies": {},
   "scripts": {
