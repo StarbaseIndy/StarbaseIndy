@@ -38,7 +38,7 @@ function getSortKey(orderId) {
 function getRibbonName(discountCode) {
   const lookup = {
     SBI_GURU: 'Presenter',
-    STARBASECREW: 'Staff',
+    STARBASECREW: 'Volunteer',
     PRESS: 'Press',
     BBBS: 'Big Brothers/Sisters', 
     BBBS12: 'Big Brothers/Sisters', 
@@ -96,7 +96,8 @@ function readMetadata(file) {
 
   console.log(`Reading additional metadata from '${file}'`);
   return readFile(file, { encoding: 'utf8' })
-    .then(content => csvParse(content, { columns: true }))
+     // .then(content => csvParse(content, { columns: true }))
+    .then(content => JSON.parse(content))
     .then(content => metadata.push(...content));
 }
 
@@ -145,7 +146,7 @@ function writeMailMergeCSV(filename, records, columns) {
   };
   
   return csvStringify(records, options)
-   .then(data => writeFile(filename, data));
+   .then(data => writeFile(filename, data, { encoding: 'utf8' }));
 }
 
 function generateVendorMailMerge(startingBadgeNum = 800) {
@@ -262,7 +263,7 @@ function generateEnvelopeMailMerge(filename, group) {
   // TODO: may need to store ribbons as an array, so we can reduce them to a count.
   
   return csvStringify(flattenedRecords, { header: true, quotedString: true })
-   .then(data => writeFile('Mailmerge Envelope.csv', data));
+   .then(data => writeFile('Mailmerge Envelope.csv', data, { encoding: 'utf8' }));
 }
 
 function generateMailMergeFiles() {
