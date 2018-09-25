@@ -27,7 +27,13 @@ const cache = {};
 const summary = [];
 const vendors = [];
 const metadata = [];
-let uniqueId = 1;
+
+// The unique ID generator needs to give us a unique sequence number for every order number
+const uniqueIds = {};
+function getSortKey(orderId) {
+  uniqueIds[orderId] = uniqueIds[orderId] + 1 || 1;
+  return `${orderId}#${uniqueIds[orderId]}`
+}
 
 function getRibbonName(discountCode) {
   const lookup = {
@@ -45,6 +51,7 @@ function getAllCacheItems() {
 }
 
 function processCSV(filename, group = [{}]) {
+  // console.log('Processing CSV file', filename);
   const onlyUnique = (value, index, array) => array.indexOf(value) === index;
   const lineItems = group.map(item => item[LINEITEM_KEY]).filter(onlyUnique);
 
@@ -62,8 +69,9 @@ function processCSV(filename, group = [{}]) {
 
   // Update the cache
   group.map(item => {
-    item[ORDERID_KEY] = parseInt(item[ORDERID_KEY], 10); // make order ID numeric
-    item.sortKey = `${item[ORDERID_KEY]}#${uniqueId++}`;
+    const orderId = parseInt(item[ORDERID_KEY], 10);
+    item[ORDERID_KEY] = orderId; // make order ID numeric
+    item.sortKey = getSortKey(orderId);
   });
   cache[lineItems[0] || filename] = group;
 }
@@ -75,9 +83,18 @@ function readCSV(filename) {
     .catch(err => console.log('Error reading CSV file:', err));
 }
 
+function readSpreadsheets(folder) {
+  console.log(`Reading CSV files from '${folder}'`);
+  return readDir(folder)
+    .then(files => files.filter(file => file.match(/\.csv$/)))
+    .then(files => files.map(file => `${folder}/${file}`))
+    .then(files => Promise.each(files.map(readCSV), p => p));
+}
+
 function readMetadata(file) {
   if (!file) return;
-  
+
+  console.log(`Reading additional metadata from '${file}'`);
   return readFile(file, { encoding: 'utf8' })
     .then(content => csvParse(content, { columns: true }))
     .then(content => metadata.push(...content));
@@ -88,9 +105,15 @@ function generateBadgeNumbers() {
   getAllCacheItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .map(item => item.badgeNum = badgeNum++);
-
-  console.log('\nTotal badges sold:', badgeNum);
+  return badgeNum;
 }
+
+function processInputData(folder, metadataFile) {
+  return readSpreadsheets(folder)
+    .then(readMetadata(metadataFile))
+    .then(generateBadgeNumbers);
+}
+  
 
 function printBadgeCounts() {
   console.log('\nBadges sold (by type):');
@@ -145,8 +168,8 @@ function generateBadgeMailMerge(filename, group) {
     .sort((a,b) => a.badgeNum - b.badgeNum)
     .map(item => {
       const { [ORDERID_KEY]: orderId, [BADGENAME_KEY]: badgeName, [REALNAME_KEY]: realName, badgeNum, sortKey } = item;
-      const [ department ] = metadata.filter(item => item[REALNAME_KEY] === realName).map(item => item.Department);
-      const [ metadataBadgeName ] = [...metadata.filter(item => item.sortKey === sortKey).map(item => item.BadgeName), badgeName];
+      const [ department ] = metadata.filter(item => item.sortKey === sortKey).map(item => item.Department);
+      const [ metadataBadgeName ] = [...metadata.filter(item => item.sortKey === sortKey).map(item => item.BadgeName).filter(Boolean), badgeName];
 
       metadataBadgeName || console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.csv file.`);
       return [sortKey, badgeNum, metadataBadgeName, department];
@@ -257,29 +280,38 @@ function generateMailMergeFiles() {
     generateEnvelopeMailMerge(),
   );
 
-  return Promise.all(promises).then(() => console.log('\nWrote mailmerge files'));
+  return Promise.each(promises, p => p)
+    .then(() => console.log(`\nWrote mailmerge files to ${process.cwd()}.  You're welcome.`));
 }
 
+function main() {
+  if (process.argv.length < 3) {
+    console.error('You must specify a folder path, where the CSV files can be found.');
+    process.exit(-1);
+  }
 
-if (process.argv.length < 3) {
-  console.error('You must specify a folder path, where the CSV files can be found.');
-  process.exit(-1);
+  const [folder, metadataFile] = process.argv.slice(2);
+
+  const lookup = process.argv.indexOf('-l')
+  if (lookup !== -1) {
+    const name = process.argv[lookup + 1];
+    
+    processInputData(folder, metadataFile).then(() =>
+      getAllCacheItems()
+        .filter(item => item[REALNAME_KEY].match(new RegExp(name, 'i')))
+        .map(item => console.log(`${item.sortKey}: ${item[REALNAME_KEY]}`)));
+
+    return;
+  }
+
+  processInputData(folder, metadataFile)
+    .then((numBadges) => console.log('\nTotal badges sold:', numBadges))
+    .then(printBadgeCounts)
+    .then(printDiscountCodeCounts)
+    .then(generateMailMergeFiles)
+    .then(() => console.log('\nDone!'))
+    .catch((err) => console.log('Error!', err));
 }
 
-const [folder, metadataFile] = process.argv.slice(2);
-console.log(`Reading CSV files from '${folder}'`);
-metadataFile && console.log(`Reading additional metadata from '${metadataFile}'`);
-
-readDir(folder)
-  .then(files => files.filter(file => file.match(/\.csv$/)))
-  .then(files => files.map(file => `${folder}/${file}`))
-  .then(files => Promise.all(files.map(readCSV)))
-  .then(readMetadata(metadataFile))
-  .then(generateBadgeNumbers)
-  .then(printBadgeCounts)
-  .then(printDiscountCodeCounts)
-  .then(generateMailMergeFiles)
-  // TODO: organize packet report based on the FORM email address
-  .then(() => console.log('\nDone!'))
-  .catch((err) => console.log('Error!', err));
-
+// Do the work
+main();
