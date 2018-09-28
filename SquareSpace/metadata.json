@@ -1,94 +1,110 @@
 [{
-		"sortKey": "1327#1",
-		"Name": "Lisa Meece",
-		"Department": "Board President / Newsletter / Social Media / Media Outreach"
-	}, {
-		"sortKey": "1327#2",
-		"Name": "Dave Mott",
-		"Department": "Tech Wiz / Head of Finances"
-	}, {
-		"sortKey": "1381#2",
-		"Name": "Suzanne Vachet Edwards",
-		"Department": "Board Treasurer,"
-	}, {
-		"sortKey": "1419#3",
-		"Name": "Randall Keown",
-		"Department": "Board COO / Con Chair"
-	}, {
-		"sortKey": "1336#1",
-		"Name": "Mark Gaddo",
-		"Department": "Attendee Recruitment"
-	}, {
-		"sortKey": "",
-		"Name": "Ricky Liles",
-		"Department": "Audio Visual"
-	}, {
-		"sortKey": "1362#2",
-		"Name": "Chris Harden",
-		"Department": "Engineering"
-	}, {
-		"sortKey": "1352#2",
-		"Name": "Amanda Bledsoe",
-		"Department": "Graphic Design / Webmaster"
-	}, {
-		"sortKey": "1399#1",
-		"Name": "Gabriel Duval",
-		"Department": "Hotel Liaison"
-	}, {
-		"sortKey": "",
-		"Name": "???",
-		"Department": "Media Guest Relations"
-	}, {
-		"sortKey": "",
-		"Name": "Nate Lineberry",
-		"Department": "Program Book"
-	}, {
-		"sortKey": "",
-		"Name": "Charity Robertson",
-		"Department": "Onsite Operations"
-	}, {
-		"sortKey": "",
-		"Name": "???",
-		"Department": "Party Liaison"
-	}, {
-		"sortKey": "1415#1",
-		"Name": "Amanda Storer",
-		"Department": "Registration / Program Book"
-	}, {
-		"sortKey": "1388#1",
-		"Name": "Miranda Montooth",
-		"Department": "Registration"
-	}, {
-		"sortKey": "1370#2",
-		"Name": "Jennifer Powell",
-		"Department": "Programming"
-	}, {
-		"sortKey": "",
-		"Name": "Robert Jackson",
-		"Department": "Security"
-	}, {
-		"sortKey": "",
-		"Name": "Susan Milfs",
-		"Department": "Vendor Hall"
-	}, {
-		"sortKey": "",
-		"Name": "???",
-		"Department": "Volunteer Coordinator"
-	}, {
-		"sortKey": "",
-		"Name": "Amber Jones",
-		"Department": "Board Secretary / Tech Wiz / Webmaster"
-	}, {
-		"sortKey": "1425#1",
-		"BadgeName": "Jon Schalburg"
-	}, {
-		"sortKey": "1425#2",
-		"BadgeName": "Heartland Staff"
-	}, {
-		"sortKey": "1359#1",
-		"BadgeName": "Paul Tackett"
-	}, {
-		"sortKey": "1350#1",
-		"BadgeName": "Unicode ☃"
-	}
-]
+  "sortKey": "1327#1",
+  "Name": "Lisa Meece",
+  "Department": "Board",
+  "Tagline": "President / Social Media"
+}, {
+  "sortKey": "1381#2",
+  "Name": "Suzanne Vachet Edwards",
+  "Department": "Board",
+  "Tagline": "Treasurer"
+}, {
+  "sortKey": "1419#3",
+  "Name": "Randall Keown",
+  "Department": "Board",
+  "Tagline": "Chief Operations Officer / Con Chair"
+}, {
+  "sortKey": "1454#1",
+  "Name": "Amber Jones",
+  "Department": "Board",
+  "Tagline": "Secretary / Webmaster"
+}, {
+  "sortKey": "1327#2",
+  "Name": "Dave Mott",
+  "Department": "Staff",
+  "Tagline": "Tech Wiz"
+}, {
+  "sortKey": "1336#1",
+  "Name": "Mark Gaddo",
+  "Department": "Staff",
+  "Tagline": "Attendee Recruitment"
+}, {
+  "sortKey": "",
+  "Name": "Ricky Liles",
+  "Department": "Staff",
+  "Tagline": "Audio Visual"
+}, {
+  "sortKey": "1362#2",
+  "Name": "Chris Harden",
+  "Department": "Staff",
+  "Tagline": "Engineering"
+}, {
+  "sortKey": "1352#2",
+  "Name": "Amanda Bledsoe",
+  "Department": "Staff",
+  "Tagline": "Graphic Design / Webmaster"
+}, {
+  "sortKey": "1399#1",
+  "Name": "Gabriel Duval",
+  "Department": "Staff",
+  "Tagline": "Hotel Liaison"
+}, {
+  "sortKey": "",
+  "Name": "???",
+  "Department": "Staff",
+  "Tagline": "Media Guest Relations"
+}, {
+  "sortKey": "",
+  "Name": "Nate Lineberry",
+  "Department": "Staff",
+  "Tagline": "Program Book"
+}, {
+  "sortKey": "1453#1",
+  "Name": "Charity Robertson",
+  "Department": "Staff",
+  "Tagline": "Onsite Operations"
+}, {
+  "sortKey": "",
+  "Name": "???",
+  "Department": "Staff",
+  "Tagline": "Party Liaison"
+}, {
+  "sortKey": "1415#1",
+  "Name": "Amanda Storer",
+  "Department": "Staff",
+  "Tagline": "Registration / Program Book"
+}, {
+  "sortKey": "1388#1",
+  "Name": "Miranda Montooth",
+  "Department": "Staff",
+  "Tagline": "Registration"
+}, {
+  "sortKey": "1370#2",
+  "Name": "Jennifer Powell",
+  "Department": "Staff",
+  "Tagline": "Programming"
+}, {
+  "sortKey": "",
+  "Name": "Robert Jackson",
+  "Department": "Staff",
+  "Tagline": "Security"
+}, {
+  "sortKey": "1457#1",
+  "Name": "Susan Milfs",
+  "Department": "Staff",
+  "Tagline": "Vendor Hall"
+}, {
+  "sortKey": "",
+  "Name": "???",
+  "Department": "Staff",
+  "Tagline": "Volunteer Coordinator"
+}, {
+  "sortKey": "1425#1",
+  "BadgeName": "Jon Schalburg"
+}, {
+  "sortKey": "1425#2",
+  "BadgeName": "Heartland Staff"
+}, {
+  "sortKey": "1359#1",
+  "BadgeName": "Paul Tackett"
+}]

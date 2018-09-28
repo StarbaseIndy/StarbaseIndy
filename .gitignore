@@ -4,3 +4,4 @@
 *.bak
 2017/public/**
 **/*.csv
+**/*.tab

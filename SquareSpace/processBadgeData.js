@@ -121,6 +121,9 @@ function printBadgeCounts() {
   Object.keys(cache).sort().forEach(key => {
     console.log(`  ${key}: ${cache[key].length}`);
   });
+
+  console.log(`  Vendors: ${vendors.length}`);
+
 }
 
 function printDiscountCodeCounts() {
@@ -138,15 +141,16 @@ function printDiscountCodeCounts() {
   });
 }
 
-function writeMailMergeCSV(filename, records, columns) {
+function writeMailMergeFile(filename, records, columns) {
   const options = {
     columns,
     header: true,
     quotedString: true,
+    delimiter: '\t',
   };
   
   return csvStringify(records, options)
-   .then(data => writeFile(filename, data, { encoding: 'utf8' }));
+   .then(data => writeFile(filename, '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
 function generateVendorMailMerge(startingBadgeNum = 800) {
@@ -160,24 +164,25 @@ function generateVendorMailMerge(startingBadgeNum = 800) {
     .reduce((acc, badges) => (acc.push(...badges), acc), []);
   
   if (!records.length) return;
-  return writeMailMergeCSV('Mailmerge Vendor.csv', records, columns);
+  return writeMailMergeFile('Mailmerge Vendor.tab', records, columns);
 };
 
 function generateBadgeMailMerge(filename, group) {
-  const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Title'];
+  const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'Tagline'];
   const records = group
     .sort((a,b) => a.badgeNum - b.badgeNum)
     .map(item => {
       const { [ORDERID_KEY]: orderId, [BADGENAME_KEY]: badgeName, [REALNAME_KEY]: realName, badgeNum, sortKey } = item;
-      const [ department ] = metadata.filter(item => item.sortKey === sortKey).map(item => item.Department);
-      const [ metadataBadgeName ] = [...metadata.filter(item => item.sortKey === sortKey).map(item => item.BadgeName).filter(Boolean), badgeName];
-
-      metadataBadgeName || console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.csv file.`);
-      return [sortKey, badgeNum, metadataBadgeName, department];
+      const metaItem = metadata.find(entry => entry.sortKey === sortKey) || { Department: '', Tagline: '', BadgeName: '' };
+      const newBadgeName =
+        metaItem.BadgeName ||
+        badgeName ||
+        console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`);
+      return [sortKey, badgeNum, newBadgeName, metaItem.Department, metaItem.Tagline];
     });
 
   if (!records.length) return;
-  return writeMailMergeCSV(`Mailmerge ${filename}.csv`, records, columns);
+  return writeMailMergeFile(`Mailmerge ${filename}.tab`, records, columns);
 }
 
 function generateChildBadgeMailMerge(filename, group) {
@@ -196,7 +201,7 @@ function generateChildBadgeMailMerge(filename, group) {
     });
   
   if (!records.length) return;
-  return writeMailMergeCSV(`Mailmerge ${filename} BACK.csv`, records, columns);
+  return writeMailMergeFile(`Mailmerge ${filename} BACK.tab`, records, columns);
 }
 
 function generateEnvelopeMailMerge(filename, group) {
@@ -224,10 +229,10 @@ function generateEnvelopeMailMerge(filename, group) {
   //   Top two lines:
   //     [BILLINGNAME_KEY].split(' ').reverse()  (Note: warn if more than one billing name is ever found)
   //     [UNIFYING_EMAIL]
-  //   For every purchased item, print out a line: (Note: one column of the CSV)
+  //   For every purchased item, print out a line: (Note: one column of the mailmerge)
   //     [LINEITEM_KEY]: [BADGENAME_KEY]
   //   TODO: Need to get photo ops and DWTS into the store to see what those transations look like.
-  //   For each ['Discount Code'], print the associated ribbon type (Note: one column of the CSV)
+  //   For each ['Discount Code'], print the associated ribbon type (Note: one column of the mailmerge)
   //     TODO: can discount codes stack?  If so, what does that look like?
   
   let lastBillingName = '';
@@ -243,7 +248,7 @@ function generateEnvelopeMailMerge(filename, group) {
       return acc;
     }, {});
     
-  // Now that we have the envelopes organized by billing => email, generate the CSV data
+  // Now that we have the envelopes organized by billing => email, generate the mailmerge data
   const records = Object.keys(envelopes).map(billing => 
     Object.keys(envelopes[billing]).map(email => 
       Object.values(envelopes[billing][email]).reduce((acc, item) => {
@@ -261,9 +266,14 @@ function generateEnvelopeMailMerge(filename, group) {
   // console.log('Records:', flattenedRecords);
   
   // TODO: may need to store ribbons as an array, so we can reduce them to a count.
+  const options = {
+    header: true,
+    quotedString: true,
+    delimiter: '\t',
+  };
   
-  return csvStringify(flattenedRecords, { header: true, quotedString: true })
-   .then(data => writeFile('Mailmerge Envelope.csv', data, { encoding: 'utf8' }));
+  return csvStringify(flattenedRecords, options)
+   .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
 function generateMailMergeFiles() {
@@ -287,7 +297,7 @@ function generateMailMergeFiles() {
 
 function main() {
   if (process.argv.length < 3) {
-    console.error('You must specify a folder path, where the CSV files can be found.');
+    console.error('You must specify a folder path, where the input CSV files can be found.');
     process.exit(-1);
   }
 
