@@ -96,9 +96,22 @@ function readMetadata(file) {
 
   console.log(`Reading additional metadata from '${file}'`);
   return readFile(file, { encoding: 'utf8' })
-     // .then(content => csvParse(content, { columns: true }))
     .then(content => JSON.parse(content))
-    .then(content => metadata.push(...content));
+    .then(content => metadata.push(...content))
+    .then(() => {
+      // Do validation on the metadata
+      const allKeys = getAllCacheItems().map(item => item.sortKey);
+      metadata
+        .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
+        .map(entry => {
+          // verify that all sortKey values in the metadata actually exist
+          if (entry.Name && !entry.sortKey) {
+            console.error(`WARNING: No sortKey specified for metadata name: ${entry.Name}`);
+          } else if (!metadata.find(entry => allKeys.find(sortKey => sortKey === entry.sortKey))) {
+            console.error(`WARNING: metadata invalid sortKey: ${entry.sortKey}`);
+          }
+        });
+    });
 }
 
 function generateBadgeNumbers() {
@@ -111,7 +124,7 @@ function generateBadgeNumbers() {
 
 function processInputData(folder, metadataFile) {
   return readSpreadsheets(folder)
-    .then(readMetadata(metadataFile))
+    .then(() => readMetadata(metadataFile))
     .then(generateBadgeNumbers);
 }
   
@@ -173,12 +186,18 @@ function generateBadgeMailMerge(filename, group) {
     .sort((a,b) => a.badgeNum - b.badgeNum)
     .map(item => {
       const { [ORDERID_KEY]: orderId, [BADGENAME_KEY]: badgeName, [REALNAME_KEY]: realName, badgeNum, sortKey } = item;
-      const metaItem = metadata.find(entry => entry.sortKey === sortKey) || { Department: '', Tagline: '', BadgeName: '' };
+      const metaItem = metadata.find(entry => entry.sortKey === sortKey) || {};
       const newBadgeName =
         metaItem.BadgeName ||
         badgeName ||
-        console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`);
-      return [sortKey, badgeNum, newBadgeName, metaItem.Department, metaItem.Tagline];
+        (console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`), '');
+		
+      if (newBadgeName.match(/[^ -~]+/g)) {
+        console.error(`WARNING: Non-printable name for badge #${badgeNum} (order ${sortKey}): ${newBadgeName}`);
+      }
+      
+  
+      return [sortKey, badgeNum, newBadgeName, metaItem.Department || '', metaItem.Tagline || ''];
     });
 
   if (!records.length) return;
