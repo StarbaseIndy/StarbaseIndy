@@ -210,6 +210,7 @@ function generateBadgeMailMerge(filename, group) {
       }
   
       if (badgeName.match(/[^ -~]+/g)) {
+        // Read more e.g. at: https://www.compart.com/en/unicode/U+30C4
         const unicode = badgeName
           .split('')
           .map(x => x.codePointAt(0))
