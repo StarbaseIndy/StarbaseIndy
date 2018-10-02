@@ -1,4 +1,6 @@
 [{
+  "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
+}, {
   "sortKey": "1327#1",
   "Name": "Lisa Meece",
   "Department": "Board",
@@ -21,83 +23,121 @@
 }, {
   "sortKey": "1327#2",
   "Name": "Dave Mott",
-  "Department": "Staff",
-  "Tagline": "Tech Wiz"
+  "Department": "Finance",
+  "Tagline": "Process Manager"
 }, {
   "sortKey": "1336#1",
   "Name": "Mark Gaddo",
-  "Department": "Staff",
+  "Department": "Marketing",
   "Tagline": "Attendee Recruitment"
 }, {
   "sortKey": "",
   "Name": "Ricky Liles",
-  "Department": "Staff",
+  "Department": "Facilities",
   "Tagline": "Audio Visual"
 }, {
   "sortKey": "1362#2",
   "Name": "Chris Harden",
-  "Department": "Staff",
+  "Department": "Facilities",
   "Tagline": "Engineering"
 }, {
   "sortKey": "1352#2",
   "Name": "Amanda Bledsoe",
-  "Department": "Staff",
+  "Department": "Marketing",
   "Tagline": "Graphic Design / Webmaster"
 }, {
   "sortKey": "1399#1",
   "Name": "Gabriel Duval",
-  "Department": "Staff",
+  "Department": "Facilities",
   "Tagline": "Hotel Liaison"
 }, {
+  "Note": "Delete this note when the Name is identified - Bryan or Bruce?",
   "sortKey": "",
   "Name": "???",
-  "Department": "Staff",
+  "Department": "Programming",
   "Tagline": "Media Guest Relations"
 }, {
   "sortKey": "",
   "Name": "Nate Lineberry",
-  "Department": "Staff",
-  "Tagline": "Program Book"
+  "Department": "Marketing",
+  "Tagline": "Publications"
 }, {
   "sortKey": "1453#1",
   "Name": "Charity Robertson",
-  "Department": "Staff",
-  "Tagline": "Onsite Operations"
+  "Department": "Tactical",
+  "Tagline": "Operations"
 }, {
+  "Note": "Delete this note when the Name is identified",
   "sortKey": "",
   "Name": "???",
-  "Department": "Staff",
+  "Department": "Programming",
   "Tagline": "Party Liaison"
 }, {
   "sortKey": "1415#1",
   "Name": "Amanda Storer",
-  "Department": "Staff",
-  "Tagline": "Registration / Program Book"
+  "Department": "Finance",
+  "Tagline": "Registration"
 }, {
   "sortKey": "1388#1",
   "Name": "Miranda Montooth",
-  "Department": "Staff",
+  "Department": "Finance",
   "Tagline": "Registration"
 }, {
   "sortKey": "1370#2",
   "Name": "Jennifer Powell",
-  "Department": "Staff",
-  "Tagline": "Programming"
+  "Department": "Programming",
+  "Tagline": "Panel Coordinator"
 }, {
   "sortKey": "",
   "Name": "Robert Jackson",
-  "Department": "Staff",
+  "Department": "Tactical",
   "Tagline": "Security"
 }, {
   "sortKey": "1457#1",
   "Name": "Susan Milfs",
-  "Department": "Staff",
+  "Department": "Finance",
   "Tagline": "Vendor Hall"
 }, {
   "sortKey": "",
-  "Name": "???",
-  "Department": "Staff",
+  "Name": "Josh Rotella",
+  "Department": "Programming",
+  "Tagline": "Hall Tables"
+}, {
+  "sortKey": "",
+  "Name": "Judith Chambers",
+  "Department": "Tactical",
   "Tagline": "Volunteer Coordinator"
+}, {
+  "Note": "Delete this note when sortKey is identified",
+  "sortKey": "1430#1",
+  "Name": "Leah Leach",
+  "Department": "Programming",
+  "Tagline": "Uhura Training Academy"
+}, {
+  "Note": "Delete this note when sortKey is identified",
+  "sortKey": "1332#3",
+  "Name": "Debbie Harland",
+  "Department": "Finance",
+  "Tagline": "Charity Auction"
+}, {
+  "sortKey": "",
+  "Name": "Giselle MacNabb",
+  "Department": "Programming",
+  "Tagline": "Masquerade"
+}, {
+  "sortKey": "1442#1",
+  "Name": "Kim Huff",
+  "Tagline": "Triumvirate"
+}, {
+  "sortKey": "",
+  "Name": "Judy Eudaley",
+  "Tagline": "Triumvirate"
+}, {
+  "sortKey": "",
+  "Name": "Lillian Sams",
+  "Tagline": "Triumvirate"
+}, {
+  "Note": "======================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ========================"
 }, {
   "sortKey": "1425#1",
   "BadgeName": "Jon Schalburg"

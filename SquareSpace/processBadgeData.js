@@ -6,6 +6,7 @@ const Fs = require('fs');
 
 const BILLINGNAME_KEY = 'Billing Name';
 const UNIFYING_EMAIL = 'Product Form: Email';
+const UNIFYING_EMAIL2 = 'Product Form: Responsible Adult\'s Email';
 const LINEITEM_KEY = 'Lineitem name';
 const REALNAME_KEY = 'Product Form: Real Name';
 const BADGENAME_KEY = 'Product Form: Badge Name';
@@ -71,6 +72,7 @@ function processCSV(filename, group = [{}]) {
   group.map(item => {
     const orderId = parseInt(item[ORDERID_KEY], 10);
     item[ORDERID_KEY] = orderId; // make order ID numeric
+    item[UNIFYING_EMAIL] = item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2]; // combine different form names for same information
     item.sortKey = getSortKey(orderId);
   });
   cache[lineItems[0] || filename] = group;
@@ -88,7 +90,33 @@ function readSpreadsheets(folder) {
   return readDir(folder)
     .then(files => files.filter(file => file.match(/\.csv$/)))
     .then(files => files.map(file => `${folder}/${file}`))
-    .then(files => Promise.each(files.map(readCSV), p => p));
+    .then(files => Promise.each(files.sort().map(readCSV), p => p));
+}
+
+function mixinMetadata() {
+  // Mixin the metadata to get new badge names, taglines, and departments
+  getAllCacheItems().map(item => {
+    const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};  
+    item[BADGENAME_KEY] = metaItem.BadgeName || item[BADGENAME_KEY] || '';
+    item.department = metaItem.Department;
+    item.tagline = metaItem.Tagline;
+  });
+}
+
+function verifyMetadata() {
+  // Do validation on the metadata
+  const allKeys = getAllCacheItems().map(item => item.sortKey);
+  metadata
+    .filter(entry => !entry.Note) // skip validation for entries with notes
+    .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
+    .map(entry => {
+      // verify that all sortKey values in the metadata actually exist
+      if (entry.Name && !entry.sortKey) {
+        console.error(`WARNING: Metadata missing sortKey for name: ${entry.Name}`);
+      } else if (!allKeys.find(sortKey => sortKey === entry.sortKey)) {
+        console.error(`WARNING: Metadata invalid sortKey: ${entry.sortKey}`);
+      }
+    });
 }
 
 function readMetadata(file) {
@@ -98,20 +126,8 @@ function readMetadata(file) {
   return readFile(file, { encoding: 'utf8' })
     .then(content => JSON.parse(content))
     .then(content => metadata.push(...content))
-    .then(() => {
-      // Do validation on the metadata
-      const allKeys = getAllCacheItems().map(item => item.sortKey);
-      metadata
-        .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
-        .map(entry => {
-          // verify that all sortKey values in the metadata actually exist
-          if (entry.Name && !entry.sortKey) {
-            console.error(`WARNING: No sortKey specified for metadata name: ${entry.Name}`);
-          } else if (!metadata.find(entry => allKeys.find(sortKey => sortKey === entry.sortKey))) {
-            console.error(`WARNING: metadata invalid sortKey: ${entry.sortKey}`);
-          }
-        });
-    });
+    .then(verifyMetadata)
+    .then(mixinMetadata);
 }
 
 function generateBadgeNumbers() {
@@ -124,8 +140,8 @@ function generateBadgeNumbers() {
 
 function processInputData(folder, metadataFile) {
   return readSpreadsheets(folder)
-    .then(() => readMetadata(metadataFile))
-    .then(generateBadgeNumbers);
+    .then(generateBadgeNumbers)
+    .tap(() => readMetadata(metadataFile));
 }
   
 
@@ -134,9 +150,6 @@ function printBadgeCounts() {
   Object.keys(cache).sort().forEach(key => {
     console.log(`  ${key}: ${cache[key].length}`);
   });
-
-  console.log(`  Vendors: ${vendors.length}`);
-
 }
 
 function printDiscountCodeCounts() {
@@ -185,19 +198,29 @@ function generateBadgeMailMerge(filename, group) {
   const records = group
     .sort((a,b) => a.badgeNum - b.badgeNum)
     .map(item => {
-      const { [ORDERID_KEY]: orderId, [BADGENAME_KEY]: badgeName, [REALNAME_KEY]: realName, badgeNum, sortKey } = item;
-      const metaItem = metadata.find(entry => entry.sortKey === sortKey) || {};
-      const newBadgeName =
-        metaItem.BadgeName ||
-        badgeName ||
-        (console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`), '');
-		
-      if (newBadgeName.match(/[^ -~]+/g)) {
-        console.error(`WARNING: Non-printable name for badge #${badgeNum} (order ${sortKey}): ${newBadgeName}`);
+      const { 
+        [BADGENAME_KEY]: badgeName,
+        department,
+        tagline,
+        badgeNum,
+        sortKey } = item;
+        
+      if (!badgeName) {
+        console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`);
       }
-      
   
-      return [sortKey, badgeNum, newBadgeName, metaItem.Department || '', metaItem.Tagline || ''];
+      if (badgeName.match(/[^ -~]+/g)) {
+        const unicode = badgeName
+          .split('')
+          .map(x => x.codePointAt(0))
+          .filter(x => x > 0x7f)
+          .map(x => `U+${x.toString(16).toUpperCase()}`);
+          
+        console.error(`WARNING: Non-printable name for badge #${badgeNum} (order ${sortKey}): ${badgeName}`);
+        console.error('         Unicode characters:', unicode);
+      }
+       
+      return [sortKey, badgeNum, badgeName, department, tagline];
     });
 
   if (!records.length) return;
@@ -226,7 +249,12 @@ function generateChildBadgeMailMerge(filename, group) {
 function generateEnvelopeMailMerge(filename, group) {
   // Front of Packets:
 
-  // Billing name: <Last Name>, <First Name>
+  // DPM TODO: Billing name won't help anyone if the badge was purchased as a gift.
+  // The top information (name, email) needs to uniquely identify who can pick up the packet.
+  // This may make more sense as [ADULTNAME_KEY]||[REALNAME_KEY], and include only one badge per packet.
+  //   We could then allow someone to pick up all packets with the same unifying email (assuming they know the names on the other envelopes).
+
+  // Billing name: <Last Name>, <First Name>  
   // UNIFYING FORM Email: <.com>
 
   // Badge 1: <Type> <Badge Name>
@@ -237,11 +265,9 @@ function generateEnvelopeMailMerge(filename, group) {
   // DWTS
   // PhotoOp
 
+  // DPM TODO: It's unclear how many of each ribbon to put in each packet, because discount codes are tied to orders, and not to badges.
   // Ribbons needed will be ascertained by the presence of the following discount codes:
-  // SBI_GURU: Presenter
-  // STARBASECREW: Corestaff
-  // PRESS: Press
-  // BBBS, BBBS12: Big Brothers / Big Sisters
+  // SBI_GURU, STARBASECREW, PRESS, BBBS, BBBS12
 
   // Work with full data set
   // Reorganize data set to be keyed on [BILLINGNAME_KEY], then by [UNIFYING_EMAIL]
@@ -250,7 +276,7 @@ function generateEnvelopeMailMerge(filename, group) {
   //     [UNIFYING_EMAIL]
   //   For every purchased item, print out a line: (Note: one column of the mailmerge)
   //     [LINEITEM_KEY]: [BADGENAME_KEY]
-  //   TODO: Need to get photo ops and DWTS into the store to see what those transations look like.
+  //   TODO: Need to get photo ops and DWTS into the store to see what those transactions look like.
   //   For each ['Discount Code'], print the associated ribbon type (Note: one column of the mailmerge)
   //     TODO: can discount codes stack?  If so, what does that look like?
   
@@ -276,8 +302,8 @@ function generateEnvelopeMailMerge(filename, group) {
         
         acc.BillingName = acc.BillingName || billing;
         acc.Email = acc.Email || email;
-        acc.Badges = [acc.Badges || '', `${badgeType}: ${badgeName}`].filter(Boolean).join('\n');
-        acc.Ribbons = [acc.Ribbons || '', getRibbonName(discountCode)].filter(Boolean).join('\n');
+        acc.Badges = [acc.Badges, `${badgeType}: ${badgeName}`].filter(Boolean).join('\n');
+        acc.Ribbons = [acc.Ribbons, getRibbonName(discountCode)].filter(Boolean).join('\n');
         return acc;
       }, {})));
 
@@ -328,8 +354,9 @@ function main() {
     
     processInputData(folder, metadataFile).then(() =>
       getAllCacheItems()
+        .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
         .filter(item => item[REALNAME_KEY].match(new RegExp(name, 'i')))
-        .map(item => console.log(`${item.sortKey}: ${item[REALNAME_KEY]}`)));
+        .map(item => console.log(`${item.sortKey}: ${item[REALNAME_KEY]}: ${item.badgeNum}: ${item[BADGENAME_KEY]}: ${item[UNIFYING_EMAIL]}`)));
 
     return;
   }
@@ -338,6 +365,7 @@ function main() {
     .then((numBadges) => console.log('\nTotal badges sold:', numBadges))
     .then(printBadgeCounts)
     .then(printDiscountCodeCounts)
+    .then(() => console.log(`\nVendor count: ${vendors.length}`))
     .then(generateMailMergeFiles)
     .then(() => console.log('\nDone!'))
     .catch((err) => console.log('Error!', err));
