@@ -4,7 +4,7 @@
   "sortKey": "1327#1",
   "Name": "Lisa Meece",
   "Department": "Board",
-  "Tagline": "President / Social Media"
+  "Tagline": "President / Ambassador"
 }, {
   "sortKey": "1381#2",
   "Name": "Suzanne Vachet Edwards",
@@ -24,7 +24,7 @@
   "sortKey": "1327#2",
   "Name": "Dave Mott",
   "Department": "Finance",
-  "Tagline": "Process Manager"
+  "Tagline": "Process Enforcement"
 }, {
   "sortKey": "1336#1",
   "Name": "Mark Gaddo",
@@ -108,13 +108,11 @@
   "Department": "Tactical",
   "Tagline": "Volunteer Coordinator"
 }, {
-  "Note": "Delete this note when sortKey is identified",
   "sortKey": "1430#1",
   "Name": "Leah Leach",
   "Department": "Programming",
   "Tagline": "Uhura Training Academy"
 }, {
-  "Note": "Delete this note when sortKey is identified",
   "sortKey": "1332#3",
   "Name": "Debbie Harland",
   "Department": "Finance",
