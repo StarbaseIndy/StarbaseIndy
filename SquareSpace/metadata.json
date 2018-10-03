@@ -49,7 +49,7 @@
   "sortKey": "1399#1",
   "Name": "Gabriel Duval",
   "Department": "Facilities",
-  "Tagline": "Hotel Liaison"
+  "Tagline": "Hotel & Party Liaison"
 }, {
   "Note": "Delete this note when the Name is identified - Bryan or Bruce?",
   "sortKey": "",
@@ -75,6 +75,11 @@
 }, {
   "sortKey": "1415#1",
   "Name": "Amanda Storer",
+  "Department": "Finance",
+  "Tagline": "Registration"
+}, {
+  "sortKey": "",
+  "Name": "Kristina Bayer",
   "Department": "Finance",
   "Tagline": "Registration"
 }, {
