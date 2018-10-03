@@ -47,6 +47,10 @@ function getRibbonName(discountCode) {
   return lookup[discountCode];
 }
 
+function zeroPad(num) {
+  return ("0000" + num).slice(-4);
+}
+
 function getAllCacheItems() {
   return [].concat(...Object.values(cache));
 }
@@ -185,7 +189,7 @@ function generateVendorMailMerge(startingBadgeNum = 800) {
     .map(item => {
       const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10);
       return [...Array(numBadges)].map(() => 
-        ['none', startingBadgeNum++, item[VENDORNAME_KEY], 'Vendor']);
+        ['none', zeroPad(startingBadgeNum++), item[VENDORNAME_KEY], 'Vendor']);
     })
     .reduce((acc, badges) => (acc.push(...badges), acc), []);
   
@@ -221,7 +225,7 @@ function generateBadgeMailMerge(filename, group) {
         console.error('         Unicode characters:', unicode);
       }
        
-      return [sortKey, badgeNum, badgeName, department, tagline];
+      return [sortKey, zeroPad(badgeNum), badgeName, department, tagline];
     });
 
   if (!records.length) return;
@@ -240,7 +244,7 @@ function generateChildBadgeMailMerge(filename, group) {
         [ADULTPHONE_KEY]: adultPhone,
         [ADULTEMAIL_KEY]: adultEmail
       } = item;
-      return [orderId, badgeNum, adultName, adultPhone.trim(), adultEmail];
+      return [orderId, zeroPad(badgeNum), adultName, adultPhone.trim(), adultEmail];
     });
   
   if (!records.length) return;
