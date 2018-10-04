@@ -183,24 +183,24 @@ function writeMailMergeFile(filename, records, columns) {
    .then(data => writeFile(filename, '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
-function generateVendorMailMerge(startingBadgeNum = 800) {
-  const columns = ['Order ID', 'Badge Number', 'Company Name', 'Title'];
-  const records = vendors
-    .map(item => {
-      const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10);
-      return [...Array(numBadges)].map(() => 
-        ['none', zeroPad(startingBadgeNum++), item[VENDORNAME_KEY], 'Vendor']);
-    })
-    .reduce((acc, badges) => (acc.push(...badges), acc), []);
+// function generateVendorMailMerge(startingBadgeNum = 800) {
+  // const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'Tagline'];
+  // const records = vendors
+    // .map(item => {
+      // const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10);
+      // return [...Array(numBadges)].map(() => 
+        // ['none', zeroPad(startingBadgeNum++), item[VENDORNAME_KEY], 'Vendor', '']);
+    // })
+    // .reduce((acc, badges) => (acc.push(...badges), acc), []);
   
-  if (!records.length) return;
-  return writeMailMergeFile('Mailmerge Vendor.tab', records, columns);
-};
+  // if (!records.length) return;
+  // return writeMailMergeFile('Mailmerge Vendor.tab', records, columns);
+// };
 
-function generateBadgeMailMerge(filename, group) {
+function generateBadgeMailMerge(filename, group, sortFn = (a,b) => a.badgeNum - b.badgeNum) {
   const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'Tagline'];
   const records = group
-    .sort((a,b) => a.badgeNum - b.badgeNum)
+    .sort(sortFn)
     .map(item => {
       const { 
         [BADGENAME_KEY]: badgeName,
@@ -326,20 +326,64 @@ function generateEnvelopeMailMerge(filename, group) {
    .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
+function getVendorGroup(startingBadgeNum = 800) {
+  return vendors
+    .map(item => {
+      const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10);
+      return [...Array(numBadges)].map(() => 
+       ({
+         sortKey: 'none',
+         badgeNum: startingBadgeNum++,
+         [BADGENAME_KEY]: item[VENDORNAME_KEY],
+         department: 'Vendor', 
+         tagline: '',
+       }));
+    })
+    .reduce((acc, badges) => (acc.push(...badges), acc), []);
+}
+
 function generateMailMergeFiles() {
-  // Export mail merge for all badge types
-  const promises = Object.keys(cache).map(key => generateBadgeMailMerge(key, cache[key]));
+  console.log(''); // output a newline
+
+  // Export Saturday|Sunday|Weekend|Star|Student (not Children|Shopping)
+  const generalBadgesPromise = generateBadgeMailMerge('General Admission',
+    getAllCacheItems()
+      .filter(item => !item[LINEITEM_KEY].match(/Children|Shopping/))
+      .filter(item => !item.department && !item.tagline)
+      .map(item => {
+        const extra = {};
+        if (item[LINEITEM_KEY].match(/Saturday/)) {
+          extra.department = 'Sat + Sun';
+        }
+        if (item[LINEITEM_KEY].match(/Sunday/)) {
+          extra.department = 'Sunday Only';
+        }
+        return Object.assign({}, item, extra);
+      }));
+
+  // Export staff badges
+  const staffSortFn = (a,b) => (a.department || '').localeCompare(b.department);
+  const staffBadgesPromise = generateBadgeMailMerge('Adorned',
+    getAllCacheItems()
+      .filter(item => !item[LINEITEM_KEY].match(/Children|Shopping/))
+      .filter(item => item.department || item.tagline)
+      .concat(getVendorGroup()),
+    staffSortFn);
   
-  // Export the mail merge for the BACK of the children's badge too!
+  // Export child badges (front AND back)
   const childPromises = Object.keys(cache)
     .filter(key => key.match(/Children/))
-    .map(key => generateChildBadgeMailMerge(key, cache[key]));
+    .map(key => 
+      generateChildBadgeMailMerge(key, cache[key])
+        .then(() => generateBadgeMailMerge(key, cache[key])));
 
-  promises.push(
+  promises = [
+    generalBadgesPromise,
+    staffBadgesPromise,
     ...childPromises,
-    generateVendorMailMerge(),
+    // generateVendorMailMerge(),
     generateEnvelopeMailMerge(),
-  );
+  ];
 
   return Promise.each(promises, p => p)
     .then(() => console.log(`\nWrote mailmerge files to ${process.cwd()}.  You're welcome.`));
@@ -367,10 +411,10 @@ function main() {
   }
 
   processInputData(folder, metadataFile)
-    .then((numBadges) => console.log('\nTotal badges sold:', numBadges))
+    .then(numBadges => console.log('\nTotal badges sold:', numBadges))
     .then(printBadgeCounts)
-    .then(printDiscountCodeCounts)
     .then(() => console.log(`\nVendor count: ${vendors.length}`))
+    .then(printDiscountCodeCounts)
     .then(generateMailMergeFiles)
     .then(() => console.log('\nDone!'))
     .catch((err) => console.log('Error!', err));

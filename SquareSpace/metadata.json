@@ -1,5 +1,10 @@
 [{
+  "Note": "This file should be used to adorn badges for the following Departments: Board, [Staff], VIP, Press, and Presenter",
+  "Note2": "Note that Vendor data is sourced separately, and metadata in this file is not (currently) applied to that data set."
+}, {
   "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
+}, {
+  "Note": "==================== Board =============================================================================="
 }, {
   "sortKey": "1327#1",
   "Name": "Lisa Meece",
@@ -21,57 +26,12 @@
   "Department": "Board",
   "Tagline": "Secretary / Webmaster"
 }, {
+  "Note": "==================== [Staff] Finance ===================================================================="
+}, {
   "sortKey": "1327#2",
   "Name": "Dave Mott",
   "Department": "Finance",
   "Tagline": "Process Enforcement"
-}, {
-  "sortKey": "1336#1",
-  "Name": "Mark Gaddo",
-  "Department": "Marketing",
-  "Tagline": "Attendee Recruitment"
-}, {
-  "sortKey": "",
-  "Name": "Ricky Liles",
-  "Department": "Facilities",
-  "Tagline": "Audio Visual"
-}, {
-  "sortKey": "1362#2",
-  "Name": "Chris Harden",
-  "Department": "Facilities",
-  "Tagline": "Engineering"
-}, {
-  "sortKey": "1352#2",
-  "Name": "Amanda Bledsoe",
-  "Department": "Marketing",
-  "Tagline": "Graphic Design / Webmaster"
-}, {
-  "sortKey": "1399#1",
-  "Name": "Gabriel Duval",
-  "Department": "Facilities",
-  "Tagline": "Hotel & Party Liaison"
-}, {
-  "Note": "Delete this note when the Name is identified - Bryan or Bruce?",
-  "sortKey": "",
-  "Name": "???",
-  "Department": "Programming",
-  "Tagline": "Media Guest Relations"
-}, {
-  "sortKey": "",
-  "Name": "Nate Lineberry",
-  "Department": "Marketing",
-  "Tagline": "Publications"
-}, {
-  "sortKey": "1453#1",
-  "Name": "Charity Robertson",
-  "Department": "Tactical",
-  "Tagline": "Operations"
-}, {
-  "Note": "Delete this note when the Name is identified",
-  "sortKey": "",
-  "Name": "???",
-  "Department": "Programming",
-  "Tagline": "Party Liaison"
 }, {
   "sortKey": "1415#1",
   "Name": "Amanda Storer",
@@ -88,45 +48,153 @@
   "Department": "Finance",
   "Tagline": "Registration"
 }, {
-  "sortKey": "1370#2",
-  "Name": "Jennifer Powell",
-  "Department": "Programming",
-  "Tagline": "Panel Coordinator"
-}, {
-  "sortKey": "",
-  "Name": "Robert Jackson",
-  "Department": "Tactical",
-  "Tagline": "Security"
-}, {
   "sortKey": "1457#1",
   "Name": "Susan Milfs",
   "Department": "Finance",
   "Tagline": "Vendor Hall"
-}, {
-  "sortKey": "",
-  "Name": "Josh Rotella",
-  "Department": "Programming",
-  "Tagline": "Hall Tables"
-}, {
-  "sortKey": "",
-  "Name": "Judith Chambers",
-  "Department": "Tactical",
-  "Tagline": "Volunteer Coordinator"
-}, {
-  "sortKey": "1430#1",
-  "Name": "Leah Leach",
-  "Department": "Programming",
-  "Tagline": "Uhura Training Academy"
 }, {
   "sortKey": "1332#3",
   "Name": "Debbie Harland",
   "Department": "Finance",
   "Tagline": "Charity Auction"
 }, {
+  "Note": "==================== [Staff] Marketing =================================================================="
+}, {
+  "sortKey": "1336#1",
+  "Name": "Mark Gaddo",
+  "Department": "Marketing",
+  "Tagline": "Attendee Recruitment"
+}, {
+  "sortKey": "1352#2",
+  "Name": "Amanda Bledsoe",
+  "Department": "Marketing",
+  "Tagline": "Graphic Design / Webmaster"
+}, {
+  "sortKey": "",
+  "Name": "Nate Lineberry",
+  "Department": "Marketing",
+  "Tagline": "Publications"
+}, {
+  "Note": "==================== [Staff] Facilities ================================================================="
+}, {
+  "sortKey": "",
+  "Name": "Ricky Liles",
+  "Department": "Facilities",
+  "Tagline": "Audio Visual"
+}, {
+  "sortKey": "1362#2",
+  "Name": "Chris Harden",
+  "Department": "Facilities",
+  "Tagline": "Engineering"
+}, {
+  "sortKey": "1399#1",
+  "Name": "Gabriel Duval",
+  "Department": "Facilities",
+  "Tagline": "Hotel & Party Liaison"
+}, {
+  "Note": "==================== [Staff] Programming ================================================================"
+}, {
+  "Note": "Delete this note when the Name is identified - Bryan or Bruce?",
+  "sortKey": "",
+  "Name": "???",
+  "Department": "Programming",
+  "Tagline": "Media Guest Relations"
+}, {
+  "Note": "Delete this note when the Name is identified",
+  "sortKey": "",
+  "Name": "???",
+  "Department": "Programming",
+  "Tagline": "Party Liaison"
+}, {
+  "sortKey": "1370#2",
+  "Name": "Jennifer Powell",
+  "Department": "Programming",
+  "Tagline": "Panel Coordinator"
+}, {
+  "sortKey": "",
+  "Name": "Josh Rotella",
+  "Department": "Programming",
+  "Tagline": "Hall Tables"
+}, {
+  "sortKey": "1430#1",
+  "Name": "Leah Leach",
+  "Department": "Programming",
+  "Tagline": "Uhura Training Academy"
+}, {
   "sortKey": "",
   "Name": "Giselle MacNabb",
   "Department": "Programming",
   "Tagline": "Masquerade"
+}, {
+  "Note": "==================== [Staff] Tactical ==================================================================="
+}, {
+  "sortKey": "1453#1",
+  "Name": "Charity Robertson",
+  "Department": "Tactical",
+  "Tagline": "Operations"
+}, {
+  "sortKey": "",
+  "Name": "Robert Jackson",
+  "Department": "Tactical",
+  "Tagline": "Security"
+}, {
+  "sortKey": "",
+  "Name": "Judith Chambers",
+  "Department": "Tactical",
+  "Tagline": "Volunteer Coordinator"
+}, {
+  "Note": "==================== VIP (Media Guests) ================================================================="
+}, {
+  "sortKey": "",
+  "Name": "Sandy Gimpel",
+  "Department": "VIP",
+  "Tagline": "Stuntwoman Extraordinaire"
+}, {
+  "sortKey": "",
+  "Name": "Dr. Erin Macdonald",
+  "Department": "VIP",
+  "Tagline": "Geeky Astrophysicist"
+}, {
+  "sortKey": "",
+  "Name": "Bill Blair",
+  "Department": "VIP",
+  "Tagline": "Professional Alien"
+}, {
+  "sortKey": "",
+  "Name": "Carl Taliaferro",
+  "Department": "VIP",
+  "Tagline": "Alien Creator"
+}, {
+  "sortKey": "",
+  "Name": "François Chau",
+  "Department": "VIP",
+  "Tagline": "Out-of-this-world Actor"
+}, {
+  "sortKey": "",
+  "Name": "Moxie Anne Magnus",
+  "Department": "VIP",
+  "Tagline": "Intergalactic Cosmetologist"
+}, {
+  "sortKey": "",
+  "Name": "LtCmdr jenbom vestai-toQqul",
+  "Department": "VIP",
+  "Tagline": "Klingon Pop Star"
+}, {
+  "sortKey": "",
+  "Name": "David Reddick",
+  "Department": "VIP",
+  "Tagline": "Artist / Illustrator / Professional Cartoonist"
+}, {
+  "sortKey": "",
+  "Name": "Dr. Lawrence M. Schoen",
+  "Department": "VIP",
+  "Tagline": "Klingon Linguist"
+}, {
+  "Note": "==================== Press =============================================================================="
+}, {
+  "Note": "==================== Presenter =========================================================================="
+}, {
+  "Note": "==================== Triumvirate ========================================================================"
 }, {
   "sortKey": "1442#1",
   "Name": "Kim Huff",
@@ -140,7 +208,7 @@
   "Name": "Lillian Sams",
   "Tagline": "Triumvirate"
 }, {
-  "Note": "======================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ========================"
+  "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
 }, {
   "sortKey": "1425#1",
   "BadgeName": "Jon Schalburg"
