@@ -353,10 +353,10 @@ function generateMailMergeFiles() {
       .map(item => {
         const extra = {};
         if (item[LINEITEM_KEY].match(/Saturday/)) {
-          extra.department = 'Sat + Sun';
+          extra.department = 'SAT + SUN';
         }
         if (item[LINEITEM_KEY].match(/Sunday/)) {
-          extra.department = 'Sunday Only';
+          extra.department = 'SUNDAY ONLY';
         }
         return Object.assign({}, item, extra);
       }));
