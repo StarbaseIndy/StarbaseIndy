@@ -9,21 +9,25 @@
   "sortKey": "1327#1",
   "Name": "Lisa Meece",
   "Department": "Board",
+  "DepartmentColor": "Purple",
   "Tagline": "President / Ambassador"
 }, {
   "sortKey": "1381#2",
   "Name": "Suzanne Vachet Edwards",
   "Department": "Board",
+  "DepartmentColor": "Purple",
   "Tagline": "Treasurer"
 }, {
   "sortKey": "1419#3",
   "Name": "Randall Keown",
   "Department": "Board",
+  "DepartmentColor": "Purple",
   "Tagline": "Chief Operations Officer / Con Chair"
 }, {
   "sortKey": "1454#1",
   "Name": "Amber Jones",
   "Department": "Board",
+  "DepartmentColor": "Purple",
   "Tagline": "Secretary / Webmaster"
 }, {
   "Note": "==================== [Staff] Finance ===================================================================="
@@ -31,31 +35,37 @@
   "sortKey": "1327#2",
   "Name": "Dave Mott",
   "Department": "Finance",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Process Enforcement"
 }, {
   "sortKey": "1415#1",
   "Name": "Amanda Storer",
   "Department": "Finance",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Registration"
 }, {
   "sortKey": "",
   "Name": "Kristina Bayer",
   "Department": "Finance",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Registration"
 }, {
   "sortKey": "1388#1",
   "Name": "Miranda Montooth",
   "Department": "Finance",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Registration"
 }, {
   "sortKey": "1457#1",
   "Name": "Susan Milfs",
   "Department": "Finance",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Vendor Hall"
 }, {
   "sortKey": "1332#3",
   "Name": "Debbie Harland",
   "Department": "Finance",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Charity Auction"
 }, {
   "Note": "==================== [Staff] Marketing =================================================================="
@@ -63,16 +73,19 @@
   "sortKey": "1336#1",
   "Name": "Mark Gaddo",
   "Department": "Marketing",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Attendee Recruitment"
 }, {
   "sortKey": "1352#2",
   "Name": "Amanda Bledsoe",
   "Department": "Marketing",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Graphic Design / Webmaster"
 }, {
   "sortKey": "",
   "Name": "Nate Lineberry",
   "Department": "Marketing",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Publications"
 }, {
   "Note": "==================== [Staff] Facilities ================================================================="
@@ -80,16 +93,19 @@
   "sortKey": "",
   "Name": "Ricky Liles",
   "Department": "Facilities",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Audio Visual"
 }, {
   "sortKey": "1362#2",
   "Name": "Chris Harden",
   "Department": "Facilities",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Engineering"
 }, {
   "sortKey": "1399#1",
   "Name": "Gabriel Duval",
   "Department": "Facilities",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Hotel & Party Liaison"
 }, {
   "Note": "==================== [Staff] Programming ================================================================"
@@ -98,32 +114,38 @@
   "sortKey": "",
   "Name": "???",
   "Department": "Programming",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Media Guest Relations"
 }, {
   "Note": "Delete this note when the Name is identified",
   "sortKey": "",
   "Name": "???",
   "Department": "Programming",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Party Liaison"
 }, {
   "sortKey": "1370#2",
   "Name": "Jennifer Powell",
   "Department": "Programming",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Panel Coordinator"
 }, {
   "sortKey": "",
   "Name": "Josh Rotella",
   "Department": "Programming",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Hall Tables"
 }, {
   "sortKey": "1430#1",
   "Name": "Leah Leach",
   "Department": "Programming",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Uhura Training Academy"
 }, {
   "sortKey": "",
   "Name": "Giselle MacNabb",
   "Department": "Programming",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Masquerade"
 }, {
   "Note": "==================== [Staff] Tactical ==================================================================="
@@ -131,16 +153,19 @@
   "sortKey": "1453#1",
   "Name": "Charity Robertson",
   "Department": "Tactical",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Operations"
 }, {
   "sortKey": "",
   "Name": "Robert Jackson",
   "Department": "Tactical",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Security"
 }, {
   "sortKey": "",
   "Name": "Judith Chambers",
   "Department": "Tactical",
+  "DepartmentColor": "Light Blue",
   "Tagline": "Volunteer Coordinator"
 }, {
   "Note": "==================== VIP (Media Guests) ================================================================="
@@ -148,64 +173,91 @@
   "sortKey": "",
   "Name": "Sandy Gimpel",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Stuntwoman Extraordinaire"
 }, {
   "sortKey": "",
   "Name": "Dr. Erin Macdonald",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Geeky Astrophysicist"
 }, {
   "sortKey": "",
   "Name": "Bill Blair",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Professional Alien"
 }, {
   "sortKey": "",
   "Name": "Carl Taliaferro",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Alien Creator"
 }, {
   "sortKey": "",
   "Name": "François Chau",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Out-of-this-world Actor"
 }, {
   "sortKey": "",
   "Name": "Moxie Anne Magnus",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Intergalactic Cosmetologist"
 }, {
   "sortKey": "",
   "Name": "LtCmdr jenbom vestai-toQqul",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Klingon Pop Star"
 }, {
   "sortKey": "",
   "Name": "David Reddick",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Artist / Illustrator / Professional Cartoonist"
 }, {
   "sortKey": "",
   "Name": "Dr. Lawrence M. Schoen",
   "Department": "VIP",
+  "DepartmentColor": "Yellow",
   "Tagline": "Klingon Linguist"
 }, {
   "Note": "==================== Press =============================================================================="
 }, {
+  "sortKey": "",
+  "Name": "",
+  "Department": "Press",
+  "DepartmentColor": "Red",
+  "Tagline": "Fox 59"
+}, {
   "Note": "==================== Presenter =========================================================================="
+}, {
+  "sortKey": "",
+  "Name": "",
+  "Department": "Presenter",
+  "DepartmentColor": "Green",
+  "Tagline": "???"
 }, {
   "Note": "==================== Triumvirate ========================================================================"
 }, {
+  "CONSIDER": "Emeritus instead of Triumvirate",
   "sortKey": "1442#1",
   "Name": "Kim Huff",
+  "DepartmentColor": "White",
   "Tagline": "Triumvirate"
 }, {
+  "CONSIDER": "Emeritus instead of Triumvirate",
   "sortKey": "",
   "Name": "Judy Eudaley",
+  "DepartmentColor": "White",
   "Tagline": "Triumvirate"
 }, {
+  "CONSIDER": "Emeritus instead of Triumvirate",
   "sortKey": "",
   "Name": "Lillian Sams",
+  "DepartmentColor": "White",
   "Tagline": "Triumvirate"
 }, {
   "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="

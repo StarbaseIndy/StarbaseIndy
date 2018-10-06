@@ -8,6 +8,7 @@ const BILLINGNAME_KEY = 'Billing Name';
 const UNIFYING_EMAIL = 'Product Form: Email';
 const UNIFYING_EMAIL2 = 'Product Form: Responsible Adult\'s Email';
 const LINEITEM_KEY = 'Lineitem name';
+const LINEITEM_VARIANT = 'Lineitem variant';
 const REALNAME_KEY = 'Product Form: Real Name';
 const BADGENAME_KEY = 'Product Form: Badge Name';
 const DISCOUNTCODE_KEY = 'Discount Code';
@@ -103,6 +104,7 @@ function mixinMetadata() {
     const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};  
     item[BADGENAME_KEY] = metaItem.BadgeName || item[BADGENAME_KEY] || '';
     item.department = metaItem.Department;
+    item.departmentColor = metaItem.DepartmentColor;
     item.tagline = metaItem.Tagline;
   });
 }
@@ -337,6 +339,8 @@ function getVendorGroup(startingBadgeNum = 800) {
          [BADGENAME_KEY]: item[VENDORNAME_KEY],
          department: 'Vendor', 
          tagline: '',
+         departmentColor: "Orange",
+
        }));
     })
     .reduce((acc, badges) => (acc.push(...badges), acc), []);
@@ -349,7 +353,7 @@ function generateMailMergeFiles() {
   const generalBadgesPromise = generateBadgeMailMerge('General Admission',
     getAllCacheItems()
       .filter(item => !item[LINEITEM_KEY].match(/Children|Shopping/))
-      .filter(item => !item.department && !item.tagline)
+      .filter(item => !item.departmentColor)
       .map(item => {
         const extra = {};
         if (item[LINEITEM_KEY].match(/Saturday/)) {
@@ -362,13 +366,15 @@ function generateMailMergeFiles() {
       }));
 
   // Export staff badges
-  const staffSortFn = (a,b) => (a.department || '').localeCompare(b.department);
-  const staffBadgesPromise = generateBadgeMailMerge('Adorned',
-    getAllCacheItems()
-      .filter(item => !item[LINEITEM_KEY].match(/Children|Shopping/))
-      .filter(item => item.department || item.tagline)
-      .concat(getVendorGroup()),
-    staffSortFn);
+  const staffBadgesPromises = getAllCacheItems()
+    .filter(item => item.departmentColor)
+    .concat(getVendorGroup())
+    .reduce((acc, item) => {
+      acc[0][item.departmentColor] = acc[0][item.departmentColor] || [];
+      acc[0][item.departmentColor].push(item);
+      return acc;
+    }, [{}])
+    .map(acc => Object.keys(acc).map(key => generateBadgeMailMerge(`Adorned ${key}`, acc[key])));
   
   // Export child badges (front AND back)
   const childPromises = Object.keys(cache)
@@ -379,7 +385,7 @@ function generateMailMergeFiles() {
 
   promises = [
     generalBadgesPromise,
-    staffBadgesPromise,
+    ...staffBadgesPromises,
     ...childPromises,
     // generateVendorMailMerge(),
     generateEnvelopeMailMerge(),
@@ -387,6 +393,21 @@ function generateMailMergeFiles() {
 
   return Promise.each(promises, p => p)
     .then(() => console.log(`\nWrote mailmerge files to ${process.cwd()}.  You're welcome.`));
+}
+
+function summarizeOtherItems() {
+  // Photo Ops (need orders to see what this looks like
+  // Dinner with various stars 
+  // Tee-Shirt, Hoodie
+  const categories = summary
+    .filter(item => item[LINEITEM_KEY].match(/Dinner|T-Shirt|Hoodie|Photo/))
+    .map(item => [item[LINEITEM_KEY], item[LINEITEM_VARIANT]].filter(Boolean).join('/'))
+    .reduce((acc, key) => (acc[key] = acc[key] + 1 || 1, acc), {});
+  
+  console.log('\nOther sales counts:');
+  Object.keys(categories).sort().forEach(key => {
+    console.log(key, categories[key]);
+  });
 }
 
 function main() {
@@ -413,6 +434,7 @@ function main() {
   processInputData(folder, metadataFile)
     .then(numBadges => console.log('\nTotal badges sold:', numBadges))
     .then(printBadgeCounts)
+    .then(summarizeOtherItems)
     .then(() => console.log(`\nVendor count: ${vendors.length}`))
     .then(printDiscountCodeCounts)
     .then(generateMailMergeFiles)
