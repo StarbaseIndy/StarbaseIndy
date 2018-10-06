@@ -117,7 +117,7 @@ function verifyMetadata() {
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .map(entry => {
       // verify that all sortKey values in the metadata actually exist
-      if (entry.Name && !entry.sortKey) {
+      if (!entry.sortKey) {
         console.error(`WARNING: Metadata missing sortKey for name: ${entry.Name}`);
       } else if (!allKeys.find(sortKey => sortKey === entry.sortKey)) {
         console.error(`WARNING: Metadata invalid sortKey: ${entry.sortKey}`);
@@ -204,7 +204,7 @@ function generateBadgeMailMerge(filename, group, sortFn = (a,b) => a.badgeNum - 
   const records = group
     .sort(sortFn)
     .map(item => {
-      const { 
+      const {
         [BADGENAME_KEY]: badgeName,
         department,
         tagline,
@@ -417,7 +417,6 @@ function main() {
   }
 
   const [folder, metadataFile] = process.argv.slice(2);
-
   const lookup = process.argv.indexOf('-l')
   if (lookup !== -1) {
     const name = process.argv[lookup + 1];
