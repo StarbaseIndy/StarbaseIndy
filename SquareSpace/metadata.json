@@ -142,7 +142,7 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Uhura Training Academy"
 }, {
-  "sortKey": "",
+  "sortKey": "1472#1",
   "Name": "Giselle MacNabb",
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
@@ -206,8 +206,8 @@
   "DepartmentColor": "Yellow",
   "Tagline": "Intergalactic Cosmetologist"
 }, {
-  "sortKey": "",
-  "Name": "LtCmdr jenbom vestai-toQqul",
+  "sortKey": "1334#1",
+  "Name": "Jennifer Usellis",
   "Department": "VIP",
   "DepartmentColor": "Yellow",
   "Tagline": "Klingon Pop Star"
