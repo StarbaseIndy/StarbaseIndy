@@ -1,6 +1,7 @@
 [{
   "Note": "This file should be used to adorn badges for the following Departments: Board, [Staff], VIP, Press, and Presenter",
-  "Note2": "Note that Vendor data is sourced separately, and metadata in this file is not (currently) applied to that data set."
+  "Note2": "Note that Vendor data is sourced separately, and metadata in this file is not (currently) applied to that data set.",
+  "Note3": "TODO: Guest Handlers - Bruce Levy, John McCain"
 }, {
   "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
 }, {
@@ -88,6 +89,30 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Publications"
 }, {
+  "sortKey": "",
+  "Name": "Emily Grumble",
+  "Department": "Marketing",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Graphic Design"
+}, {
+  "sortKey": "",
+  "Name": "Gabriel Duval",
+  "Department": "Marketing",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Photographer"
+}, {
+  "sortKey": "",
+  "Name": "Andy Sams",
+  "Department": "Marketing",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Photographer"
+}, {
+  "sortKey": "",
+  "Name": "Megan Voss",
+  "Department": "Marketing",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Photographer"
+}, {
   "Note": "==================== [Staff] Facilities ================================================================="
 }, {
   "sortKey": "",
@@ -110,16 +135,20 @@
 }, {
   "Note": "==================== [Staff] Programming ================================================================"
 }, {
-  "Note": "Delete this note when the Name is identified - Bryan or Bruce?",
   "sortKey": "",
-  "Name": "???",
+  "Name": "Bryan Neeley",
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
   "Tagline": "Media Guest Relations"
 }, {
-  "Note": "Delete this note when the Name is identified",
   "sortKey": "",
-  "Name": "???",
+  "Name": "Beth Staker",
+  "Department": "Programming",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Party Liaison"
+}, {
+  "sortKey": "",
+  "Name": "Cern Staker",
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
   "Tagline": "Party Liaison"
@@ -147,6 +176,12 @@
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
   "Tagline": "Masquerade"
+}, {
+  "sortKey": "",
+  "Name": "Bradley Nixon",
+  "Department": "Programming",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Stage Manager"
 }, {
   "Note": "==================== [Staff] Tactical ==================================================================="
 }, {
@@ -212,6 +247,7 @@
   "DepartmentColor": "Yellow",
   "Tagline": "Klingon Pop Star"
 }, {
+  "Note": "DO NOT INCLUDE???",
   "sortKey": "",
   "Name": "David Reddick",
   "Department": "VIP",
@@ -239,6 +275,12 @@
   "Department": "Presenter",
   "DepartmentColor": "Green",
   "Tagline": "???"
+}, {
+  "sortKey": "",
+  "Name": "Demetrius Witherspoon",
+  "Department": "VIP",
+  "DepartmentColor": "Yellow",
+  "Tagline": ""
 }, {
   "Note": "==================== Triumvirate ========================================================================"
 }, {
