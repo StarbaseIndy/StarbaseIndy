@@ -94,7 +94,7 @@ function processCSV(data) {
     });
     // console.log('ROW:', row);
   });
-  return Promise.resolve(data.filter(row => Object.keys(row).length));
+  return Promise.resolve(data.filter(row => Object.keys(row).includes('id')));
 }
 
 function processSheet(config) {
