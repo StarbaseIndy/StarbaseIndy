@@ -68,31 +68,7 @@
         
         // 2019
         // TODO: add next year href initialization here.
-      }
-      
-      function forceDownload(blob, filename) {
-        var a = document.createElement('a');
-        a.download = filename;
-        a.href = blob;
-        a.click();
-      }
-
-      // Current blob size limit is around 500MB for browsers
-      function downloadResource(url, filename) {
-        if (!filename) filename = url.split('\\').pop().split('/').pop();
-        fetch(url, {
-            headers: new Headers({
-              'Origin': location.origin
-            }),
-            mode: 'cors'
-          })
-          .then(response => response.blob())
-          .then(blob => {
-            let blobUrl = window.URL.createObjectURL(blob);
-            forceDownload(blobUrl, filename);
-          })
-          .catch(e => console.error(e));
-      }      
+      }  
     </script>
   </head>
   <body onload="onLoad()">
@@ -106,8 +82,8 @@
       <li>Rename the file before saving</li>
     </ul>
 
-    <a href="#" id="2017Transactions">2017 Square Transactions</a><br/>
-    <a href="#" id="2017Items"       >2017 Square Detailed Items</a><br/>
+    <a href="#" id="2017Transactions">2017 Square Transactions</a> (Square)<br/>
+    <a href="#" id="2017Items"       >2017 Square Detailed Items</a> (Square)<br/>
     <br/>
     <a href="#" id="2018ChildrensBadge"    download="2018 ChildrensBadge.csv"   >2018 Children's Badge.csv</a><br/>
     <a href="#" id="2018SaturdayBadge"     download="2018 SaturdayBadge.csv"    >2018 Saturday Badge.csv</a><br/>
@@ -116,13 +92,11 @@
     <a href="#" id="2018StudentBadge"      download="2018 StudentBadge.csv"     >2018 Student Badge.csv</a><br/>
     <a href="#" id="2018Summary"           download="2018 Summary.csv"          >2018 Summary.csv</a><br/>
     <a href="#" id="2018SundayBadge"       download="2018 SundayBadge.csv"      >2018 Sunday Badge.csv</a><br/>
-    <a href="#" id="2018Vendor"            download="2018 Vendor.csv"           >2018 Vendors.csv (Google Drive)</a><br/>
+    <a href="#" id="2018Vendor"            download="2018 Vendor.csv"           >2018 Vendors.csv</a> (Google Drive)<br/>
     <a href="#" id="2018WeekendBadge"      download="2018 WeekendBadge.csv"     >2018 Weekend Badge.csv</a><br/>
     
-    <a href="#" id="2018Transactions">2018 Square Transactions</a><br/>
-    <a href="#" id="2018Items"       >2018 Square Detailed Items</a><br/>
-    
-    <div style="cursor: pointer;" onclick="downloadResource(get2018SquareSpaceUrl('5b43fe24aa4a9907985a6406'), 'dpm.csv')">TEST ME</div>
-  </body>
+    <a href="#" id="2018Transactions">2018 Square Transactions</a> (Square)<br/>
+    <a href="#" id="2018Items"       >2018 Square Detailed Items</a> (Square)<br/>
+   </body>
 </html>
 
