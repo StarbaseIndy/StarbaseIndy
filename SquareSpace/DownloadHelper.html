@@ -1,11 +1,38 @@
 <html>
   <head>
     <title>Squarespace Detailed Order Download Helper</title>
+
     <script>
       // Why download this way?  Because the SquareSpace Commerce API costs extra.
       // https://developers.squarespace.com/commerce-api
 
-      function getUrl(productId = '') {
+      function getSquareUrl(type, startDate, endDate) {
+        const startTimestamp = (new Date(startDate + 'T00:00:00.000-0500')).getTime() * 1000;
+        const endTimestamp = (new Date(endDate + 'T00:00:00.000-0500')).getTime() * 1000;
+        const postData = {
+          "user_token": { "merchant_token": "SFTBA37WGJXWY", "unit_token": ["21PTCF9NNTCRJ"] },
+          "time_range_params": {
+            "batch_request": { "batch_size": 5000 }, // TODO: needed?
+            "ordered_time_range": {
+              "begin_time": { "instant_usec": startTimestamp },
+              "end_time": { "instant_usec": endTimestamp },
+              "sort_order": "DESC",
+              "tz_name": "America/New_York"
+            },
+          },
+        };
+        return 'https://squareup.com/v2/reports/' + type + '.csv?beemo_request=' + encodeURIComponent(JSON.stringify(postData));
+      }
+      
+      function get2017SquareUrl(type) {
+        return getSquareUrl(type, '2017-11-24', '2017-11-27')
+      }
+
+      function get2018SquareUrl(type) {
+        return getSquareUrl(type, '2018-11-23', '2018-11-26')
+      }
+      
+      function getSquareSpaceUrl(productId = '') {
         return 'https://heather-cottingham-r34y.squarespace.com/api/commerce/orders/export' +
                '?orderStates=PENDING' +
                '&productType=' +
@@ -13,28 +40,59 @@
 			         '&productId=' + productId;
       }
       
-      function get2018Url(productId) {
-        return getUrl(productId) +
+      function get2018SquareSpaceUrl(productId) {
+        return getSquareSpaceUrl(productId) +
                '&orderSubmittedOnMin=2018-04-20T00%3A00%3A00.000Z' +
                '&orderSubmittedOnMax=2018-11-23T00%3A00%3A00.000Z';
       }
       
       function onLoad() {
+        // 2017
+        document.getElementById('2017Transactions').href = get2017SquareUrl('transactions');
+        document.getElementById('2017Items').href = get2017SquareUrl('items');
+        
         // 2018
-        document.getElementById('2018WeekendBadge').href = get2018Url('5a9af8dbec212db87d180a40');
-        document.getElementById('2018StarBadge').href = get2018Url('5a9afc808165f55874292791');
-        document.getElementById('2018SaturdayBadge').href = get2018Url('5a9aff4a0d9297b12545dd96');
-        document.getElementById('2018ChildrensBadge').href = get2018Url('5a9b05e5c830255b24337e84');
-        document.getElementById('2018SundayBadge').href = get2018Url('5a9b05cc71c10b1a7d192bb4');
-        document.getElementById('2018StudentBadge').href = get2018Url('5b43fe24aa4a9907985a6406');
-        document.getElementById('2018ShoppingWristband').href = get2018Url('5a9b018af9619a44982d5255');
-        // document.getElementById('2018PhotoOps').href = get2018Url('5baac1df71c10b96e750a30b');        
-        document.getElementById('2018Summary').href = get2018Url(); 
+        document.getElementById('2018WeekendBadge').href = get2018SquareSpaceUrl('5a9af8dbec212db87d180a40');
+        document.getElementById('2018StarBadge').href = get2018SquareSpaceUrl('5a9afc808165f55874292791');
+        document.getElementById('2018SaturdayBadge').href = get2018SquareSpaceUrl('5a9aff4a0d9297b12545dd96');
+        document.getElementById('2018ChildrensBadge').href = get2018SquareSpaceUrl('5a9b05e5c830255b24337e84');
+        document.getElementById('2018SundayBadge').href = get2018SquareSpaceUrl('5a9b05cc71c10b1a7d192bb4');
+        document.getElementById('2018StudentBadge').href = get2018SquareSpaceUrl('5b43fe24aa4a9907985a6406');
+        document.getElementById('2018ShoppingWristband').href = get2018SquareSpaceUrl('5a9b018af9619a44982d5255');
+        document.getElementById('2018Summary').href = get2018SquareSpaceUrl(); 
         
         document.getElementById('2018Vendor').href = 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034';
 
+        document.getElementById('2018Transactions').href = get2018SquareUrl('transactions');
+        document.getElementById('2018Items').href = get2018SquareUrl('items');
+        
+        // 2019
         // TODO: add next year href initialization here.
       }
+      
+      function forceDownload(blob, filename) {
+        var a = document.createElement('a');
+        a.download = filename;
+        a.href = blob;
+        a.click();
+      }
+
+      // Current blob size limit is around 500MB for browsers
+      function downloadResource(url, filename) {
+        if (!filename) filename = url.split('\\').pop().split('/').pop();
+        fetch(url, {
+            headers: new Headers({
+              'Origin': location.origin
+            }),
+            mode: 'cors'
+          })
+          .then(response => response.blob())
+          .then(blob => {
+            let blobUrl = window.URL.createObjectURL(blob);
+            forceDownload(blobUrl, filename);
+          })
+          .catch(e => console.error(e));
+      }      
     </script>
   </head>
   <body onload="onLoad()">
@@ -43,21 +101,28 @@
     <ul>
       <li>Log into <a target="_blank" href="https://heather-cottingham-r34y.squarespace.com/config">SBI SquareSpace</a> (will open in new tab)</li>
       <li>Log into <a target="_blank" href="https://drive.google.com/drive/u/1/folders/16nKCDo2RRU2M6T502mD1Rl38nOW3R2fm">SBI Google Drive</a> (will open in new tab)</li>
+      <li>Log into <a target="_blank" href="https://squareup.com/login">Square (will open in new tab)</a></li>
       <li>Right-click each link below, and select 'Save link as...'</li>
       <li>Rename the file before saving</li>
     </ul>
+
+    <a href="#" id="2017Transactions">2017 Square Transactions</a><br/>
+    <a href="#" id="2017Items"       >2017 Square Detailed Items</a><br/>
+    <br/>
     <a href="#" id="2018ChildrensBadge"    download="2018 ChildrensBadge.csv"   >2018 Children's Badge.csv</a><br/>
-    <!--
-    <a href="#" id="2018PhotoOps"          download="2018 PhotoOps.csv"         >2018 Photo Ops.csv</a><br/>    
-    -->
     <a href="#" id="2018SaturdayBadge"     download="2018 SaturdayBadge.csv"    >2018 Saturday Badge.csv</a><br/>
     <a href="#" id="2018ShoppingWristband" download="2018 ShoppingWristband.csv">2018 Shopping Wristband.csv</a><br/>
     <a href="#" id="2018StarBadge"         download="2018 StarBadge.csv"        >2018 Star Badge.csv</a><br/>
     <a href="#" id="2018StudentBadge"      download="2018 StudentBadge.csv"     >2018 Student Badge.csv</a><br/>
     <a href="#" id="2018Summary"           download="2018 Summary.csv"          >2018 Summary.csv</a><br/>
     <a href="#" id="2018SundayBadge"       download="2018 SundayBadge.csv"      >2018 Sunday Badge.csv</a><br/>
-    <a href="#" id="2018Vendor"            download="2018 Vendor.csv"           >2018 Vendors.csv</a><br/>
+    <a href="#" id="2018Vendor"            download="2018 Vendor.csv"           >2018 Vendors.csv (Google Drive)</a><br/>
     <a href="#" id="2018WeekendBadge"      download="2018 WeekendBadge.csv"     >2018 Weekend Badge.csv</a><br/>
+    
+    <a href="#" id="2018Transactions">2018 Square Transactions</a><br/>
+    <a href="#" id="2018Items"       >2018 Square Detailed Items</a><br/>
+    
+    <div style="cursor: pointer;" onclick="downloadResource(get2018SquareSpaceUrl('5b43fe24aa4a9907985a6406'), 'dpm.csv')"></div>
   </body>
 </html>
 
