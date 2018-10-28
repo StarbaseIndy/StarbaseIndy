@@ -6,18 +6,26 @@
       // Why download this way?  Because the SquareSpace Commerce API costs extra.
       // https://developers.squarespace.com/commerce-api
 
-      function getSquareUrl(type, startDate, endDate) {
+      // How to get this Square info?
+      // 1. Navigate to SquareUp => Sales => Transactions
+      // 2. Select date 12/01/2017-12/01/2018
+      // 3. Select location "SBI" only
+      // 4. In Chrome Developer Tools (F12), view the page Elements, search for "_blank", and replace with "_self"
+      // 5. In Chrome Developer Tools (F12), select Network tab, and click the "Preserve Logs" checkbox
+      // 6. Click the "Export" button, and select "Transactions CSV"
+      // 7. In Chrome Developer Tools (F12), in the Network tab, look at the "transactions.csv" network call form data.
+      function getSquareUrl(type, startDate, endDate, locationToken) {
         const startTimestamp = (new Date(startDate + 'T00:00:00.000-0500')).getTime() * 1000;
         const endTimestamp = (new Date(endDate + 'T00:00:00.000-0500')).getTime() * 1000;
         const postData = {
-          "user_token": { "merchant_token": "SFTBA37WGJXWY", "unit_token": ["21PTCF9NNTCRJ"] },
-          "time_range_params": {
-            "batch_request": { "batch_size": 5000 }, // TODO: needed?
-            "ordered_time_range": {
-              "begin_time": { "instant_usec": startTimestamp },
-              "end_time": { "instant_usec": endTimestamp },
-              "sort_order": "DESC",
-              "tz_name": "America/New_York"
+          user_token: { 'merchant_token': 'SFTBA37WGJXWY', unit_token: [locationToken] },
+          time_range_params: {
+            batch_request: { batch_size: 5000 }, // TODO: needed?
+            ordered_time_range: {
+              begin_time: { instant_usec: startTimestamp },
+              end_time: { instant_usec: endTimestamp },
+              sort_order: "DESC",
+              tz_name: "America/New_York"
             },
           },
         };
@@ -25,11 +33,14 @@
       }
       
       function get2017SquareUrl(type) {
-        return getSquareUrl(type, '2017-11-24', '2017-11-27')
+        // Note: 2018 vendors are also invoiced from this location
+        const the_starbase = '21PTCF9NNTCRJ';
+        return getSquareUrl(type, '2017-11-24', '2017-11-27', the_starbase);
       }
 
       function get2018SquareUrl(type) {
-        return getSquareUrl(type, '2018-11-23', '2018-11-26')
+        const sbi = 'WR6MC29WH0P5Z'
+        return getSquareUrl(type, '2017-12-01', '2018-12-01', sbi);
       }
       
       function getSquareSpaceUrl(productId = '') {
@@ -42,8 +53,8 @@
       
       function get2018SquareSpaceUrl(productId) {
         return getSquareSpaceUrl(productId) +
-               '&orderSubmittedOnMin=2018-04-20T00%3A00%3A00.000Z' +
-               '&orderSubmittedOnMax=2018-11-23T00%3A00%3A00.000Z';
+               '&orderSubmittedOnMin=' + encodeURIComponent('2018-04-20T00:00:00.000Z') +
+               '&orderSubmittedOnMax=' + encodeURIComponent('2018-11-23T00:00:00.000Z');
       }
       
       function onLoad() {
@@ -60,8 +71,9 @@
         document.getElementById('2018StudentBadge').href = get2018SquareSpaceUrl('5b43fe24aa4a9907985a6406');
         document.getElementById('2018ShoppingWristband').href = get2018SquareSpaceUrl('5a9b018af9619a44982d5255');
         document.getElementById('2018Summary').href = get2018SquareSpaceUrl(); 
-        
-        document.getElementById('2018Vendor').href = 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034';
+
+        const vendorSheet2018 = 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034';
+        document.getElementById('2018Vendor').href = vendorSheet2018;
 
         document.getElementById('2018Transactions').href = get2018SquareUrl('transactions');
         document.getElementById('2018Items').href = get2018SquareUrl('items');
@@ -72,12 +84,12 @@
     </script>
   </head>
   <body onload="onLoad()">
-    <h1>Squarespace Detailed Order Download Helper</h1>
+    <h1>Square/Squarespace/Drive Data Download Helper</h1>
     <h3>Instructions:</h3>
     <ul>
       <li>Log into <a target="_blank" href="https://heather-cottingham-r34y.squarespace.com/config">SBI SquareSpace</a> (will open in new tab)</li>
       <li>Log into <a target="_blank" href="https://drive.google.com/drive/u/1/folders/16nKCDo2RRU2M6T502mD1Rl38nOW3R2fm">SBI Google Drive</a> (will open in new tab)</li>
-      <li>Log into <a target="_blank" href="https://squareup.com/login">Square (will open in new tab)</a></li>
+      <li>Log into <a target="_blank" href="https://squareup.com/login">Square</a> (will open in new tab)</li>
       <li>Right-click each link below, and select 'Save link as...'</li>
       <li>Rename the file before saving</li>
     </ul>
