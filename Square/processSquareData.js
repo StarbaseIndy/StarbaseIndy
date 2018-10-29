@@ -64,7 +64,7 @@ function getTransactions() {
 }
 
 function formatCurrency(value) {
-  return (+value).toFixed(2).toString().padStart(8, ' ');
+  return value.toFixed(2).toString().padStart(8, ' ');
 }
 
 function processCSV(filename, group = [{}]) {
@@ -85,7 +85,7 @@ function processCSV(filename, group = [{}]) {
       const id = item[TRANSACTION_ID];
       transactions[id] = Object.assign({ items: [] }, transactions[id], item);
     });
-  }
+  }  
 }
 
 function readCSV(filename) {
@@ -95,12 +95,27 @@ function readCSV(filename) {
     .catch(err => console.log('Error reading CSV file:', err));
 }
 
+function convertDollarAmounts(ary) {
+  ary.forEach(item => {
+    Object.entries(item).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        convertDollarAmounts(value);
+      } else if (value.match(/^\$/)) {
+        item[key] = +value.slice(1);
+      } else if ([QUANTITY, FEE_PERCENTAGE, FEE_FIXED].includes(key)) {
+        item[key] = +value;
+      }
+    });
+  });
+}
+
 function readSpreadsheets(folder) {
   console.log(`Reading CSV files from '${folder}'`);
   return readDir(folder)
     .then(files => files.filter(file => file.match(/^(transactions|items).*\.csv$/)))
     .then(files => files.map(file => `${folder}/${file}`))
-    .then(files => Promise.each(files.sort().map(readCSV), p => p));
+    .then(files => Promise.each(files.sort().map(readCSV), p => p))
+    .then(() => convertDollarAmounts(getTransactions()));
 }
 
 function processInputData(folder) {
@@ -127,7 +142,7 @@ function processInputData(folder) {
 // }
 
 function printSummary() {
-  const baseFee = +(getTransactions().find(t => t[CARD_ENTRY_METHOD] === 'Swiped') || {})[FEE_PERCENTAGE] || 2.75;
+  const baseFee = (getTransactions().find(t => t[CARD_ENTRY_METHOD] === 'Swiped') || {})[FEE_PERCENTAGE] || 2.75;
   const totals = getTransactions().reduce((acc, transaction) => {
     const {
       [TOTAL_COLLECTED]: total,
@@ -138,15 +153,14 @@ function printSummary() {
       [FEE_PERCENTAGE]: percentage,
       [FEE_FIXED]: fixed,
     } = transaction;
-    const totalCollected = +total.slice(1);
-    const diffFee = percentage ? +percentage - baseFee : 0;
+    const diffFee = percentage ? percentage - baseFee : 0;
 
-    acc.total = acc.total + totalCollected;
-    acc.fees = acc.fees + +fees.slice(1);
-    acc.card = acc.card + +card.slice(1);
-    acc.cash = acc.cash + +cash.slice(1);
-    acc.other = acc.other + +other.slice(1);    
-    acc.keyedFees = acc.keyedFees + (+fixed.slice(1) + (totalCollected * diffFee / 100));
+    acc.total = acc.total + total;
+    acc.fees = acc.fees + fees;
+    acc.card = acc.card + card;
+    acc.cash = acc.cash + cash;
+    acc.other = acc.other + other;
+    acc.keyedFees = acc.keyedFees + (fixed + (total * diffFee / 100));
     return acc;
   }, { total: 0, card: 0, fees: 0, cash: 0, other: 0, keyedFees: 0 });
   console.log('\nSummary:', 
@@ -197,10 +211,10 @@ function generateShiftReport(title, dataset = getTransactions(), key = TOTAL_COL
       const timestamp = transaction.timestamp;
       if ((acc.start || timestamp) >= timestamp) { acc.start = timestamp; } 
       if ((acc.end   || timestamp) <= timestamp) { acc.end = timestamp; }
-      acc.amount = (+acc.amount || 0) + +transaction[key].slice(1);
+      acc.amount = acc.amount + transaction[key];
       acc.device = getName(transaction);
       return acc;
-    }, {}));
+    }, { amount: 0 }));
 
   console.log(`\nShift report: ${title}:`);
   summary
