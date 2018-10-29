@@ -42,6 +42,8 @@ const LOCATION = 'Location';
 const NET_TOTAL = 'Net Total'; // This can be negative
 const TOTAL_COLLECTED = 'Total Collected'; // This can be negative
 const CASH = 'Cash'; // Amount of cash in the transaction
+const CARD = 'Card'; // Amount charged to credit card
+const OTHER_TENDER = 'Other Tender';
 
 // from item CSV
 const ITEM = 'Item'; // Item description
@@ -56,6 +58,14 @@ const readFile = Promise.promisify(Fs.readFile);
 const writeFile = Promise.promisify(Fs.writeFile);
 
 const transactions = {};
+
+function getTransactions() {
+  return Object.values(transactions);
+}
+
+function formatCurrency(value) {
+  return (+value).toFixed(2).toString().padStart(8, ' ');
+}
 
 function processCSV(filename, group = [{}]) {
   if (group[0][ITEM]) {
@@ -117,19 +127,49 @@ function processInputData(folder) {
 // }
 
 function printSummary() {
-  console.log('Total transactions:', Object.keys(transactions).length);
+  const baseFee = +(getTransactions().find(t => t[CARD_ENTRY_METHOD] === 'Swiped') || {})[FEE_PERCENTAGE] || 2.75;
+  const totals = getTransactions().reduce((acc, transaction) => {
+    const {
+      [TOTAL_COLLECTED]: total,
+      [FEES]: fees,
+      [CARD]: card,
+      [CASH]: cash,
+      [OTHER_TENDER]: other,
+      [FEE_PERCENTAGE]: percentage,
+      [FEE_FIXED]: fixed,
+    } = transaction;
+    const totalCollected = +total.slice(1);
+    const diffFee = percentage ? +percentage - baseFee : 0;
+
+    acc.total = acc.total + totalCollected;
+    acc.fees = acc.fees + +fees.slice(1);
+    acc.card = acc.card + +card.slice(1);
+    acc.cash = acc.cash + +cash.slice(1);
+    acc.other = acc.other + +other.slice(1);    
+    acc.keyedFees = acc.keyedFees + (+fixed.slice(1) + (totalCollected * diffFee / 100));
+    return acc;
+  }, { total: 0, card: 0, fees: 0, cash: 0, other: 0, keyedFees: 0 });
+  console.log('\nSummary:', 
+              '\n  Transactions:', Object.keys(transactions).length,
+              '\n  Total:             ', formatCurrency(totals.total),
+              '\n  Other tender total:', formatCurrency(totals.other),
+              '\n  Cash total:        ', formatCurrency(totals.cash),
+              '\n  Credit total:      ', formatCurrency(totals.card),
+              '\n  Fees total:        ', formatCurrency(totals.fees),
+              '\n  Keyed fees total:  ', formatCurrency(totals.keyedFees));
+              
 }
 
 function calculateTimestamps() {
-  Object.values(transactions).forEach(transaction => {
+  getTransactions().forEach(transaction => {
     const [month, day, year] = transaction[DATE].split('/').map(v => parseInt(v, 10));
     const dateArgs = [year + 2000, month - 1, day, ...transaction[TIME].split(':').map(v => parseInt(v, 10))];
     transaction.timestamp = new Date(...dateArgs)
   });
 }
 
-function generateCashReport() {
-  const getName = (transaction = {}) => transaction[DEVICE_NICKNAME] || transaction[DEVICE_NAME] || '<unknown>';
+function generateShiftReport(title, dataset = getTransactions(), key = TOTAL_COLLECTED) {
+  const getName = (transaction = {}) => [transaction[DEVICE_NICKNAME], transaction[DEVICE_NAME]].filter(Boolean).join('/') || '<unknown>';
   
   // 1. Sort by Device Nickname | Device Name first, then date/time
   // 2. Create new group whenever transaction has item of SKU=SHIFT_START (and discard transaction), or
@@ -137,7 +177,7 @@ function generateCashReport() {
   // 3. Sum TOTAL_COLLECTED per group
   // 4. Calculate start-end date/time per group
   // 5. Print group data
-  const groups = Object.values(transactions)
+  const groups = dataset
     .sort((a,b) => getName(a).localeCompare(getName(b)) || a.timestamp - b.timestamp)
     .reduce((acc, transaction) => {
       if (transaction.items.some(item => item[SKU] === 'SHIFT_START')) {
@@ -157,18 +197,35 @@ function generateCashReport() {
       const timestamp = transaction.timestamp;
       if ((acc.start || timestamp) >= timestamp) { acc.start = timestamp; } 
       if ((acc.end   || timestamp) <= timestamp) { acc.end = timestamp; }
-      acc.amount = (+acc.amount || 0) + +transaction[TOTAL_COLLECTED].slice(1);
+      acc.amount = (+acc.amount || 0) + +transaction[key].slice(1);
       acc.device = getName(transaction);
       return acc;
     }, {}));
 
-  summary.forEach(group => {
-    const { start, end, amount, device } = group;
-    const date = start.toISOString().slice(0, 10); // TODO: what if this doesn't equal group.end date string?
-    console.log(date, start.toTimeString().slice(0,8), '-', end.toTimeString().slice(0,8), `'${device}'`, 'Total:', amount);
-    
-    // TODO: Consider writing this group data to CSV file
-  });
+  console.log(`\nShift report: ${title}:`);
+  summary
+    .sort((a,b) => a.start - b.start)
+    .forEach(group => {
+      const { start, end, amount, device } = group;
+      const [startDate, startTime] = start.toISOString().split('.')[0].split('T');
+      const [endDate, endTime] = end.toISOString().split('.')[0].split('T');
+      console.log('  ',
+                  startDate, startTime, 
+                  '-', 
+                  startDate === endDate ? '' : endDate, endTime,
+                  'Total:', formatCurrency(amount),
+                  `'${device}'`);
+      
+      // TODO: Consider writing this group data to CSV file
+    });
+}
+
+function generateShiftTotalReport() {
+  generateShiftReport('All transactions', getTransactions(), TOTAL_COLLECTED);
+}
+
+function generateShiftCashReport() {
+  generateShiftReport('Cash transactions', getTransactions().filter(t => t[CASH] !== '$0.00'), CASH);
 }
 
 function main() {
@@ -182,7 +239,8 @@ function main() {
   processInputData(folder)
     .then(calculateTimestamps)
     .then(printSummary)
-    .then(generateCashReport)
+    .then(generateShiftTotalReport)
+    .then(generateShiftCashReport)
     .then(() => console.log('\nDone!'))
     .catch((err) => console.log('Error!', err));
 }
