@@ -160,7 +160,7 @@ function printSummary() {
     acc.card = acc.card + card;
     acc.cash = acc.cash + cash;
     acc.other = acc.other + other;
-    acc.keyedFees = acc.keyedFees + (fixed + (total * diffFee / 100));
+    acc.keyedFees = acc.keyedFees - (fixed + (total * diffFee / 100));
     return acc;
   }, { total: 0, card: 0, fees: 0, cash: 0, other: 0, keyedFees: 0 });
   console.log('\nSummary:', 
@@ -169,8 +169,7 @@ function printSummary() {
               '\n  Other tender total:', formatCurrency(totals.other),
               '\n  Cash total:        ', formatCurrency(totals.cash),
               '\n  Credit total:      ', formatCurrency(totals.card),
-              '\n  Fees total:        ', formatCurrency(totals.fees),
-              '\n  Keyed fees total:  ', formatCurrency(totals.keyedFees));
+              '\n  Fees total:        ', formatCurrency(totals.fees), `(keyed fees: ${ formatCurrency(totals.keyedFees) })`);
               
 }
 
@@ -225,8 +224,7 @@ function generateShiftReport(title, dataset = getTransactions(), key = TOTAL_COL
       const [endDate, endTime] = end.toISOString().split('.')[0].split('T');
       console.log('  ',
                   startDate, startTime, 
-                  '-', 
-                  startDate === endDate ? '' : endDate, endTime,
+                  startDate === endDate ? '-' : '- ' + endDate, endTime,
                   'Total:', formatCurrency(amount),
                   `'${device}'`);
       
