@@ -38,7 +38,7 @@ function checkForValidPayload(payload) {
   const regex = new RegExp('<html.*<head.*</head>.*<body.*</body>.*</html>', 's');
   if (regex.test(payload.toString('utf8'))) {
     throw('ERROR: CSV content appears to be an HTML page.\n' + 
-          'Please set document permissions to be  publically accessible via link without any username or password.');
+          'Please set document permissions to be publicly accessible via link without any username or password.');
   }
 }
 
@@ -48,11 +48,7 @@ function processPage(key, gid, processFn) {
     columns: (ary) => ary.map((value) => value.match(/^\d+$/) ? false : value),
   };
 
-  // TODO: this isn't giving us a 304 return value
-  const wreckOptions = {
-    headers: { 'If-Modified-Since': 'Sun, 12 Feb 2018 01:16:45 GMT' },
-  };
-  return Promise.resolve(Wreck.get(getUri(key, gid), wreckOptions))
+  return Promise.resolve(Wreck.get(getUri(key, gid)))
     .tap((response) => console.log('Response status:', response.res.statusCode))
     .then((response) => response.payload)
     .tap((payload) => checkForValidPayload(payload))
@@ -65,7 +61,6 @@ function processCSV(data) {
 
   data.forEach((row) => {
     const meta = {};
-    // console.log('ROW:', row);
     Object.entries(row).forEach(([name, value]) => {
       value = value.trim();
       if (name.includes('.')) {
@@ -92,7 +87,6 @@ function processCSV(data) {
         row[name] = value;
       }
     });
-    // console.log('ROW:', row);
   });
   return Promise.resolve(data.filter(row => Object.keys(row).includes('id')));
 }
