@@ -45,7 +45,7 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Registration"
 }, {
-  "sortKey": "",
+  "sortKey": "1499#1",
   "Name": "Kristina Bayer",
   "Department": "Finance",
   "DepartmentColor": "Light Blue",
@@ -89,13 +89,13 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Publications"
 }, {
-  "sortKey": "",
+  "sortKey": "1467#2",
   "Name": "Emily Grumble",
   "Department": "Marketing",
   "DepartmentColor": "Light Blue",
   "Tagline": "Graphic Design"
 }, {
-  "sortKey": "",
+  "sortKey": "1399#1",
   "Name": "Gabriel Duval",
   "Department": "Marketing",
   "DepartmentColor": "Light Blue",
@@ -141,13 +141,13 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Media Guest Relations"
 }, {
-  "sortKey": "",
+  "sortKey": "1471#1",
   "Name": "Beth Staker",
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
   "Tagline": "Party Liaison"
 }, {
-  "sortKey": "",
+  "sortKey": "1471#2",
   "Name": "Cern Staker",
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
@@ -294,7 +294,7 @@
   "DepartmentColor": "White",
   "Tagline": "Triumvirate"
 }, {
-  "sortKey": "",
+  "sortKey": "1476#1",
   "Name": "Lillian Sams",
   "DepartmentColor": "White",
   "Tagline": "Triumvirate"
