@@ -163,14 +163,42 @@ function printSummary() {
     acc.keyedFees = acc.keyedFees - (fixed + (total * diffFee / 100));
     return acc;
   }, { total: 0, card: 0, fees: 0, cash: 0, other: 0, keyedFees: 0 });
-  console.log('\nSummary:', 
-              '\n  Transactions:', Object.keys(transactions).length,
-              '\n  Total:             ', formatCurrency(totals.total),
-              '\n  Other tender total:', formatCurrency(totals.other),
-              '\n  Cash total:        ', formatCurrency(totals.cash),
-              '\n  Credit total:      ', formatCurrency(totals.card),
-              '\n  Fees total:        ', formatCurrency(totals.fees), `(keyed fees: ${ formatCurrency(totals.keyedFees) })`);
-              
+
+  console.log(
+    '\nSummary:', 
+    '\n  Transactions:',       Object.keys(transactions).length,
+    '\n  Total:             ', formatCurrency(totals.total),
+    '\n  Other tender total:', formatCurrency(totals.other),
+    '\n  Cash total:        ', formatCurrency(totals.cash),
+    '\n  Credit total:      ', formatCurrency(totals.card),
+    '\n  Fees total:        ', formatCurrency(totals.fees), `(keyed fees: ${ formatCurrency(totals.keyedFees) })`,
+  );
+}
+
+function printBadgeCount() {
+  // TODO: lookup a regexp based on the year of the transaction date:
+  // TODO: add regular expressions for years 2012-2016
+  // 2017 data: search for Weekend, Friday, Saturday, Sunday
+  // 2018 data: search for Badge
+  
+  const badgeSales = getTransactions().reduce((acc, transaction) => {
+    const badgeItems = transaction.items.filter(item => item[ITEM].match(/(Weekend|Friday|Saturday|Sunday)/));
+    badgeItems.map(item => {
+      const count = +item[QUANTITY];
+      acc[item[ITEM]] = (acc[item[ITEM]] || 0) + count;
+      acc.total += count;
+    });
+    return acc;
+  }, { total: 0 });
+  
+  console.log('Badge sales:');
+  Object.entries(badgeSales)
+    .sort((a,b) => a[0].localeCompare(b[0]))
+    .filter(([type]) => type !== 'total')
+    .forEach(([type, count]) => {
+      console.log(`  ${type}:`, count);
+    });
+  console.log('  Total:', badgeSales.total);
 }
 
 function calculateTimestamps() {
@@ -251,6 +279,7 @@ function main() {
   processInputData(folder)
     .then(calculateTimestamps)
     .then(printSummary)
+    .then(printBadgeCount)
     .then(generateShiftTotalReport)
     .then(generateShiftCashReport)
     .then(() => console.log('\nDone!'))
