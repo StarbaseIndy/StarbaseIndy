@@ -132,23 +132,24 @@ function synthesizeMetadata() {
         item.department = "Presenter";
         item.departmentColor = "Green";
       }
+      
+      // If a general admission badge would have a tagline, send it to the 'White' mailmerge file instead.
+      item.departmentColor = item.departmentColor || (item.tagline ? 'White' : '');
     }
   });
 }
 
 function mixinMetadata() {
   // Split badge name on unicode character '»' to facilitate entering taglines via the store.
-  // Mixin the metadata to get new badge names, taglines, and departments
+  // Mixin the metadata to get new badgeName, tagline, and department, and departmentColor.
   getAllCacheItems().forEach(item => {
     const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};  
     const [ badgeName, tagline = '' ] = (metaItem.BadgeName || item[BADGENAME_KEY] || '').split('»');
 
-    // if (tagline) { console.log('TAGLINE FROM BADGE NAME', badgeName, tagline); }
-    
     item[BADGENAME_KEY] = badgeName;
+    item.tagline = metaItem.Tagline || tagline;
     item.department = metaItem.Department;
     item.departmentColor = metaItem.DepartmentColor;
-    item.tagline = metaItem.Tagline || tagline;
   });
 }
 
