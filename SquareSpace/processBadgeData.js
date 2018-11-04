@@ -19,6 +19,12 @@ const ADULTEMAIL_KEY = 'Product Form: Responsible Adult\'s Email';
 const VENDORNAME_KEY = 'Business Name';
 const VENDORNUMBADGES_KEY = '#Badges';
 
+const PRESENTER_FIRSTNAME = 'name.0';
+const PRESENTER_LASTNAME = 'name.1';
+const PRESENTER_PREFIX = 'name.2';
+const PRESENTER_SUFFIX = 'name.3';
+const PRESENTER_ID = 'id';
+
 const ORDERID_KEY = 'Order ID';
 const csvParse = Promise.promisify(csv.parse);
 const csvStringify = Promise.promisify(csv.stringify);
@@ -27,7 +33,7 @@ const readFile = Promise.promisify(Fs.readFile);
 const writeFile = Promise.promisify(Fs.writeFile);
 const cache = {};
 const summary = [];
-const vendors = [];
+const vendors = []; // sourced separately
 const metadata = [];
 
 // The unique ID generator needs to give us a unique sequence number for every order number
@@ -73,14 +79,17 @@ function processCSV(filename, group = [{}]) {
     return;
   }
 
-  // Update the cache
-  group.map(item => {
-    const orderId = parseInt(item[ORDERID_KEY], 10);
-    item[ORDERID_KEY] = orderId; // make order ID numeric
-    item[UNIFYING_EMAIL] = item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2]; // combine different form names for same information
-    item.sortKey = getSortKey(orderId);
-  });
-  cache[lineItems[0] || filename] = group;
+  // Update the cache.
+  if (lineItems.length === 1) {
+    group.map(item => {
+      const orderId = parseInt(item[ORDERID_KEY], 10);
+      item[ORDERID_KEY] = orderId; // make order ID numeric
+      item[UNIFYING_EMAIL] = item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2]; // combine different form names for same information
+      item.sortKey = getSortKey(orderId);
+    });
+    cache[lineItems[0] || filename] = group;
+    return;
+  }
 }
 
 function readCSV(filename) {
@@ -98,14 +107,48 @@ function readSpreadsheets(folder) {
     .then(files => Promise.each(files.sort().map(readCSV), p => p));
 }
 
+function synthesizeMetadata() {
+  // 1. Any use of SBI_GURU where there's not already adornment should adorn as presenter
+  // 2. When adding the stragglers to the store, we should use a different code for entertainers, and a different code for guests.
+  // 3. Same treatment as #1 for codes for entertainers and media guests
+  // SBI_ENTERTAINER (Entertainer/Red), SBI_MEDIA_GUEST (VIP/Yellow), SBI_GURU (Presenter/Green) 
+
+  getAllCacheItems().forEach(item => {
+    if (!item.departmentColor) {
+      const sortKey = item[ORDERID_KEY] + '#1';
+      const discountCodes = getAllCacheItems().find(item => item.sortKey === sortKey)[DISCOUNTCODE_KEY];
+
+      if (discountCodes.match('SBI_MEDIA_GUEST')) {
+        item.department = "VIP";
+        item.departmentColor = "Yellow";
+      }
+      
+      if (discountCodes.match('SBI_ENTERTAINER')) {
+        item.department = "Entertainer";
+        item.departmentColor = "Red";
+      }
+      
+      if (discountCodes.match('SBI_GURU')) {
+        item.department = "Presenter";
+        item.departmentColor = "Green";
+      }
+    }
+  });
+}
+
 function mixinMetadata() {
+  // Split badge name on unicode character '»' to facilitate entering taglines via the store.
   // Mixin the metadata to get new badge names, taglines, and departments
-  getAllCacheItems().map(item => {
+  getAllCacheItems().forEach(item => {
     const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};  
-    item[BADGENAME_KEY] = metaItem.BadgeName || item[BADGENAME_KEY] || '';
+    const [ badgeName, tagline = '' ] = (metaItem.BadgeName || item[BADGENAME_KEY] || '').split('»');
+
+    // if (tagline) { console.log('TAGLINE FROM BADGE NAME', badgeName, tagline); }
+    
+    item[BADGENAME_KEY] = badgeName;
     item.department = metaItem.Department;
     item.departmentColor = metaItem.DepartmentColor;
-    item.tagline = metaItem.Tagline;
+    item.tagline = metaItem.Tagline || tagline;
   });
 }
 
@@ -146,8 +189,9 @@ function generateBadgeNumbers() {
 
 function processInputData(folder, metadataFile) {
   return readSpreadsheets(folder)
-    .then(generateBadgeNumbers)
-    .tap(() => readMetadata(metadataFile));
+    .then(generateBadgeNumbers) // preserve badge count by using tap() below.
+    .tap(() => readMetadata(metadataFile))
+    .tap(synthesizeMetadata);
 }
   
 
@@ -159,14 +203,13 @@ function printBadgeCounts() {
 }
 
 function printDiscountCodeCounts() {
-  // TODO: This code assumes that there is only one discount code in the DISCOUNTCODE_KEY field.
-  // If discount codes can stack, then this code will report stacked discount codes as their own category.
-  const codeUsages = getAllCacheItems().map(item => ({ [item[ORDERID_KEY]]: item[DISCOUNTCODE_KEY] }));
-  const deDuplicatedCodes = Object.assign({}, ...codeUsages);
-  const discountCodes = Object.values(deDuplicatedCodes)
+  const discountCodes = summary
+    .map(item => item[DISCOUNTCODE_KEY])
     .filter(Boolean)
-    .reduce((acc, val) => (acc[val] = acc[val] + 1 || 1, acc), {});
-
+    .map(code => code.split(','))
+    .reduce((acc, codes) => acc.concat(codes), [])
+    .reduce((acc, code) => (acc[code] = acc[code] + 1 || 1, acc), {});
+    
   console.log('\nDiscount codes used:');
   Object.keys(discountCodes).sort().forEach(key => {
     console.log(`  ${key}: ${discountCodes[key]}`);
@@ -184,20 +227,6 @@ function writeMailMergeFile(filename, records, columns) {
   return csvStringify(records, options)
    .then(data => writeFile(filename, '\uFEFF' + data, { encoding: 'utf16le' }));
 }
-
-// function generateVendorMailMerge(startingBadgeNum = 800) {
-  // const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'Tagline'];
-  // const records = vendors
-    // .map(item => {
-      // const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10);
-      // return [...Array(numBadges)].map(() => 
-        // ['none', zeroPad(startingBadgeNum++), item[VENDORNAME_KEY], 'Vendor', '']);
-    // })
-    // .reduce((acc, badges) => (acc.push(...badges), acc), []);
-  
-  // if (!records.length) return;
-  // return writeMailMergeFile('Mailmerge Vendor.tab', records, columns);
-// };
 
 function generateBadgeMailMerge(filename, group, sortFn = (a,b) => a.badgeNum - b.badgeNum) {
   const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'Tagline'];
@@ -343,7 +372,7 @@ function getVendorGroup(startingBadgeNum = 800) {
 
        }));
     })
-    .reduce((acc, badges) => (acc.push(...badges), acc), []);
+    .reduce((acc, badges) => acc.concat(badges), []);
 }
 
 function generateMailMergeFiles() {
@@ -364,18 +393,19 @@ function generateMailMergeFiles() {
         }
         return Object.assign({}, item, extra);
       }));
-
+      
   // Export staff badges
   const staffBadgesPromises = getAllCacheItems()
     .filter(item => item.departmentColor)
     .concat(getVendorGroup())
+    // .concat(getPresenterGroup())
     .reduce((acc, item) => {
       acc[0][item.departmentColor] = acc[0][item.departmentColor] || [];
       acc[0][item.departmentColor].push(item);
       return acc;
     }, [{}])
     .map(acc => Object.keys(acc).map(key => generateBadgeMailMerge(`Adorned ${key}`, acc[key])));
-  
+    
   // Export child badges (front AND back)
   const childPromises = Object.keys(cache)
     .filter(key => key.match(/Children/))

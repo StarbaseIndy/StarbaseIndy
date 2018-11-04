@@ -83,7 +83,7 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Graphic Design / Webmaster"
 }, {
-  "sortKey": "",
+  "sortKey": "1562#1",
   "Name": "Nate Lineberry",
   "Department": "Marketing",
   "DepartmentColor": "Light Blue",
@@ -101,13 +101,13 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Photographer"
 }, {
-  "sortKey": "",
+  "sortKey": "1560#1",
   "Name": "Andy Sams",
   "Department": "Marketing",
   "DepartmentColor": "Light Blue",
   "Tagline": "Photographer"
 }, {
-  "sortKey": "",
+  "sortKey": "1546#1",
   "Name": "Megan Voss",
   "Department": "Marketing",
   "DepartmentColor": "Light Blue",
@@ -115,8 +115,8 @@
 }, {
   "Note": "==================== [Staff] Facilities ================================================================="
 }, {
-  "sortKey": "",
-  "Name": "Ricky Liles",
+  "sortKey": "1558#1",
+  "Name": "Ricky Lile",
   "Department": "Facilities",
   "DepartmentColor": "Light Blue",
   "Tagline": "Audio Visual"
@@ -191,7 +191,7 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Operations"
 }, {
-  "sortKey": "",
+  "sortKey": "1559#1",
   "Name": "Robert Jackson",
   "Department": "Tactical",
   "DepartmentColor": "Light Blue",
@@ -205,37 +205,37 @@
 }, {
   "Note": "==================== VIP (Media Guests) ================================================================="
 }, {
-  "sortKey": "",
+  "sortKey": "1565#1",
   "Name": "Sandy Gimpel",
   "Department": "VIP",
   "DepartmentColor": "Yellow",
   "Tagline": "Stuntwoman Extraordinaire"
 }, {
-  "sortKey": "",
+  "sortKey": "1565#2",
   "Name": "Dr. Erin Macdonald",
   "Department": "VIP",
   "DepartmentColor": "Yellow",
   "Tagline": "Geeky Astrophysicist"
 }, {
-  "sortKey": "",
+  "sortKey": "1565#3",
   "Name": "Bill Blair",
   "Department": "VIP",
   "DepartmentColor": "Yellow",
   "Tagline": "Professional Alien"
 }, {
-  "sortKey": "",
+  "sortKey": "1565#4",
   "Name": "Carl Taliaferro",
   "Department": "VIP",
   "DepartmentColor": "Yellow",
   "Tagline": "Alien Creator"
 }, {
-  "sortKey": "",
+  "sortKey": "1565#5",
   "Name": "François Chau",
   "Department": "VIP",
   "DepartmentColor": "Yellow",
   "Tagline": "Out-of-this-world Actor"
 }, {
-  "sortKey": "",
+  "sortKey": "1565#6",
   "Name": "Moxie Anne Magnus",
   "Department": "VIP",
   "DepartmentColor": "Yellow",
@@ -247,40 +247,96 @@
   "DepartmentColor": "Yellow",
   "Tagline": "Klingon Pop Star"
 }, {
-  "Note": "DO NOT INCLUDE???",
-  "sortKey": "",
-  "Name": "David Reddick",
-  "Department": "VIP",
-  "DepartmentColor": "Yellow",
-  "Tagline": "Artist / Illustrator / Professional Cartoonist"
-}, {
-  "sortKey": "",
+  "sortKey": "1565#7",
   "Name": "Dr. Lawrence M. Schoen",
   "Department": "VIP",
   "DepartmentColor": "Yellow",
   "Tagline": "Klingon Linguist"
 }, {
-  "Note": "==================== Press =============================================================================="
+  "Note": "==================== Presenter ========================================================================"
 }, {
-  "sortKey": "",
-  "Name": "",
-  "Department": "Press",
-  "DepartmentColor": "Red",
-  "Tagline": "Fox 59"
-}, {
-  "Note": "==================== Presenter =========================================================================="
-}, {
-  "sortKey": "",
-  "Name": "",
+  "sortKey": "1434#2",
+  "Name": "James Engle",
   "Department": "Presenter",
   "DepartmentColor": "Green",
-  "Tagline": "???"
+  "Tagline": "Brewmaster"
 }, {
-  "sortKey": "",
-  "Name": "Demetrius Witherspoon",
-  "Department": "VIP",
-  "DepartmentColor": "Yellow",
-  "Tagline": ""
+  "sortKey": "1341#1",
+  "Name": "Ryan Peck",
+  "Department": "Presenter",
+  "DepartmentColor": "Green"
+}, {
+  "sortKey": "1341#2",
+  "Name": "Kathy Peck",
+  "Department": "Presenter",
+  "DepartmentColor": "Green"
+}, {
+  "sortKey": "1404#1",
+  "Name": "Ann Burton",
+  "Department": "Presenter",
+  "DepartmentColor": "Green"
+}, {
+  "Note": "==================== Entertainer ========================================================================"
+}, {
+  "sortKey": "1443#1",
+  "Name": "Patrick O'Connor",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups / 5YM"
+}, {
+  "sortKey": "1444#1",
+  "Name": "Savannah O'Connor",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "1445#1",
+  "Name": "Lee Cherolis",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "1446#1",
+  "Name": "Luisanna Rodriguez",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "1447#1",
+  "Name": "Ed Cho",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "1448#1",
+  "Name": "Steve Hinckley",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "1479#1",
+  "Name": "Joe Green",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Myst Brigade"
+}, {
+  "sortKey": "1480#1",
+  "Name": "Laura Kramer",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Myst Brigade"
+}, {
+  "sortKey": "1481#1",
+  "Name": "Craig Kramer",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Myst Brigade"
+}, {
+  "sortKey": "1482#1",
+  "Name": "Steven Benson",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Myst Brigade"
 }, {
   "Note": "==================== Triumvirate ========================================================================"
 }, {
@@ -309,4 +365,31 @@
 }, {
   "sortKey": "1359#1",
   "BadgeName": "Paul Tackett"
+}, {
+  "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
+}, {
+  "sortKey": "1449#1",
+  "Name": "Nancy Cho",
+  "Department": "",
+  "DepartmentColor": "White"
+}, {
+  "sortKey": "1468#1",
+  "Name": "Joshua Grumble",
+  "Department": "",
+  "DepartmentColor": "White"
+}, {
+  "sortKey": "1524#1",
+  "Name": "Melanie Fox",
+  "Department": "",
+  "DepartmentColor": "White"
+}, {
+  "sortKey": "1552#1",
+  "Name": "Josh Kerner",
+  "Department": "",
+  "DepartmentColor": "White"
+}, {
+  "sortKey": "1554#1",
+  "Name": "Patrick Kleckner",
+  "Department": "",
+  "DepartmentColor": "White"
 }]
