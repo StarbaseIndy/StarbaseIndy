@@ -431,7 +431,7 @@ function summarizeOtherItems() {
   // Dinner with various stars 
   // Tee-Shirt, Hoodie
   const categories = summary
-    .filter(item => item[LINEITEM_KEY].match(/Dinner|T-Shirt|Hoodie|Photo/))
+    .filter(item => item[LINEITEM_KEY].match(/Dinner|T-Shirt|V-Neck Shirt|Hoodie|Photo/))
     .map(item => [item[LINEITEM_KEY], item[LINEITEM_VARIANT]].filter(Boolean).join('/'))
     .reduce((acc, key) => (acc[key] = acc[key] + 1 || 1, acc), {});
   
