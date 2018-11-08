@@ -197,7 +197,7 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Security"
 }, {
-  "sortKey": "",
+  "sortKey": "1581#1",
   "Name": "Judith Chambers",
   "Department": "Tactical",
   "DepartmentColor": "Light Blue",
@@ -390,6 +390,11 @@
 }, {
   "sortKey": "1554#1",
   "Name": "Patrick Kleckner",
+  "Department": "",
+  "DepartmentColor": "White"
+}, {
+  "sortKey": "1576#1",
+  "Name": "Michael Irwin",
   "Department": "",
   "DepartmentColor": "White"
 }]

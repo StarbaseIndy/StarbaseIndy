@@ -229,6 +229,43 @@ function writeMailMergeFile(filename, records, columns) {
    .then(data => writeFile(filename, '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
+function generateUnicodeKeyFile() {
+  const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'DepartmentColor', 'Unicode Character', 'Supported Fonts URL'];
+  const sortFn = (a,b) => a.badgeNum - b.badgeNum;
+  const records = getAllCacheItems()
+    .sort(sortFn)
+    .map(item => {
+      const {
+        [BADGENAME_KEY]: badgeName,
+        department,
+        departmentColor,
+        badgeNum,
+        sortKey } = item;
+
+      if (badgeName.match(/[^ -~]+/g)) {
+        // Read more e.g. at: https://www.compart.com/en/unicode/U+30C4
+        const unicode = badgeName
+          .split('')
+          .map(x => x.codePointAt(0))
+          .filter(x => x > 0x7f)
+          .map(x => `U+${x.toString(16).toUpperCase()}`);
+
+        console.error(`WARNING: Non-printable name for badge #${badgeNum} (order ${sortKey}): ${badgeName}`);
+        console.error('         Unicode characters:', unicode);
+        
+        const getUrl = (code) => `https://www.fileformat.info/info/unicode/char/${code}/fontsupport.htm`;
+        return unicode.map(code => [sortKey, zeroPad(badgeNum), badgeName, department, departmentColor, code, getUrl(code.slice(2))]);
+      }
+
+      return [];
+    })
+    .filter(collection => collection.length)
+    .reduce((acc, collection) => acc.concat(collection), []);
+
+  if (!records.length) return;
+  return writeMailMergeFile(`Unicode key.tab`, records, columns);
+}
+
 function generateBadgeMailMerge(filename, group, sortFn = (a,b) => a.badgeNum - b.badgeNum) {
   const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'Tagline'];
   const records = group
@@ -240,27 +277,16 @@ function generateBadgeMailMerge(filename, group, sortFn = (a,b) => a.badgeNum - 
         tagline,
         badgeNum,
         sortKey } = item;
-        
+
       if (!badgeName) {
         console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`);
       }
-  
-      if (badgeName.match(/[^ -~]+/g)) {
-        // Read more e.g. at: https://www.compart.com/en/unicode/U+30C4
-        const unicode = badgeName
-          .split('')
-          .map(x => x.codePointAt(0))
-          .filter(x => x > 0x7f)
-          .map(x => `U+${x.toString(16).toUpperCase()}`);
-          
-        console.error(`WARNING: Non-printable name for badge #${badgeNum} (order ${sortKey}): ${badgeName}`);
-        console.error('         Unicode characters:', unicode);
-      }
-       
+
       return [sortKey, zeroPad(badgeNum), badgeName, department, tagline];
     });
 
   if (!records.length) return;
+  
   return writeMailMergeFile(`Mailmerge ${filename}.tab`, records, columns);
 }
 
@@ -423,7 +449,7 @@ function generateMailMergeFiles() {
   ];
 
   return Promise.each(promises, p => p)
-    .then(() => console.log(`\nWrote mailmerge files to ${process.cwd()}.  You're welcome.`));
+    .then(() => console.log(`\nWrote mailmerge files to ${process.cwd()}.  You're welcome.\n`));
 }
 
 function summarizeOtherItems() {
@@ -468,6 +494,7 @@ function main() {
     .then(() => console.log(`\nVendor count: ${vendors.length}`))
     .then(printDiscountCodeCounts)
     .then(generateMailMergeFiles)
+    .then(generateUnicodeKeyFile)
     .then(() => console.log('\nDone!'))
     .catch((err) => console.log('Error!', err));
 }
