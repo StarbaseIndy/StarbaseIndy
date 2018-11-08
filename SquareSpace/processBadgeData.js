@@ -194,7 +194,6 @@ function processInputData(folder, metadataFile) {
     .tap(() => readMetadata(metadataFile))
     .tap(synthesizeMetadata);
 }
-  
 
 function printBadgeCounts() {
   console.log('\nBadges sold (by type):');
@@ -229,11 +228,14 @@ function writeMailMergeFile(filename, records, columns) {
    .then(data => writeFile(filename, '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
+function sortByBadgeNumFn(a,b) {
+  return a.badgeNum - b.badgeNum;
+}
+
 function generateUnicodeKeyFile() {
   const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'DepartmentColor', 'Unicode Character', 'Supported Fonts URL'];
-  const sortFn = (a,b) => a.badgeNum - b.badgeNum;
   const records = getAllCacheItems()
-    .sort(sortFn)
+    .sort(sortByBadgeNumFn)
     .map(item => {
       const {
         [BADGENAME_KEY]: badgeName,
@@ -266,7 +268,7 @@ function generateUnicodeKeyFile() {
   return writeMailMergeFile(`Unicode key.tab`, records, columns);
 }
 
-function generateBadgeMailMerge(filename, group, sortFn = (a,b) => a.badgeNum - b.badgeNum) {
+function generateBadgeMailMerge(filename, group, sortFn = sortByBadgeNumFn) {
   const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'Tagline'];
   const records = group
     .sort(sortFn)
@@ -293,7 +295,7 @@ function generateBadgeMailMerge(filename, group, sortFn = (a,b) => a.badgeNum - 
 function generateChildBadgeMailMerge(filename, group) {
   const columns = ['Order ID', 'Badge Number', 'Adult Name', 'Adult Phone', 'Adult Email'];
   const records = group
-    .sort((a,b) => a.badgeNum - b.badgeNum)
+    .sort(sortByBadgeNumFn)
     .map(item => {
       const { 
         badgeNum,
@@ -384,7 +386,12 @@ function generateEnvelopeMailMerge(filename, group) {
    .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
-function getVendorGroup(startingBadgeNum = 800) {
+function getVendorStartingBadgeNumber() {
+  const lastBadge = getAllCacheItems().sort((a,b) => sortByBadgeNumFn(b,a))[0].badgeNum;
+  return (~~((lastBadge + 99) / 100) * 100); // round to next 100
+}
+
+function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
   return vendors
     .map(item => {
       const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10);
@@ -425,7 +432,6 @@ function generateMailMergeFiles() {
   const staffBadgesPromises = getAllCacheItems()
     .filter(item => item.departmentColor)
     .concat(getVendorGroup())
-    // .concat(getPresenterGroup())
     .reduce((acc, item) => {
       acc[0][item.departmentColor] = acc[0][item.departmentColor] || [];
       acc[0][item.departmentColor].push(item);
@@ -478,8 +484,8 @@ function main() {
   if (lookup !== -1) {
     const name = process.argv[lookup + 1];
     
-    processInputData(folder, metadataFile).then(() =>
-      getAllCacheItems()
+    processInputData(folder, metadataFile)
+      .then(() => getAllCacheItems()
         .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
         .filter(item => item[REALNAME_KEY].match(new RegExp(name, 'i')))
         .map(item => console.log(`${item.sortKey}: ${item[REALNAME_KEY]}: ${item.badgeNum}: ${item[BADGENAME_KEY]}: ${item[UNIFYING_EMAIL]}`)));
