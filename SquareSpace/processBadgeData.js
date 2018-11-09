@@ -15,6 +15,7 @@ const DISCOUNTCODE_KEY = 'Discount Code';
 const ADULTNAME_KEY = 'Product Form: Responsible Adult\'s Name';
 const ADULTPHONE_KEY = 'Product Form: Responsible Adult\'s Phone Number';
 const ADULTEMAIL_KEY = 'Product Form: Responsible Adult\'s Email';
+const PRIVATE_NOTES = 'Private Notes';
 
 const VENDORNAME_KEY = 'Business Name';
 const VENDORNUMBADGES_KEY = '#Badges';
@@ -36,30 +37,42 @@ const summary = [];
 const vendors = []; // sourced separately
 const metadata = [];
 
+const fanExperienceRegex = /Dinner|T-Shirt|V-Neck Shirt|Hoodie|Photo/;
+const fanExperiences = [];
+
 // The unique ID generator needs to give us a unique sequence number for every order number
 const uniqueIds = {};
-function getSortKey(orderId) {
-  uniqueIds[orderId] = uniqueIds[orderId] + 1 || 1;
-  return `${orderId}#${uniqueIds[orderId]}`
-}
-
-function getRibbonName(discountCode) {
+function getSortKey(orderId, itemType) {
+  // Provide a lookup table of suffixes that will cause the items to sort the way we want.
   const lookup = {
-    SBI_GURU: 'Presenter',
-    STARBASECREW: 'Volunteer',
-    PRESS: 'Press',
-    BBBS: 'Big Brothers/Sisters', 
-    BBBS12: 'Big Brothers/Sisters', 
+    'D': '#1D',
+    'P': '#2P',
+    'H': '#3H',
+    'T': '#4T',
+    'V': '#5V',
   };
-  return lookup[discountCode];
+  const fanXP = (itemType.match(fanExperienceRegex) || [''])[0][0];
+  const orderIdSuffix = lookup[fanXP] || ''; // Badges have no order suffix
+  const key = orderId + orderIdSuffix;
+  
+  uniqueIds[key] = uniqueIds[key] + 1 || 1;
+  return `${key}#${uniqueIds[key]}`
 }
 
 function zeroPad(num) {
   return ("0000" + num).slice(-4);
 }
 
-function getAllCacheItems() {
+function getAllBadgeItems() {
+  return [].concat(...Object.values(cache)).filter(item => item[LINEITEM_KEY].match(/Badge/));
+}
+
+function getAllItems() {
   return [].concat(...Object.values(cache));
+}
+
+function reverseName(name) {
+  return name.split(' ').reverse().join(' ');
 }
 
 function processCSV(filename, group = [{}]) {
@@ -81,15 +94,25 @@ function processCSV(filename, group = [{}]) {
 
   // Update the cache.
   if (lineItems.length === 1) {
+    const lastResponsibleParty = {}; // within an orderID
     group.map(item => {
       const orderId = parseInt(item[ORDERID_KEY], 10);
       item[ORDERID_KEY] = orderId; // make order ID numeric
-      item[UNIFYING_EMAIL] = item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2]; // combine different form names for same information
-      item.sortKey = getSortKey(orderId);
+      // combine different form names for same information
+      item[UNIFYING_EMAIL] = (item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2] || '').toLowerCase();
+      
+      item.sortKey = getSortKey(orderId, lineItems[0]);
+      
+      // Calculate a responsibleParty name (last name first)
+      item.responsibleParty = lastResponsibleParty[item[ORDERID_KEY]] = 
+        reverseName(item[BILLINGNAME_KEY]) ||
+        lastResponsibleParty[item[ORDERID_KEY]] ||
+        reverseName(item[REALNAME_KEY]);
     });
     cache[lineItems[0] || filename] = group;
     return;
   }
+  
 }
 
 function readCSV(filename) {
@@ -113,10 +136,10 @@ function synthesizeMetadata() {
   // 3. Same treatment as #1 for codes for entertainers and media guests
   // SBI_ENTERTAINER (Entertainer/Red), SBI_MEDIA_GUEST (VIP/Yellow), SBI_GURU (Presenter/Green) 
 
-  getAllCacheItems().forEach(item => {
+  getAllBadgeItems().forEach(item => {
     if (!item.departmentColor) {
       const sortKey = item[ORDERID_KEY] + '#1';
-      const discountCodes = getAllCacheItems().find(item => item.sortKey === sortKey)[DISCOUNTCODE_KEY];
+      const discountCodes = getAllBadgeItems().find(item => item.sortKey === sortKey)[DISCOUNTCODE_KEY];
 
       if (discountCodes.match('SBI_MEDIA_GUEST')) {
         item.department = "VIP";
@@ -142,7 +165,7 @@ function synthesizeMetadata() {
 function mixinMetadata() {
   // Split badge name on unicode character '»' to facilitate entering taglines via the store.
   // Mixin the metadata to get new badgeName, tagline, and department, and departmentColor.
-  getAllCacheItems().forEach(item => {
+  getAllBadgeItems().forEach(item => {
     const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};  
     const [ badgeName, tagline = '' ] = (metaItem.BadgeName || item[BADGENAME_KEY] || '').split('»');
 
@@ -155,7 +178,7 @@ function mixinMetadata() {
 
 function verifyMetadata() {
   // Do validation on the metadata
-  const allKeys = getAllCacheItems().map(item => item.sortKey);
+  const allKeys = getAllBadgeItems().map(item => item.sortKey);
   metadata
     .filter(entry => !entry.Note) // skip validation for entries with notes
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
@@ -182,7 +205,7 @@ function readMetadata(file) {
 
 function generateBadgeNumbers() {
   let badgeNum = 1;
-  getAllCacheItems()
+  getAllBadgeItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .map(item => item.badgeNum = badgeNum++);
   return badgeNum;
@@ -197,9 +220,12 @@ function processInputData(folder, metadataFile) {
 
 function printBadgeCounts() {
   console.log('\nBadges sold (by type):');
-  Object.keys(cache).sort().forEach(key => {
-    console.log(`  ${key}: ${cache[key].length}`);
-  });
+  Object.keys(cache)
+    .filter(key => key.match(/Badge/))
+    .sort()
+    .forEach(key => {
+      console.log(`  ${key}: ${cache[key].length}`);
+    });
 }
 
 function printDiscountCodeCounts() {
@@ -234,7 +260,7 @@ function sortByBadgeNumFn(a,b) {
 
 function generateUnicodeKeyFile() {
   const columns = ['Order ID', 'Badge Number', 'Badge Name', 'Department', 'DepartmentColor', 'Unicode Character', 'Supported Fonts URL'];
-  const records = getAllCacheItems()
+  const records = getAllBadgeItems()
     .sort(sortByBadgeNumFn)
     .map(item => {
       const {
@@ -314,47 +340,43 @@ function generateChildBadgeMailMerge(filename, group) {
 function generateEnvelopeMailMerge(filename, group) {
   // Front of Packets:
 
-  // DPM TODO: Billing name won't help anyone if the badge was purchased as a gift.
   // The top information (name, email) needs to uniquely identify who can pick up the packet.
-  // This may make more sense as [ADULTNAME_KEY]||[REALNAME_KEY], and include only one badge per packet.
+  // Note: Billing name won't help anyone if the badge was purchased as an anonymous gift.
+  // Note: This may make more sense as [ADULTNAME_KEY]||[REALNAME_KEY], and include only one badge per packet.
   //   We could then allow someone to pick up all packets with the same unifying email (assuming they know the names on the other envelopes).
-
+  //
   // Billing name: <Last Name>, <First Name>  
   // UNIFYING FORM Email: <.com>
-
+  //
   // Badge 1: <Type> <Badge Name>
   // Badge 2: <Type> <Badge Name>
   // Etc…
-
+  //
   // Fan Experiences: 
   // DWTS
   // PhotoOp
-
-  // DPM TODO: It's unclear how many of each ribbon to put in each packet, because discount codes are tied to orders, and not to badges.
-  // Ribbons needed will be ascertained by the presence of the following discount codes:
-  // SBI_GURU, STARBASECREW, PRESS, BBBS, BBBS12
-
+  //
+  // Merchandise:
+  // Tee-shirts, V-Neck Tee-shirts, Hoodies
+  //
+  // Note: We're not putting ribbons in envelopes in 2018.  
+  //       Volunteer ribbons will be given to volunteer coordinators.
+  //       Presenter badges are already distinguished by design.
+  //
   // Work with full data set
   // Reorganize data set to be keyed on [BILLINGNAME_KEY], then by [UNIFYING_EMAIL]
-  //   Top two lines:
-  //     [BILLINGNAME_KEY].split(' ').reverse()  (Note: warn if more than one billing name is ever found)
-  //     [UNIFYING_EMAIL]
-  //   For every purchased item, print out a line: (Note: one column of the mailmerge)
-  //     [LINEITEM_KEY]: [BADGENAME_KEY]
-  //   TODO: Need to get photo ops and DWTS into the store to see what those transactions look like.
-  //   For each ['Discount Code'], print the associated ribbon type (Note: one column of the mailmerge)
-  //     TODO: can discount codes stack?  If so, what does that look like?
-  
-  let lastBillingName = '';
-  const envelopes = getAllCacheItems()
+
+  const envelopes = getAllItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .reduce((acc, item) => {
-      const billing = item[BILLINGNAME_KEY].split(' ').reverse().join(' ') || lastBillingName; // last name first
-      lastBillingName = billing;
-      const email = item[UNIFYING_EMAIL];
-      acc[billing] = acc[billing] || {};
-      acc[billing][email] = acc[billing][email] || [];
-      acc[billing][email].push(item);
+      // When the 'admin@starbaseindy.org' email is encountered:
+      // replace the billing name with the form real name to force a new envelope to be created.
+      const { [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName } = item;
+      const responsibleParty = email === 'admin@starbaseindy.org' ? reverseName(realName) : item.responsibleParty; 
+      
+      acc[responsibleParty] = acc[responsibleParty] || {};
+      acc[responsibleParty][email] = acc[responsibleParty][email] || [];
+      acc[responsibleParty][email].push(item);
       return acc;
     }, {});
     
@@ -362,20 +384,40 @@ function generateEnvelopeMailMerge(filename, group) {
   const records = Object.keys(envelopes).map(billing => 
     Object.keys(envelopes[billing]).map(email => 
       Object.values(envelopes[billing][email]).reduce((acc, item) => {
-        const { [LINEITEM_KEY]: badgeType, [BADGENAME_KEY]: badgeName, [DISCOUNTCODE_KEY]: discountCode} = item;
-        // TODO: we will need to distinguish between badges and tickets.
+        const {
+          [LINEITEM_KEY]: badgeType,
+          [BADGENAME_KEY]: badgeName,
+          [DISCOUNTCODE_KEY]: discountCode,
+          [REALNAME_KEY]: realName,
+          [PRIVATE_NOTES]: notes,
+          [ORDERID_KEY]: orderId,
+          badgeNum,
+          sortKey,
+        } = item;
         
         acc.BillingName = acc.BillingName || billing;
         acc.Email = acc.Email || email;
-        acc.Badges = [acc.Badges, `${badgeType}: ${badgeName}`].filter(Boolean).join('\n');
-        acc.Ribbons = [acc.Ribbons, getRibbonName(discountCode)].filter(Boolean).join('\n');
+        
+        // Get DWTS by matching 'DWTS: ' in PRIVATE_NOTES of star badge purchases
+        const dwts = badgeType.match(/Star/) && notes.match(/DWTS: [^\n]+/g) || [];
+        acc.DWTS = [acc.DWTS, ...dwts].filter(Boolean).join('\n');
+        
+        if (sortKey.match(/#..#/)) {
+          // Photo Ops, Tee-Shirts, Hoodies, DWTS (direct orders)
+          const variant = [badgeType, item[LINEITEM_VARIANT]].filter(Boolean).join('/');
+          acc.FanXP = [acc.FanXP, variant].filter(Boolean).join('\n');
+        } else {
+          // Badges
+          const badgeInfo = `#${badgeNum}: ${badgeType}: ${realName}`;
+          acc.Badges = [acc.Badges, badgeInfo].filter(Boolean).join('\n');
+        }
+        
         return acc;
       }, {})));
 
   const flattenedRecords = [].concat(...records);
   // console.log('Records:', flattenedRecords);
   
-  // TODO: may need to store ribbons as an array, so we can reduce them to a count.
   const options = {
     header: true,
     quotedString: true,
@@ -387,7 +429,7 @@ function generateEnvelopeMailMerge(filename, group) {
 }
 
 function getVendorStartingBadgeNumber() {
-  const lastBadge = getAllCacheItems().sort((a,b) => sortByBadgeNumFn(b,a))[0].badgeNum;
+  const lastBadge = getAllBadgeItems().sort((a,b) => sortByBadgeNumFn(b,a))[0].badgeNum;
   return (~~((lastBadge + 99) / 100) * 100); // round to next 100
 }
 
@@ -414,7 +456,7 @@ function generateMailMergeFiles() {
 
   // Export Saturday|Sunday|Weekend|Star|Student (not Children|Shopping)
   const generalBadgesPromise = generateBadgeMailMerge('General Admission',
-    getAllCacheItems()
+    getAllBadgeItems()
       .filter(item => !item[LINEITEM_KEY].match(/Children|Shopping/))
       .filter(item => !item.departmentColor)
       .map(item => {
@@ -429,7 +471,7 @@ function generateMailMergeFiles() {
       }));
       
   // Export staff badges
-  const staffBadgesPromises = getAllCacheItems()
+  const staffBadgesPromises = getAllBadgeItems()
     .filter(item => item.departmentColor)
     .concat(getVendorGroup())
     .reduce((acc, item) => {
@@ -441,7 +483,7 @@ function generateMailMergeFiles() {
     
   // Export child badges (front AND back)
   const childPromises = Object.keys(cache)
-    .filter(key => key.match(/Children/))
+    .filter(key => key.match(/Child.*Badge/))
     .map(key => 
       generateChildBadgeMailMerge(key, cache[key])
         .then(() => generateBadgeMailMerge(key, cache[key])));
@@ -459,11 +501,14 @@ function generateMailMergeFiles() {
 }
 
 function summarizeOtherItems() {
-  // Photo Ops (need orders to see what this looks like
-  // Dinner with various stars 
-  // Tee-Shirt, Hoodie
+  // Report fan experience sales from the summary list:
+  //   Photo Ops
+  //   Dinner with various stars 
+  //   Tee-Shirt
+  //   V-Neck Tee-Shirt
+  //   Hoodie
   const categories = summary
-    .filter(item => item[LINEITEM_KEY].match(/Dinner|T-Shirt|V-Neck Shirt|Hoodie|Photo/))
+    .filter(item => item[LINEITEM_KEY].match(fanExperienceRegex))
     .map(item => [item[LINEITEM_KEY], item[LINEITEM_VARIANT]].filter(Boolean).join('/'))
     .reduce((acc, key) => (acc[key] = acc[key] + 1 || 1, acc), {});
   
@@ -485,7 +530,7 @@ function main() {
     const name = process.argv[lookup + 1];
     
     processInputData(folder, metadataFile)
-      .then(() => getAllCacheItems()
+      .then(() => getAllBadgeItems()
         .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
         .filter(item => item[REALNAME_KEY].match(new RegExp(name, 'i')))
         .map(item => console.log(`${item.sortKey}: ${item[REALNAME_KEY]}: ${item.badgeNum}: ${item[BADGENAME_KEY]}: ${item[UNIFYING_EMAIL]}`)));

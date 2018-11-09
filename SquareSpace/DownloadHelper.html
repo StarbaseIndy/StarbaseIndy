@@ -63,17 +63,29 @@
         document.getElementById('2017Items').href = get2017SquareUrl('items');
         
         // 2018
-        document.getElementById('2018WeekendBadge').href = get2018SquareSpaceUrl('5a9af8dbec212db87d180a40');
-        document.getElementById('2018StarBadge').href = get2018SquareSpaceUrl('5a9afc808165f55874292791');
-        document.getElementById('2018SaturdayBadge').href = get2018SquareSpaceUrl('5a9aff4a0d9297b12545dd96');
-        document.getElementById('2018ChildrensBadge').href = get2018SquareSpaceUrl('5a9b05e5c830255b24337e84');
-        document.getElementById('2018SundayBadge').href = get2018SquareSpaceUrl('5a9b05cc71c10b1a7d192bb4');
-        document.getElementById('2018StudentBadge').href = get2018SquareSpaceUrl('5b43fe24aa4a9907985a6406');
-        document.getElementById('2018ShoppingWristband').href = get2018SquareSpaceUrl('5a9b018af9619a44982d5255');
+        document.getElementById('2018BadgeWeekend').href = get2018SquareSpaceUrl('5a9af8dbec212db87d180a40');
+        document.getElementById('2018BadgeStar').href = get2018SquareSpaceUrl('5a9afc808165f55874292791');
+        document.getElementById('2018BadgeSaturday').href = get2018SquareSpaceUrl('5a9aff4a0d9297b12545dd96');
+        document.getElementById('2018BadgeChild').href = get2018SquareSpaceUrl('5a9b05e5c830255b24337e84');
+        document.getElementById('2018BadgeSunday').href = get2018SquareSpaceUrl('5a9b05cc71c10b1a7d192bb4');
+        document.getElementById('2018BadgeStudent').href = get2018SquareSpaceUrl('5b43fe24aa4a9907985a6406');
+        document.getElementById('2018BadgeShopping').href = get2018SquareSpaceUrl('5a9b018af9619a44982d5255');
         document.getElementById('2018Summary').href = get2018SquareSpaceUrl(); 
 
+        document.getElementById('2018MerchTeeShirt').href = get2018SquareSpaceUrl('5baabb389140b7701afad52d');
+        document.getElementById('2018MerchVeeNeck').href = get2018SquareSpaceUrl('5bd0ffe9ec212d8c62dfe566');
+        document.getElementById('2018MerchHoodie').href = get2018SquareSpaceUrl('5baabbdc71c10b96e750610a');
+        document.getElementById('2018MerchPhotoOps').href = get2018SquareSpaceUrl('5baac1df71c10b96e750a30b');
+
+        // DWTS: Gimpel: N/A
+        document.getElementById('2018DWTSChau').href = get2018SquareSpaceUrl('5a9affc0e2c48369e01066ce');
+        document.getElementById('2018DWTSBlair').href = get2018SquareSpaceUrl('5ba1881d40ec9a5482934510');
+        document.getElementById('2018DWTSMagnus').href = get2018SquareSpaceUrl('5ba18ab94fa51aba30387d1d');
+        document.getElementById('2018DWTSMacdonald').href = get2018SquareSpaceUrl('5ba18a01575d1f0b2b265823');
+        document.getElementById('2018DWTSKlingon').href = get2018SquareSpaceUrl('5ba18cc84ae23767f1671f67');
+
         const vendorSheet2018 = 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034';
-        document.getElementById('2018Vendor').href = vendorSheet2018;
+        document.getElementById('2018BadgeVendor').href = vendorSheet2018;
 
         document.getElementById('2018Transactions').href = get2018SquareUrl('transactions');
         document.getElementById('2018Items').href = get2018SquareUrl('items');
@@ -94,21 +106,33 @@
       <li>Rename the file before saving</li>
     </ul>
 
-    <a href="#" id="2017Transactions">2017 Square Transactions</a> (Square)<br/>
-    <a href="#" id="2017Items"       >2017 Square Detailed Items</a> (Square)<br/>
+    <a href="#" id="2017Transactions"  >2017 Square Transactions</a> (Square)<br/>
+    <a href="#" id="2017Items"         >2017 Square Detailed Items</a> (Square)<br/>
     <br/>
-    <a href="#" id="2018ChildrensBadge"    download="2018 ChildrensBadge.csv"   >2018 Children's Badge.csv</a><br/>
-    <a href="#" id="2018SaturdayBadge"     download="2018 SaturdayBadge.csv"    >2018 Saturday Badge.csv</a><br/>
-    <a href="#" id="2018ShoppingWristband" download="2018 ShoppingWristband.csv">2018 Shopping Wristband.csv</a><br/>
-    <a href="#" id="2018StarBadge"         download="2018 StarBadge.csv"        >2018 Star Badge.csv</a><br/>
-    <a href="#" id="2018StudentBadge"      download="2018 StudentBadge.csv"     >2018 Student Badge.csv</a><br/>
-    <a href="#" id="2018Summary"           download="2018 Summary.csv"          >2018 Summary.csv</a><br/>
-    <a href="#" id="2018SundayBadge"       download="2018 SundayBadge.csv"      >2018 Sunday Badge.csv</a><br/>
-    <a href="#" id="2018Vendor"            download="2018 Vendor.csv"           >2018 Vendors.csv</a> (Google Drive)<br/>
-    <a href="#" id="2018WeekendBadge"      download="2018 WeekendBadge.csv"     >2018 Weekend Badge.csv</a><br/>
-    
-    <a href="#" id="2018Transactions">2018 Square Transactions</a> (Square)<br/>
-    <a href="#" id="2018Items"       >2018 Square Detailed Items</a> (Square)<br/>
+    <a href="#" id="2018BadgeChild"    >2018 Badge Child.csv</a><br/>
+    <a href="#" id="2018BadgeSaturday" >2018 Badge Saturday.csv</a><br/>
+    <a href="#" id="2018BadgeShopping" >2018 Badge Shopping.csv</a><br/>
+    <a href="#" id="2018BadgeStar"     >2018 Badge Star.csv</a><br/>
+    <a href="#" id="2018BadgeStudent"  >2018 Badge Student.csv</a><br/>
+    <a href="#" id="2018BadgeSunday"   >2018 Badge Sunday.csv</a><br/>
+    <a href="#" id="2018BadgeVendor"   >2018 Badge Vendor.csv</a> (Google Drive)<br/>
+    <a href="#" id="2018BadgeWeekend"  >2018 Badge Weekend.csv</a><br/>
+    <br/>
+    <a href="#" id="2018DWTSBlair"     >2018 DWTS Blair.csv</a><br/>
+    <a href="#" id="2018DWTSChau"      >2018 DWTS Chau.csv</a><br/>
+    <a href="#" id="2018DWTSKlingon"   >2018 DWTS Klingon.csv</a><br/>
+    <a href="#" id="2018DWTSMacdonald" >2018 DWTS Macdonald.csv</a><br/>
+    <a href="#" id="2018DWTSMagnus"    >2018 DWTS Magnus.csv</a><br/>
+    <br/>
+    <a href="#" id="2018MerchHoodie"   >2018 Merch Hoodie.csv</a><br/>
+    <a href="#" id="2018MerchPhotoOps" >2018 Merch Photo Ops.csv</a><br/>
+    <a href="#" id="2018MerchTeeShirt" >2018 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2018MerchVeeNeck"  >2018 Merch Vee Neck Tee.csv</a><br/>
+    <br/>
+    <a href="#" id="2018Summary"       >2018 Summary.csv</a><br/>
+    <br/>
+    <a href="#" id="2018Transactions"  >2018 Square Transactions</a> (Square)<br/>
+    <a href="#" id="2018Items"         >2018 Square Detailed Items</a> (Square)<br/>
    </body>
 </html>
 
