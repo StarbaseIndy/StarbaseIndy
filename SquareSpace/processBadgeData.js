@@ -5,6 +5,7 @@ const Promise = require('bluebird');
 const Fs = require('fs');
 
 const BILLINGNAME_KEY = 'Billing Name';
+const BILLINGEMAIL_KEY = 'Email';
 const UNIFYING_EMAIL = 'Product Form: Email';
 const UNIFYING_EMAIL2 = 'Product Form: Responsible Adult\'s Email';
 const LINEITEM_KEY = 'Lineitem name';
@@ -72,13 +73,16 @@ function getAllItems() {
 }
 
 function reverseName(name) {
-  return name.split(' ').reverse().join(' ');
+  return (name || '').split(' ').reverse().join(' ');
+}
+
+function uniqueFilter(value, index, array) {
+  return array.indexOf(value) === index;
 }
 
 function processCSV(filename, group = [{}]) {
   // console.log('Processing CSV file', filename);
-  const onlyUnique = (value, index, array) => array.indexOf(value) === index;
-  const lineItems = group.map(item => item[LINEITEM_KEY]).filter(onlyUnique);
+  const lineItems = group.map(item => item[LINEITEM_KEY]).filter(uniqueFilter);
 
   // Look for the vendor CSV file.  It's a different format.
   if ((group[0] || {})[VENDORNAME_KEY]) {
@@ -94,7 +98,7 @@ function processCSV(filename, group = [{}]) {
 
   // Update the cache.
   if (lineItems.length === 1) {
-    const lastResponsibleParty = {}; // within an orderID
+    const transactionData = {}; // within an orderID
     group.map(item => {
       const orderId = parseInt(item[ORDERID_KEY], 10);
       item[ORDERID_KEY] = orderId; // make order ID numeric
@@ -103,11 +107,17 @@ function processCSV(filename, group = [{}]) {
       
       item.sortKey = getSortKey(orderId, lineItems[0]);
       
+      transactionData[orderId] = transactionData[orderId] || {};
+      
       // Calculate a responsibleParty name (last name first)
-      item.responsibleParty = lastResponsibleParty[item[ORDERID_KEY]] = 
+      item.responsibleParty = transactionData[orderId].name = 
         reverseName(item[BILLINGNAME_KEY]) ||
-        lastResponsibleParty[item[ORDERID_KEY]] ||
+        transactionData[orderId].name ||
         reverseName(item[REALNAME_KEY]);
+        
+      // Also replicate the billing email
+      item[BILLINGEMAIL_KEY] = transactionData[orderId].email = 
+        item[BILLINGEMAIL_KEY] || transactionData[orderId].email;
     });
     cache[lineItems[0] || filename] = group;
     return;
@@ -369,63 +379,84 @@ function generateEnvelopeMailMerge(filename, group) {
   const envelopes = getAllItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .reduce((acc, item) => {
+      const { [BILLINGEMAIL_KEY]: billingEmail, [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName } = item;
+
       // When the 'admin@starbaseindy.org' email is encountered:
-      // replace the billing name with the form real name to force a new envelope to be created.
-      const { [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName } = item;
-      const responsibleParty = email === 'admin@starbaseindy.org' ? reverseName(realName) : item.responsibleParty; 
-      
-      acc[responsibleParty] = acc[responsibleParty] || {};
-      acc[responsibleParty][email] = acc[responsibleParty][email] || [];
-      acc[responsibleParty][email].push(item);
+      // replace the email with the form real name to force a new envelope to be created.
+      // replace the billing name with the form real name
+      const unifyingEmail = email === 'admin@starbaseindy.org' ? reverseName(realName) + ` (${email})` : email;
+      const responsibleParty = email === 'admin@starbaseindy.org' ? reverseName(realName) : item.responsibleParty;
+
+      acc[unifyingEmail] = acc[unifyingEmail] || [];
+      acc[unifyingEmail].push(Object.assign({}, item, { responsibleParty }));
       return acc;
     }, {});
     
   // Now that we have the envelopes organized by billing => email, generate the mailmerge data
-  const records = Object.keys(envelopes).map(billing => 
-    Object.keys(envelopes[billing]).map(email => 
-      Object.values(envelopes[billing][email]).reduce((acc, item) => {
-        const {
-          [LINEITEM_KEY]: badgeType,
-          [BADGENAME_KEY]: badgeName,
-          [DISCOUNTCODE_KEY]: discountCode,
-          [REALNAME_KEY]: realName,
-          [PRIVATE_NOTES]: notes,
-          [ORDERID_KEY]: orderId,
-          badgeNum,
-          sortKey,
-        } = item;
-        
-        acc.BillingName = acc.BillingName || billing;
-        acc.Email = acc.Email || email;
-        
-        // Get DWTS by matching 'DWTS: ' in PRIVATE_NOTES of star badge purchases
-        const dwts = badgeType.match(/Star/) && notes.match(/DWTS: [^\n]+/g) || [];
-        acc.DWTS = [acc.DWTS, ...dwts].filter(Boolean).join('\n');
-        
-        if (sortKey.match(/#..#/)) {
-          // Photo Ops, Tee-Shirts, Hoodies, DWTS (direct orders)
-          const variant = [badgeType, item[LINEITEM_VARIANT]].filter(Boolean).join('/');
-          acc.FanXP = [acc.FanXP, variant].filter(Boolean).join('\n');
-        } else {
-          // Badges
-          const badgeInfo = `#${badgeNum}: ${badgeType}: ${realName}`;
-          acc.Badges = [acc.Badges, badgeInfo].filter(Boolean).join('\n');
-        }
-        
-        return acc;
-      }, {})));
+  const records = Object.keys(envelopes).map(email => 
+    envelopes[email].reduce((acc, item) => {
+      const {
+        [LINEITEM_KEY]: badgeType,
+        [BADGENAME_KEY]: badgeName,
+        [DISCOUNTCODE_KEY]: discountCode,
+        [REALNAME_KEY]: realName,
+        [PRIVATE_NOTES]: notes,
+        [ORDERID_KEY]: orderId,
+        badgeNum,
+        sortKey,
+        responsibleParty,
+      } = item;
 
-  const flattenedRecords = [].concat(...records);
-  // console.log('Records:', flattenedRecords);
-  
+      acc.BillingName.push(responsibleParty);
+      acc.RealName.push(reverseName(realName));
+      acc.Email = acc.Email || email;
+
+      // Get DWTS by matching 'DWTS: ' in PRIVATE_NOTES of star badge purchases
+      acc.DWTS = acc.DWTS.concat(badgeType.match(/Star/) && notes.match(/DWTS: [^\n]+/g) || []);
+      
+      if (sortKey.match(/#..#/)) {
+        // Photo Ops, Tee-Shirts, Hoodies, DWTS (direct orders)
+        const variant = [badgeType, item[LINEITEM_VARIANT]].filter(Boolean).join('/');
+        acc.FanXP.push(variant);
+      } else {
+        // Badges
+        const badgeInfo = `#${badgeNum}: ${badgeType}: ${realName}`;
+        acc.Badges.push(badgeInfo);
+      }
+      
+      return acc;
+    }, { Email: '', RealName: [], BillingName: [], DWTS: [], FanXP: [], Badges: [] }));
+
+  const envelopeMailMerge = records
+    .map(item => ({
+      BillingName: item.BillingName.filter(Boolean).filter(uniqueFilter).sort().join(' / '),
+      Email: item.Email,
+      Badges: item.Badges.filter(Boolean).join('\n'),
+      DWTS: item.DWTS.filter(Boolean).join('\n'),
+      FanXP: item.FanXP.filter(Boolean).join('\n'),
+    }));
+
+  // console.log('envelope merge:', envelopeMailMerge);
+  const crossReference = records
+    .map(item => item.RealName.filter(Boolean).map(name => ({
+      RealName: name,
+      BillingName: item.BillingName.filter(Boolean).filter(uniqueFilter).sort().join(' / '),
+      Email: item.Email,
+    })))
+    .reduce((acc, item) => acc.concat(...item), [])
+    .sort((a,b) => a.RealName.localeCompare(b.RealName));
+    
+  // console.log('Xref:', crossReference);
   const options = {
     header: true,
     quotedString: true,
     delimiter: '\t',
   };
   
-  return csvStringify(flattenedRecords, options)
-   .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
+  return csvStringify(envelopeMailMerge, options)
+   .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
+   .then(() => csvStringify(crossReference, options))
+   .then(data => writeFile('Envelope reference.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
 function getVendorStartingBadgeNumber() {
