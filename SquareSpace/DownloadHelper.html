@@ -5,7 +5,28 @@
     <script>
       // Why download this way?  Because the SquareSpace Commerce API costs extra.
       // https://developers.squarespace.com/commerce-api
+      const linkIDs = {};
 
+      function getSquareSpaceYearDateRange(year) {
+        const ranges = {
+          // Update this with each year of interest
+          2018: { start: '2018-04-20T00:00:00.000Z', end: '2018-11-23T00:00:00.000Z' },
+        };
+        
+        return ranges[year];
+      }
+      
+      function getSquareYearDateRange(year) {
+        const ranges = {
+          // Update this with each year of interest
+          // Note: 2018 vendors are also invoiced from location '21PTCF9NNTCRJ'
+          2017: { start: '2017-11-24', end: '2017-11-27', location: '21PTCF9NNTCRJ' }, // 'The Starbase'
+          2018: { start: '2018-11-23', end: '2017-11-26', location: 'WR6MC29WH0P5Z' }, // 'SBI'
+        };
+        
+        return ranges[year];
+      }
+      
       // How to get this Square info?
       // 1. Navigate to SquareUp => Sales => Transactions
       // 2. Select date 12/01/2017-12/01/2018
@@ -14,11 +35,12 @@
       // 5. In Chrome Developer Tools (F12), select Network tab, and click the "Preserve Logs" checkbox
       // 6. Click the "Export" button, and select "Transactions CSV"
       // 7. In Chrome Developer Tools (F12), in the Network tab, look at the "transactions.csv" network call form data.
-      function getSquareUrl(type, startDate, endDate, locationToken) {
-        const startTimestamp = (new Date(startDate + 'T00:00:00.000-0500')).getTime() * 1000;
-        const endTimestamp = (new Date(endDate + 'T00:00:00.000-0500')).getTime() * 1000;
+      function getSquareUrl(year, type) {        
+        const range = getSquareYearDateRange(year)
+        const startTimestamp = (new Date(range.start + 'T00:00:00.000-0500')).getTime() * 1000;
+        const endTimestamp = (new Date(range.end + 'T00:00:00.000-0500')).getTime() * 1000;
         const postData = {
-          user_token: { 'merchant_token': 'SFTBA37WGJXWY', unit_token: [locationToken] },
+          user_token: { 'merchant_token': 'SFTBA37WGJXWY', unit_token: [range.location] },
           time_range_params: {
             batch_request: { batch_size: 5000 }, // TODO: needed?
             ordered_time_range: {
@@ -32,70 +54,106 @@
         return 'https://squareup.com/v2/reports/' + type + '.csv?beemo_request=' + encodeURIComponent(JSON.stringify(postData));
       }
       
-      function get2017SquareUrl(type) {
-        // Note: 2018 vendors are also invoiced from this location
-        const the_starbase = '21PTCF9NNTCRJ';
-        return getSquareUrl(type, '2017-11-24', '2017-11-27', the_starbase);
-      }
-
-      function get2018SquareUrl(type) {
-        const sbi = 'WR6MC29WH0P5Z'
-        return getSquareUrl(type, '2017-12-01', '2018-12-01', sbi);
-      }
-      
-      function getSquareSpaceUrl(productId = '') {
+      function getSquareSpaceUrl(year, productId = '') {
         return 'https://heather-cottingham-r34y.squarespace.com/api/commerce/orders/export' +
                '?orderStates=PENDING' +
                '&productType=' +
                '&includeProductForm=' + (productId ? 'true' : 'false') +
-			         '&productId=' + productId;
+			         '&productId=' + productId +
+               '&orderSubmittedOnMin=' + encodeURIComponent(getSquareSpaceYearDateRange(year).start) +
+               '&orderSubmittedOnMax=' + encodeURIComponent(getSquareSpaceYearDateRange(year).end);
+      }
+
+      function assignSquareSpaceHref(year, linkId, productId = '') {
+        const elementId = year + linkId;
+        document.getElementById(elementId).href = getSquareSpaceUrl(year, productId);
+        
+        // Queue linkID to click on it later.
+        linkIDs['SquareSpace'] = linkIDs['SquareSpace'] || {};
+        linkIDs['SquareSpace'][year] = linkIDs['SquareSpace'][year] || [];
+        linkIDs['SquareSpace'][year].push(elementId);
       }
       
-      function get2018SquareSpaceUrl(productId) {
-        return getSquareSpaceUrl(productId) +
-               '&orderSubmittedOnMin=' + encodeURIComponent('2018-04-20T00:00:00.000Z') +
-               '&orderSubmittedOnMax=' + encodeURIComponent('2018-11-23T00:00:00.000Z');
+      function assignSquareHref(year, type) {
+        const elementId = year + type;
+        document.getElementById(elementId).href = getSquareUrl(year, type.toLowerCase());
+
+        // Queue linkID to click on it later.
+        linkIDs['Square'] = linkIDs['Square'] || {};
+        linkIDs['Square'][year] = linkIDs['Square'][year] || [];
+        linkIDs['Square'][year].push(elementId);
+      }
+      
+      function downloadSquareYearData(year) {
+        let delay = 0;
+        // Click on each queued element, with a delay between each.
+        linkIDs['Square'][year].forEach((elementId, index, array) => {
+          setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * 5000);
+          
+          if(index === array.length - 1) {
+            setTimeout(() => document.getElementById("finishedDialog").open = true, delay++ * 5000);
+          }
+        });
+      }
+      
+      function downloadSquareSpaceYearData(year) {
+        let delay = 0;
+        // Click on each queued element, with a delay between each.
+        linkIDs['SquareSpace'][year].forEach((elementId, index, array) => {
+          setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * 1000); 
+
+          if(index === array.length - 1) {
+            setTimeout(() => document.getElementById("finishedDialog").open = true, delay++ * 1000);
+          }
+        });
       }
       
       function onLoad() {
         // 2017
-        document.getElementById('2017Transactions').href = get2017SquareUrl('transactions');
-        document.getElementById('2017Items').href = get2017SquareUrl('items');
+        assignSquareHref(2017, 'Transactions');
+        assignSquareHref(2017, 'Items');
         
         // 2018
-        document.getElementById('2018BadgeWeekend').href = get2018SquareSpaceUrl('5a9af8dbec212db87d180a40');
-        document.getElementById('2018BadgeStar').href = get2018SquareSpaceUrl('5a9afc808165f55874292791');
-        document.getElementById('2018BadgeSaturday').href = get2018SquareSpaceUrl('5a9aff4a0d9297b12545dd96');
-        document.getElementById('2018BadgeChild').href = get2018SquareSpaceUrl('5a9b05e5c830255b24337e84');
-        document.getElementById('2018BadgeSunday').href = get2018SquareSpaceUrl('5a9b05cc71c10b1a7d192bb4');
-        document.getElementById('2018BadgeStudent').href = get2018SquareSpaceUrl('5b43fe24aa4a9907985a6406');
-        document.getElementById('2018BadgeShopping').href = get2018SquareSpaceUrl('5a9b018af9619a44982d5255');
-        document.getElementById('2018Summary').href = get2018SquareSpaceUrl(); 
+        assignSquareSpaceHref(2018, 'BadgeWeekend', '5a9af8dbec212db87d180a40');
+        assignSquareSpaceHref(2018, 'BadgeStar', '5a9afc808165f55874292791');
+        assignSquareSpaceHref(2018, 'BadgeSaturday', '5a9aff4a0d9297b12545dd96');
+        assignSquareSpaceHref(2018, 'BadgeChild', '5a9b05e5c830255b24337e84');
+        assignSquareSpaceHref(2018, 'BadgeSunday', '5a9b05cc71c10b1a7d192bb4');
+        assignSquareSpaceHref(2018, 'BadgeStudent', '5b43fe24aa4a9907985a6406');
+        assignSquareSpaceHref(2018, 'BadgeShopping', '5a9b018af9619a44982d5255');
+        assignSquareSpaceHref(2018, 'Summary');
 
-        document.getElementById('2018MerchTeeShirt').href = get2018SquareSpaceUrl('5baabb389140b7701afad52d');
-        document.getElementById('2018MerchVeeNeck').href = get2018SquareSpaceUrl('5bd0ffe9ec212d8c62dfe566');
-        document.getElementById('2018MerchHoodie').href = get2018SquareSpaceUrl('5baabbdc71c10b96e750610a');
-        document.getElementById('2018MerchPhotoOps').href = get2018SquareSpaceUrl('5baac1df71c10b96e750a30b');
+        assignSquareSpaceHref(2018, 'MerchTeeShirt', '5baabb389140b7701afad52d');
+        assignSquareSpaceHref(2018, 'MerchVeeNeck', '5bd0ffe9ec212d8c62dfe566');
+        assignSquareSpaceHref(2018, 'MerchHoodie', '5baabbdc71c10b96e750610a');
+        assignSquareSpaceHref(2018, 'MerchPhotoOps', '5baac1df71c10b96e750a30b');
 
         // DWTS: Gimpel: N/A
-        document.getElementById('2018DWTSChau').href = get2018SquareSpaceUrl('5a9affc0e2c48369e01066ce');
-        document.getElementById('2018DWTSBlair').href = get2018SquareSpaceUrl('5ba1881d40ec9a5482934510');
-        document.getElementById('2018DWTSMagnus').href = get2018SquareSpaceUrl('5ba18ab94fa51aba30387d1d');
-        document.getElementById('2018DWTSMacdonald').href = get2018SquareSpaceUrl('5ba18a01575d1f0b2b265823');
-        document.getElementById('2018DWTSKlingon').href = get2018SquareSpaceUrl('5ba18cc84ae23767f1671f67');
+        assignSquareSpaceHref(2018, 'DWTSChau', '5a9affc0e2c48369e01066ce');
+        assignSquareSpaceHref(2018, 'DWTSBlair', '5ba1881d40ec9a5482934510');
+        assignSquareSpaceHref(2018, 'DWTSMagnus', '5ba18ab94fa51aba30387d1d');
+        assignSquareSpaceHref(2018, 'DWTSMacdonald', '5ba18a01575d1f0b2b265823');
+        assignSquareSpaceHref(2018, 'DWTSKlingon', '5ba18cc84ae23767f1671f67');
 
+        // Vendors come from google sheets, and not Square or SquareSpace.
         const vendorSheet2018 = 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034';
         document.getElementById('2018BadgeVendor').href = vendorSheet2018;
 
-        document.getElementById('2018Transactions').href = get2018SquareUrl('transactions');
-        document.getElementById('2018Items').href = get2018SquareUrl('items');
+        assignSquareHref(2018, 'Transactions');
+        assignSquareHref(2018, 'Items');
         
         // 2019
         // TODO: add next year href initialization here.
-      }  
+      }
     </script>
   </head>
   <body onload="onLoad()">
+
+    <dialog id="finishedDialog" onclick="document.getElementById('finishedDialog').open = false">
+    Your downloads are (probably) complete.<br>
+    Click to continue.
+    </dialog>
+
     <h1>Square/Squarespace/Drive Data Download Helper</h1>
     <h3>Instructions:</h3>
     <ul>
@@ -106,8 +164,16 @@
       <li>Rename the file before saving</li>
     </ul>
 
+    <hr/>
+    <button onclick="downloadSquareYearData(2017)">Download 2017 Square data</button>
+    <br/>
+    <br/>
     <a href="#" id="2017Transactions"  >2017 Square Transactions</a> (Square)<br/>
     <a href="#" id="2017Items"         >2017 Square Detailed Items</a> (Square)<br/>
+    <br/>
+    <hr/>
+    <button onclick="downloadSquareSpaceYearData(2018)">Download 2018 SquareSpace + Google Drive data</button>
+    <br/>
     <br/>
     <a href="#" id="2018BadgeChild"    >2018 Badge Child.csv</a><br/>
     <a href="#" id="2018BadgeSaturday" >2018 Badge Saturday.csv</a><br/>
@@ -130,6 +196,10 @@
     <a href="#" id="2018MerchVeeNeck"  >2018 Merch Vee Neck Tee.csv</a><br/>
     <br/>
     <a href="#" id="2018Summary"       >2018 Summary.csv</a><br/>
+    <br/>
+    <hr/>
+    <button onclick="downloadSquareYearData(2018)">Download 2018 Square data</button>
+    <br/>
     <br/>
     <a href="#" id="2018Transactions"  >2018 Square Transactions</a> (Square)<br/>
     <a href="#" id="2018Items"         >2018 Square Detailed Items</a> (Square)<br/>

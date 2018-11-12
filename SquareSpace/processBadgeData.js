@@ -112,8 +112,8 @@ function processCSV(filename, group = [{}]) {
       // Calculate a responsibleParty name (last name first)
       item.responsibleParty = transactionData[orderId].name = 
         reverseName(item[BILLINGNAME_KEY]) ||
-        transactionData[orderId].name ||
-        reverseName(item[REALNAME_KEY]);
+        transactionData[orderId].name ||        
+        reverseName(item[REALNAME_KEY]); // Used when no billing name is associated with a free order.
         
       // Also replicate the billing email
       item[BILLINGEMAIL_KEY] = transactionData[orderId].email = 
@@ -129,7 +129,7 @@ function readCSV(filename) {
   return readFile(filename, { encoding: 'utf8' })
     .then(content => csvParse(content, { columns: true }))
     .then(group => processCSV(filename, group))
-    .catch(err => console.log('Error reading CSV file:', err));
+    .catch(err => console.log('Error reading CSV file:', filename, err.toString()));
 }
 
 function readSpreadsheets(folder) {
@@ -209,8 +209,7 @@ function readMetadata(file) {
   return readFile(file, { encoding: 'utf8' })
     .then(content => JSON.parse(content))
     .then(content => metadata.push(...content))
-    .then(verifyMetadata)
-    .then(mixinMetadata);
+    .then(verifyMetadata);
 }
 
 function generateBadgeNumbers() {
@@ -225,6 +224,7 @@ function processInputData(folder, metadataFile) {
   return readSpreadsheets(folder)
     .then(generateBadgeNumbers) // preserve badge count by using tap() below.
     .tap(() => readMetadata(metadataFile))
+    .tap(mixinMetadata)
     .tap(synthesizeMetadata);
 }
 
@@ -402,6 +402,7 @@ function generateEnvelopeMailMerge(filename, group) {
         [REALNAME_KEY]: realName,
         [PRIVATE_NOTES]: notes,
         [ORDERID_KEY]: orderId,
+        [BILLINGEMAIL_KEY]: billingEmail,
         badgeNum,
         sortKey,
         responsibleParty,
@@ -410,6 +411,7 @@ function generateEnvelopeMailMerge(filename, group) {
       acc.BillingName.push(responsibleParty);
       acc.RealName.push(reverseName(realName));
       acc.Email = acc.Email || email;
+      acc.BillingEmail = acc.BillingEmail || billingEmail;
 
       // Get DWTS by matching 'DWTS: ' in PRIVATE_NOTES of star badge purchases
       acc.DWTS = acc.DWTS.concat(badgeType.match(/Star/) && notes.match(/DWTS: [^\n]+/g) || []);
@@ -436,17 +438,16 @@ function generateEnvelopeMailMerge(filename, group) {
       FanXP: item.FanXP.filter(Boolean).join('\n'),
     }));
 
-  // console.log('envelope merge:', envelopeMailMerge);
   const crossReference = records
     .map(item => item.RealName.filter(Boolean).map(name => ({
       RealName: name,
       BillingName: item.BillingName.filter(Boolean).filter(uniqueFilter).sort().join(' / '),
+      BillingEmail: item.BillingEmail,
       Email: item.Email,
     })))
     .reduce((acc, item) => acc.concat(...item), [])
     .sort((a,b) => a.RealName.localeCompare(b.RealName));
-    
-  // console.log('Xref:', crossReference);
+
   const options = {
     header: true,
     quotedString: true,
@@ -456,7 +457,7 @@ function generateEnvelopeMailMerge(filename, group) {
   return csvStringify(envelopeMailMerge, options)
    .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
    .then(() => csvStringify(crossReference, options))
-   .then(data => writeFile('Envelope reference.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
+   .then(data => writeFile('Xerf Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
 function getVendorStartingBadgeNumber() {
@@ -549,6 +550,48 @@ function summarizeOtherItems() {
   });
 }
 
+function generateCrossReferences() {
+  // map real name to: billing name, billing email, unifying email
+  const realNameCrossRef = getAllItems()
+    .map(item => JSON.stringify({
+      RealName: reverseName(item[REALNAME_KEY]),
+      // When the 'admin@starbaseindy.org' email is encountered, replace the billing name with the form real name
+      BillingName: item[UNIFYING_EMAIL] === 'admin@starbaseindy.org' ? reverseName(item[REALNAME_KEY]) : item.responsibleParty,
+      BillingEmail: item[BILLINGEMAIL_KEY],
+      UnifyingEmail: item[UNIFYING_EMAIL],
+    }))
+  .sort((a, b) => a.localeCompare(b))
+  .filter(uniqueFilter)
+  .map(item => JSON.parse(item));
+
+  // map unifying email to each item purchased
+  // Items can be photo ops, tee-shirts (variant), badges (with badgeNum, real name)
+  const unifyingEmailCrossRef = getAllItems()
+   .map(item => JSON.stringify({
+     UnifyingEmail: item[UNIFYING_EMAIL],
+     Item: [
+       item[LINEITEM_KEY],
+       [item[LINEITEM_VARIANT]].filter(v => v !== 'Through June 30')[0],
+       item.badgeNum,
+       item[BADGENAME_KEY]
+     ].filter(Boolean).join('/'),
+   }))
+  .sort((a, b) => a.localeCompare(b))
+  .filter(uniqueFilter)
+  .map(item => JSON.parse(item));
+
+  const options = {
+    header: true,
+    quotedString: true,
+    delimiter: '\t',
+  };
+
+  return csvStringify(realNameCrossRef, options)
+   .then(data => writeFile('Xref Real Name.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
+   .then(() => csvStringify(unifyingEmailCrossRef, options))
+   .then(data => writeFile('Xref UnifyingEmail.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
+}
+
 function main() {
   if (process.argv.length < 3) {
     console.error('You must specify a folder path, where the input CSV files can be found.');
@@ -577,6 +620,7 @@ function main() {
     .then(printDiscountCodeCounts)
     .then(generateMailMergeFiles)
     .then(generateUnicodeKeyFile)
+    .then(generateCrossReferences)
     .then(() => console.log('\nDone!'))
     .catch((err) => console.log('Error!', err));
 }
