@@ -38,26 +38,42 @@ const summary = [];
 const vendors = []; // sourced separately
 const metadata = [];
 
-const fanExperienceRegex = /Dinner|T-Shirt|V-Neck Shirt|Hoodie|Photo/;
-const fanExperiences = [];
+const fanExperienceRegex = /(Dinner|T-Shirt|V-Neck Shirt|Hoodie|Photo)/;
+const badgeRegex = /(Child|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
+const childBadgeRegex = /Child.*Badge/;
 
 // The unique ID generator needs to give us a unique sequence number for every order number
 const uniqueIds = {};
 function getSortKey(orderId, itemType) {
-  // Provide a lookup table of suffixes that will cause the items to sort the way we want.
-  const lookup = {
-    'D': '#1D',
-    'P': '#2P',
-    'H': '#3H',
-    'T': '#4T',
-    'V': '#5V',
+  // Provide a lookup table of suffixes that will cause the items to sort the way we want for envelope printing.
+  const fanXPLookup = {
+    'Dinner':       '#1D',
+    'Photo':        '#2P',
+    'Hoodie':       '#3H',
+    'T-Shirt':      '#4T',
+    'V-Neck Shirt': '#5V',
   };
-  const fanXP = (itemType.match(fanExperienceRegex) || [''])[0][0];
-  const orderIdSuffix = lookup[fanXP] || ''; // Badges have no order suffix
+  
+  // Make badge items sort deterministically so we can traverse all badge types in a given order deterministically while assigning badge numbers.
+  // This removes coupling on the input file names, but adds coupling to the names of the merchandise in the store.
+  const badgeLookup = {
+    'Child':    'A',
+    'Saturday': 'B',
+    'Shopping': 'C',
+    'Star':     'D',
+    'Student':  'E',
+    'Sunday':   'F',
+    'Weekend':  'G', // no suffix for weekend badges
+  };
+
+  const fanXPMatch = (itemType.match(fanExperienceRegex) || [])[1];
+  const badgeMatch = (itemType.match(badgeRegex) || [])[1];
+  const orderIdSuffix = fanXPLookup[fanXPMatch] || badgeLookup[badgeMatch] || '';
   const key = orderId + orderIdSuffix;
+  // console.log(itemType, key, fanXPMatch || badgeMatch, orderIdSuffix);
   
   uniqueIds[key] = uniqueIds[key] + 1 || 1;
-  return `${key}#${uniqueIds[key]}`
+  return `${key}#${uniqueIds[key]}`;
 }
 
 function zeroPad(num) {
@@ -65,7 +81,9 @@ function zeroPad(num) {
 }
 
 function getAllBadgeItems() {
-  return [].concat(...Object.values(cache)).filter(item => item[LINEITEM_KEY].match(/Badge/));
+  return Object.values(cache)
+    .reduce((acc, item) => acc.concat(...item), [])
+    .filter(item => item[LINEITEM_KEY].match(badgeRegex));
 }
 
 function getAllItems() {
@@ -81,8 +99,8 @@ function uniqueFilter(value, index, array) {
 }
 
 function processCSV(filename, group = [{}]) {
-  // console.log('Processing CSV file', filename);
   const lineItems = group.map(item => item[LINEITEM_KEY]).filter(uniqueFilter);
+  // console.log('Processing CSV file', (lineItems.length > 1 ? 'summary' : lineItems[0]), filename);
 
   // Look for the vendor CSV file.  It's a different format.
   if ((group[0] || {})[VENDORNAME_KEY]) {
@@ -147,9 +165,10 @@ function synthesizeMetadata() {
   // SBI_ENTERTAINER (Entertainer/Red), SBI_MEDIA_GUEST (VIP/Yellow), SBI_GURU (Presenter/Green) 
 
   getAllBadgeItems().forEach(item => {
-    if (!item.departmentColor) {
-      const sortKey = item[ORDERID_KEY] + '#1';
-      const discountCodes = getAllBadgeItems().find(item => item.sortKey === sortKey)[DISCOUNTCODE_KEY];
+    // DPM TODO: exclude children and students from being shuffled.  This happened a lot for the SBI_GURU discount code.
+    if (!item.departmentColor && !item[LINEITEM_KEY].match(childBadgeRegex)) {
+      const sortKey = item[ORDERID_KEY] + 'G#1';
+      const discountCodes = (getAllBadgeItems().find(item => item.sortKey === sortKey) || {})[DISCOUNTCODE_KEY] || '';
 
       if (discountCodes.match('SBI_MEDIA_GUEST')) {
         item.department = "VIP";
@@ -216,7 +235,9 @@ function generateBadgeNumbers() {
   let badgeNum = 1;
   getAllBadgeItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
-    .map(item => item.badgeNum = badgeNum++);
+    .map(item => ((item.badgeNum = badgeNum++), item));
+    // .filter(item => item[LINEITEM_KEY].match(/Shopping/))
+    // .map(item => console.log(item.badgeNum, item[LINEITEM_KEY], item.responsibleParty));
   return badgeNum;
 }
 
@@ -335,12 +356,12 @@ function generateChildBadgeMailMerge(filename, group) {
     .map(item => {
       const { 
         badgeNum,
-        [ORDERID_KEY]: orderId,
+        sortKey,
         [ADULTNAME_KEY]: adultName,
         [ADULTPHONE_KEY]: adultPhone,
         [ADULTEMAIL_KEY]: adultEmail
       } = item;
-      return [orderId, zeroPad(badgeNum), adultName, adultPhone.trim(), adultEmail];
+      return [sortKey, zeroPad(badgeNum), adultName, adultPhone.trim(), adultEmail];
     });
   
   if (!records.length) return;
@@ -469,16 +490,14 @@ function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
   return vendors
     .map(item => {
       const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10);
-      return [...Array(numBadges)].map(() => 
-       ({
-         sortKey: 'none',
-         badgeNum: startingBadgeNum++,
-         [BADGENAME_KEY]: item[VENDORNAME_KEY],
-         department: 'Vendor', 
-         tagline: '',
-         departmentColor: "Orange",
-
-       }));
+      return [...Array(numBadges)].map(() => ({
+        sortKey: 'none',
+        badgeNum: startingBadgeNum++,
+        [BADGENAME_KEY]: item[VENDORNAME_KEY],
+        department: 'Vendor', 
+        tagline: '',
+        departmentColor: 'Orange',
+      }));
     })
     .reduce((acc, badges) => acc.concat(badges), []);
 }
@@ -515,8 +534,8 @@ function generateMailMergeFiles() {
     
   // Export child badges (front AND back)
   const childPromises = Object.keys(cache)
-    .filter(key => key.match(/Child.*Badge/))
-    .map(key => 
+    .filter(key => key.match(childBadgeRegex))
+    .map(key =>
       generateChildBadgeMailMerge(key, cache[key])
         .then(() => generateBadgeMailMerge(key, cache[key])));
 
@@ -533,12 +552,7 @@ function generateMailMergeFiles() {
 }
 
 function summarizeOtherItems() {
-  // Report fan experience sales from the summary list:
-  //   Photo Ops
-  //   Dinner with various stars 
-  //   Tee-Shirt
-  //   V-Neck Tee-Shirt
-  //   Hoodie
+  // Report fan experience sales from the summary list
   const categories = summary
     .filter(item => item[LINEITEM_KEY].match(fanExperienceRegex))
     .map(item => [item[LINEITEM_KEY], item[LINEITEM_VARIANT]].filter(Boolean).join('/'))

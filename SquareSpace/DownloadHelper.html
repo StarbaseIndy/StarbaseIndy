@@ -87,9 +87,9 @@
       function downloadSquareYearData(year) {
         let delay = 0;
         // Click on each queued element, with a delay between each.
-        linkIDs['Square'][year].forEach((elementId, index, array) => {
+        linkIDs['Square'][year].sort().forEach((elementId, index, array) => {
           setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * 5000);
-          
+
           if(index === array.length - 1) {
             setTimeout(() => document.getElementById("finishedDialog").open = true, delay++ * 5000);
           }
@@ -99,7 +99,7 @@
       function downloadSquareSpaceYearData(year) {
         let delay = 0;
         // Click on each queued element, with a delay between each.
-        linkIDs['SquareSpace'][year].forEach((elementId, index, array) => {
+        linkIDs['SquareSpace'][year].sort().forEach((elementId, index, array) => {
           setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * 1000); 
 
           if(index === array.length - 1) {
@@ -138,7 +138,8 @@
         // Vendors come from google sheets, and not Square or SquareSpace.
         const vendorSheet2018 = 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034';
         document.getElementById('2018BadgeVendor').href = vendorSheet2018;
-
+        linkIDs['SquareSpace'][2018].push('2018BadgeVendor');
+        
         assignSquareHref(2018, 'Transactions');
         assignSquareHref(2018, 'Items');
         
