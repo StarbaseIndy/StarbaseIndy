@@ -129,8 +129,8 @@
 }, {
   "Note": "==================== [Staff] Programming ================================================================"
 }, {
-  "sortKey": "",
-  "Name": "Bryan Neeley",
+  "sortKey": "1591G#1",
+  "Name": "Bryan Neely",
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
   "Tagline": "Media Guest Relations"
@@ -153,7 +153,7 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Panel Coordinator"
 }, {
-  "sortKey": "",
+  "sortKey": "1617G#15",
   "Name": "Josh Rotella",
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
@@ -171,7 +171,7 @@
   "DepartmentColor": "Light Blue",
   "Tagline": "Masquerade"
 }, {
-  "sortKey": "",
+  "sortKey": "1617G#14",
   "Name": "Bradley Nixon",
   "Department": "Programming",
   "DepartmentColor": "Light Blue",
@@ -246,6 +246,12 @@
   "Department": "VIP",
   "DepartmentColor": "Yellow",
   "Tagline": "Klingon Linguist"
+}, {
+  "sortKey": "1617G#20",
+  "Name": "Christina Branch",
+  "Department": "Emcee",
+  "DepartmentColor": "PINK",
+  "Tagline": "Master of Ceremonies"
 }, {
   "Note": "==================== Presenter ========================================================================"
 }, {
@@ -389,6 +395,13 @@
 }, {
   "sortKey": "1576G#1",
   "Name": "Michael Irwin",
+  "Department": "",
+  "DepartmentColor": "White"
+}, {
+  "sortKey": "1610G#1",
+  "Name": "Reed Hartman",
+  "BadgeName": "Reed",
+  "Tagline": "AV Redshirt",
   "Department": "",
   "DepartmentColor": "White"
 }]

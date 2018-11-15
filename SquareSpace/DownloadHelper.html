@@ -100,10 +100,10 @@
         let delay = 0;
         // Click on each queued element, with a delay between each.
         linkIDs['SquareSpace'][year].sort().forEach((elementId, index, array) => {
-          setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * 1000); 
+          setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * 2000); 
 
           if(index === array.length - 1) {
-            setTimeout(() => document.getElementById("finishedDialog").open = true, delay++ * 1000);
+            setTimeout(() => document.getElementById("finishedDialog").open = true, delay++ * 2000);
           }
         });
       }
