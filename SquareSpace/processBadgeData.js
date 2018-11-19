@@ -494,7 +494,7 @@ function getVendorStartingBadgeNumber() {
 function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
   return vendors
     .map(item => {
-      const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10);
+      const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10) || 0;
       return [...Array(numBadges)].map(() => ({
         sortKey: 'none',
         badgeNum: startingBadgeNum++,
