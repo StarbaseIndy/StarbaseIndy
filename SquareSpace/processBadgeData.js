@@ -54,7 +54,7 @@ function getSortKey(orderId, itemType) {
     'T-Shirt':      '#4T',
     'V-Neck Shirt': '#5V',
   };
-  
+
   // Make badge items sort deterministically so we can traverse all badge types in a given order deterministically while assigning badge numbers.
   // This removes coupling on the input file names, but adds coupling to the names of the merchandise in the store.
   const badgeLookup = {
@@ -72,7 +72,7 @@ function getSortKey(orderId, itemType) {
   const orderIdSuffix = fanXPLookup[fanXPMatch] || badgeLookup[badgeMatch] || '';
   const key = orderId + orderIdSuffix;
   // console.log(itemType, key, fanXPMatch || badgeMatch, orderIdSuffix);
-  
+
   uniqueIds[key] = uniqueIds[key] + 1 || 1;
   return `${key}#${uniqueIds[key]}`;
 }
@@ -123,25 +123,25 @@ function processCSV(filename, group = [{}]) {
       item[ORDERID_KEY] = orderId; // make order ID numeric
       // combine different form names for same information
       item[UNIFYING_EMAIL] = (item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2] || '').toLowerCase();
-      
+
       item.sortKey = getSortKey(orderId, lineItems[0]);
-      
+
       transactionData[orderId] = transactionData[orderId] || {};
-      
+
       // Calculate a responsibleParty name (last name first)
-      item.responsibleParty = transactionData[orderId].name = 
+      item.responsibleParty = transactionData[orderId].name =
         reverseName(item[BILLINGNAME_KEY]) ||
-        transactionData[orderId].name ||        
+        transactionData[orderId].name ||
         reverseName(item[REALNAME_KEY]); // Used when no billing name is associated with a free order.
-        
+
       // Also replicate the billing email
-      item[BILLINGEMAIL_KEY] = transactionData[orderId].email = 
+      item[BILLINGEMAIL_KEY] = transactionData[orderId].email =
         item[BILLINGEMAIL_KEY] || transactionData[orderId].email;
     });
     cache[lineItems[0] || filename] = group;
     return;
   }
-  
+
 }
 
 function readCSV(filename) {
@@ -163,7 +163,7 @@ function synthesizeMetadata() {
   // 1. Any use of SBI_GURU where there's not already adornment should adorn as presenter
   // 2. When adding the stragglers to the store, we should use a different code for entertainers, and a different code for guests.
   // 3. Same treatment as #1 for codes for entertainers and media guests
-  // SBI_ENTERTAINER (Entertainer/Red), SBI_MEDIA_GUEST (VIP/Yellow), SBI_GURU (Presenter/Green) 
+  // SBI_ENTERTAINER (Entertainer/Red), SBI_MEDIA_GUEST (VIP/Yellow), SBI_GURU (Presenter/Green)
 
   getAllBadgeItems().forEach(item => {
     // DPM TODO: exclude children and students from being shuffled.  This happened a lot for the SBI_GURU discount code.
@@ -175,17 +175,17 @@ function synthesizeMetadata() {
         item.department = "VIP";
         item.departmentColor = "Yellow";
       }
-      
+
       if (discountCodes.match('SBI_ENTERTAINER')) {
         item.department = "Entertainer";
         item.departmentColor = "Red";
       }
-      
+
       if (discountCodes.match('SBI_GURU')) {
         item.department = "Presenter";
         item.departmentColor = "Green";
       }
-      
+
       // If a general admission badge would have a tagline, send it to the 'White' mailmerge file instead.
       item.departmentColor = item.departmentColor || (item.tagline ? 'White' : '');
     }
@@ -196,7 +196,7 @@ function mixinMetadata() {
   // Split badge name on unicode character '»' to facilitate entering taglines via the store.
   // Mixin the metadata to get new badgeName, tagline, and department, and departmentColor.
   getAllBadgeItems().forEach(item => {
-    const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};  
+    const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};
     const [ badgeName, tagline = '' ] = (metaItem.BadgeName || item[BADGENAME_KEY] || '').split('»');
 
     item[BADGENAME_KEY] = badgeName;
@@ -269,7 +269,7 @@ function printDiscountCodeCounts() {
     .map(code => code.split(','))
     .reduce((acc, codes) => acc.concat(codes), [])
     .reduce((acc, code) => (acc[code] = acc[code] + 1 || 1, acc), {});
-    
+
   console.log('\nDiscount codes used:');
   Object.keys(discountCodes).sort().forEach(key => {
     console.log(`  ${key}: ${discountCodes[key]}`);
@@ -283,7 +283,7 @@ function writeMailMergeFile(filename, records, columns) {
     quotedString: true,
     delimiter: '\t',
   };
-  
+
   return csvStringify(records, options)
    .then(data => writeFile(filename, '\uFEFF' + data, { encoding: 'utf16le' }));
 }
@@ -314,7 +314,7 @@ function generateUnicodeKeyFile() {
 
         console.error(`WARNING: Non-printable name for badge #${badgeNum} (order ${sortKey}): ${badgeName}`);
         console.error('         Unicode characters:', unicode);
-        
+
         const getUrl = (code) => `https://www.fileformat.info/info/unicode/char/${code}/fontsupport.htm`;
         return unicode.map(code => [sortKey, zeroPad(badgeNum), badgeName, department, departmentColor, code, getUrl(code.slice(2))]);
       }
@@ -348,7 +348,7 @@ function generateBadgeMailMerge(filename, group, sortFn = sortByBadgeNumFn) {
     });
 
   if (!records.length) return;
-  
+
   return writeMailMergeFile(`Mailmerge ${filename}.tab`, records, columns);
 }
 
@@ -357,7 +357,7 @@ function generateChildBadgeMailMerge(filename, group) {
   const records = group
     .sort(sortByBadgeNumFn)
     .map(item => {
-      const { 
+      const {
         badgeNum,
         sortKey,
         [ADULTNAME_KEY]: adultName,
@@ -366,7 +366,7 @@ function generateChildBadgeMailMerge(filename, group) {
       } = item;
       return [sortKey, zeroPad(badgeNum), adultName, adultPhone.trim(), adultEmail];
     });
-  
+
   if (!records.length) return;
   return writeMailMergeFile(`Mailmerge ${filename} BACK.tab`, records, columns);
 }
@@ -379,21 +379,21 @@ function generateEnvelopeMailMerge(filename, group) {
   // Note: This may make more sense as [ADULTNAME_KEY]||[REALNAME_KEY], and include only one badge per packet.
   //   We could then allow someone to pick up all packets with the same unifying email (assuming they know the names on the other envelopes).
   //
-  // Billing name: <Last Name>, <First Name>  
+  // Billing name: <Last Name>, <First Name>
   // UNIFYING FORM Email: <.com>
   //
   // Badge 1: <Type> <Badge Name>
   // Badge 2: <Type> <Badge Name>
   // Etc…
   //
-  // Fan Experiences: 
+  // Fan Experiences:
   // DWTS
   // PhotoOp
   //
   // Merchandise:
   // Tee-shirts, V-Neck Tee-shirts, Hoodies
   //
-  // Note: We're not putting ribbons in envelopes in 2018.  
+  // Note: We're not putting ribbons in envelopes in 2018.
   //       Volunteer ribbons will be given to volunteer coordinators.
   //       Presenter badges are already distinguished by design.
   //
@@ -415,9 +415,9 @@ function generateEnvelopeMailMerge(filename, group) {
       acc[unifyingEmail].push(Object.assign({}, item, { responsibleParty }));
       return acc;
     }, {});
-    
+
   // Now that we have the envelopes organized by billing => email, generate the mailmerge data
-  const records = Object.keys(envelopes).map(email => 
+  const records = Object.keys(envelopes).map(email =>
     envelopes[email].reduce((acc, item) => {
       const {
         [LINEITEM_KEY]: badgeType,
@@ -439,7 +439,7 @@ function generateEnvelopeMailMerge(filename, group) {
 
       // Get DWTS by matching 'DWTS: ' in PRIVATE_NOTES of star badge purchases
       acc.DWTS = acc.DWTS.concat(badgeType.match(/Star/) && notes.match(/DWTS: [^\n]+/g) || []);
-      
+
       if (sortKey.match(/#..#/)) {
         // Photo Ops, Tee-Shirts, Hoodies, DWTS (direct orders)
         const variant = [badgeType, item[LINEITEM_VARIANT]].filter(Boolean).join('/');
@@ -449,7 +449,7 @@ function generateEnvelopeMailMerge(filename, group) {
         const badgeInfo = `#${badgeNum}: ${badgeType}: ${realName}`;
         acc.Badges.push(badgeInfo);
       }
-      
+
       return acc;
     }, { Email: '', RealName: [], BillingName: [], DWTS: [], FanXP: [], Badges: [] }));
 
@@ -477,7 +477,7 @@ function generateEnvelopeMailMerge(filename, group) {
     quotedString: true,
     delimiter: '\t',
   };
-  
+
   return csvStringify(envelopeMailMerge, options)
    .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
    .then(() => csvStringify(crossReference, options))
@@ -499,7 +499,7 @@ function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
         sortKey: 'none',
         badgeNum: startingBadgeNum++,
         [BADGENAME_KEY]: item[VENDORNAME_KEY],
-        department: 'Vendor', 
+        department: 'Vendor',
         tagline: '',
         departmentColor: 'Orange',
       }));
@@ -525,7 +525,7 @@ function generateMailMergeFiles() {
         }
         return Object.assign({}, item, extra);
       }));
-      
+
   // Export staff badges
   const staffBadgesPromises = getAllBadgeItems()
     .filter(item => item.departmentColor)
@@ -536,7 +536,7 @@ function generateMailMergeFiles() {
       return acc;
     }, [{}])
     .map(acc => Object.keys(acc).map(key => generateBadgeMailMerge(`Adorned ${key}`, acc[key])));
-    
+
   // Export child badges (front AND back)
   const childPromises = Object.keys(cache)
     .filter(key => key.match(childBadgeRegex))
@@ -562,7 +562,7 @@ function summarizeOtherItems() {
     .filter(item => item[LINEITEM_KEY].match(fanExperienceRegex))
     .map(item => [item[LINEITEM_KEY], item[LINEITEM_VARIANT]].filter(Boolean).join('/'))
     .reduce((acc, key) => (acc[key] = acc[key] + 1 || 1, acc), {});
-  
+
   console.log('\nOther sales counts:');
   Object.keys(categories).sort().forEach(key => {
     console.log(key, categories[key]);
@@ -621,7 +621,7 @@ function main() {
   const lookup = process.argv.indexOf('-l')
   if (lookup !== -1) {
     const name = process.argv[lookup + 1];
-    
+
     processInputData(folder, metadataFile)
       .then(() => getAllBadgeItems()
         .sort((a,b) => a.sortKey.localeCompare(b.sortKey))

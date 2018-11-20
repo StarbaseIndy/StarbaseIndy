@@ -50,6 +50,7 @@ const ITEM = 'Item'; // Item description
 const CATEGORY = 'Category';
 const QUANTITY = 'Qty';
 const SKU = 'SKU';
+const MODIFIERS = 'Modifiers Applied';
 
 const csvParse = Promise.promisify(csv.parse);
 const csvStringify = Promise.promisify(csv.stringify);
@@ -67,7 +68,12 @@ function formatCurrency(value) {
   return value.toFixed(2).toString().padStart(8, ' ');
 }
 
-function processCSV(filename, group = [{}]) {
+function processCSV(filename, group ) {
+  if (!group || !group.length) {
+    console.log('Notice: Skipping empty file:', filename);
+    return;
+  }
+
   if (group[0][ITEM]) {
     // process detailed item CSV
     console.log('Reading detailed items from:', filename);
@@ -77,7 +83,7 @@ function processCSV(filename, group = [{}]) {
       transactions[id].items.push(item);
     });
   }
-  
+
   if (group[0][DESCRIPTION]) {
     // process transaction CSV
     console.log('Reading transactions from:  ', filename);
@@ -85,7 +91,7 @@ function processCSV(filename, group = [{}]) {
       const id = item[TRANSACTION_ID];
       transactions[id] = Object.assign({ items: [] }, transactions[id], item);
     });
-  }  
+  }
 }
 
 function readCSV(filename) {
@@ -127,7 +133,7 @@ function processInputData(folder) {
   // const records = group
     // .sort((a,b) => a.badgeNum - b.badgeNum)
     // .map(item => {
-      // const { 
+      // const {
         // badgeNum,
         // [ORDERID_KEY]: orderId,
         // [ADULTNAME_KEY]: adultName,
@@ -136,7 +142,7 @@ function processInputData(folder) {
       // } = item;
       // return [orderId, zeroPad(badgeNum), adultName, adultPhone.trim(), adultEmail];
     // });
-  
+
   // if (!records.length) return;
   // return writeMailMergeFile(`Mailmerge ${filename} BACK.tab`, records, columns);
 // }
@@ -165,7 +171,7 @@ function printSummary() {
   }, { total: 0, card: 0, fees: 0, cash: 0, other: 0, keyedFees: 0 });
 
   console.log(
-    '\nSummary:', 
+    '\nSummary:',
     '\n  Transactions:',       Object.keys(transactions).length,
     '\n  Total:             ', formatCurrency(totals.total),
     '\n  Other tender total:', formatCurrency(totals.other),
@@ -175,14 +181,49 @@ function printSummary() {
   );
 }
 
+function printFanExperienceReport() {
+  const typeRegex = /Photo|Autograph|Selfie/;
+  const fanXPFilter = (item) => item[ITEM].match(typeRegex) && ['Fan Experience', 'Guest Handler'].includes(item[CATEGORY]);
+  const fanXPSales = getTransactions().reduce((acc, transaction) => {
+    const fanXPItems = transaction.items.filter(fanXPFilter);
+    fanXPItems.map(item => {
+      const count = +item[QUANTITY];
+      const modifiers = item[MODIFIERS].split(', ');
+
+      modifiers.map(mod => {
+        const type = (item[ITEM].match(typeRegex) || ['?'])[0];
+        const key = [item[ITEM], mod].filter(Boolean).join('/');
+        acc[key] = (acc[key] || 0) + count;
+        acc[`Total ${type}s`] = (acc[`Total ${type}s`] || 0) + count;
+      });
+    });
+    return acc;
+  }, {});
+
+  console.log('\nFan Experience sales:');
+  Object.entries(fanXPSales)
+    .sort((a,b) => a[0].localeCompare(b[0]))
+    .filter(([type]) => !type.match(/^total/))
+    .forEach(([type, count]) => {
+      console.log(`  ${type}:`, count);
+    });
+
+  // Print totals
+  Object.entries(fanXPSales)
+    .sort((a,b) => a[0].localeCompare(b[0]))
+    .filter(([type]) => type.match(/^total/))
+    .forEach(([type, count]) => {
+      console.log(`  ${type}:`, count);
+    });
+}
+
 function printBadgeCount() {
   // TODO: lookup a regexp based on the year of the transaction date:
   // TODO: add regular expressions for years 2012-2016
   // 2017 data: search for Weekend, Friday, Saturday, Sunday
   // 2018 data: search for Badge
-  
   const badgeSales = getTransactions().reduce((acc, transaction) => {
-    const badgeItems = transaction.items.filter(item => item[ITEM].match(/(Weekend|Friday|Saturday|Sunday)/));
+    const badgeItems = transaction.items.filter(item => item[CATEGORY] === 'Badges');
     badgeItems.map(item => {
       const count = +item[QUANTITY];
       acc[item[ITEM]] = (acc[item[ITEM]] || 0) + count;
@@ -190,8 +231,8 @@ function printBadgeCount() {
     });
     return acc;
   }, { total: 0 });
-  
-  console.log('Badge sales:');
+
+  console.log('\nBadge sales:');
   Object.entries(badgeSales)
     .sort((a,b) => a[0].localeCompare(b[0]))
     .filter(([type]) => type !== 'total')
@@ -209,9 +250,20 @@ function calculateTimestamps() {
   });
 }
 
+function getDateAndTime(date) {
+  return [
+    [
+      date.getFullYear(),
+      ('0' + (date.getMonth() + 1)).slice(-2),
+      ('0' + date.getDate()).slice(-2),
+    ].join('-'),
+    date.toTimeString().slice(0,8)
+  ];
+}
+
 function generateShiftReport(title, dataset = getTransactions(), key = TOTAL_COLLECTED) {
   const getName = (transaction = {}) => [transaction[DEVICE_NICKNAME], transaction[DEVICE_NAME]].filter(Boolean).join('/') || '<unknown>';
-  
+
   // 1. Sort by Device Nickname | Device Name first, then date/time
   // 2. Create new group whenever transaction has item of SKU=SHIFT_START (and discard transaction), or
   //    Create new group whenever the device name changes
@@ -221,7 +273,7 @@ function generateShiftReport(title, dataset = getTransactions(), key = TOTAL_COL
   const groups = dataset
     .sort((a,b) => getName(a).localeCompare(getName(b)) || a.timestamp - b.timestamp)
     .reduce((acc, transaction) => {
-      if (transaction.items.some(item => item[SKU] === 'SHIFT_START')) {
+      if (transaction.items.some(item => item[SKU].match(/^SHIFT_START/))) {
         acc.unshift([]);
       } else if (getName(acc[0][0]) !== getName(transaction)) {
         acc.unshift([transaction]);
@@ -231,12 +283,12 @@ function generateShiftReport(title, dataset = getTransactions(), key = TOTAL_COL
       return acc;
     }, [[]]);
 
-    
+
   const summary = groups
     .filter(group => group.length)
     .map(group => group.reduce((acc, transaction) => {
       const timestamp = transaction.timestamp;
-      if ((acc.start || timestamp) >= timestamp) { acc.start = timestamp; } 
+      if ((acc.start || timestamp) >= timestamp) { acc.start = timestamp; }
       if ((acc.end   || timestamp) <= timestamp) { acc.end = timestamp; }
       acc.amount = acc.amount + transaction[key];
       acc.device = getName(transaction);
@@ -248,14 +300,20 @@ function generateShiftReport(title, dataset = getTransactions(), key = TOTAL_COL
     .sort((a,b) => a.start - b.start)
     .forEach(group => {
       const { start, end, amount, device } = group;
-      const [startDate, startTime] = start.toISOString().split('.')[0].split('T');
-      const [endDate, endTime] = end.toISOString().split('.')[0].split('T');
+      const [startDate, startTime] = getDateAndTime(start);
+      let [endDate, endTime] = getDateAndTime(end);
+
+      if (startDate === endDate) {
+        endDate = ' '.repeat(endDate.length);
+      }
+
       console.log('  ',
-                  startDate, startTime, 
-                  startDate === endDate ? '-' : '- ' + endDate, endTime,
+                  startDate, startTime,
+                  '-',
+                  endDate, endTime,
                   'Total:', formatCurrency(amount),
                   `'${device}'`);
-      
+
       // TODO: Consider writing this group data to CSV file
     });
 }
@@ -280,6 +338,7 @@ function main() {
     .then(calculateTimestamps)
     .then(printSummary)
     .then(printBadgeCount)
+    .then(printFanExperienceReport)
     .then(generateShiftTotalReport)
     .then(generateShiftCashReport)
     .then(() => console.log('\nDone!'))
