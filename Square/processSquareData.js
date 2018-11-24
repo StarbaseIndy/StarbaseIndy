@@ -106,7 +106,7 @@ function convertDollarAmounts(ary) {
     Object.entries(item).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         convertDollarAmounts(value);
-      } else if (value.match(/^\$/)) {
+      } else if (key !== ITEM && value.match(/^\$/)) {
         item[key] = +value.slice(1);
       } else if ([QUANTITY, FEE_PERCENTAGE, FEE_FIXED].includes(key)) {
         item[key] = +value;
