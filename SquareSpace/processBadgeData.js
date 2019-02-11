@@ -9,14 +9,17 @@ const BILLINGEMAIL_KEY = 'Email';
 const UNIFYING_EMAIL = 'Product Form: Email';
 const UNIFYING_EMAIL2 = 'Product Form: Responsible Adult\'s Email';
 const LINEITEM_KEY = 'Lineitem name';
+const LINEITEM_PRICE = 'Lineitem price';
 const LINEITEM_VARIANT = 'Lineitem variant';
 const REALNAME_KEY = 'Product Form: Real Name';
 const BADGENAME_KEY = 'Product Form: Badge Name';
 const DISCOUNTCODE_KEY = 'Discount Code';
+const DISCOUNTAMOUNT_KEY = 'Discount Amount';
 const ADULTNAME_KEY = 'Product Form: Responsible Adult\'s Name';
 const ADULTPHONE_KEY = 'Product Form: Responsible Adult\'s Phone Number';
 const ADULTEMAIL_KEY = 'Product Form: Responsible Adult\'s Email';
 const PRIVATE_NOTES = 'Private Notes';
+const ORDER_TOTAL = 'Total'; // only appears once per order
 
 const VENDORNAME_KEY = 'Business Name';
 const VENDORNUMBADGES_KEY = '#Badges';
@@ -28,6 +31,7 @@ const PRESENTER_SUFFIX = 'name.3';
 const PRESENTER_ID = 'id';
 
 const ORDERID_KEY = 'Order ID';
+const PAIDAT_KEY = 'Paid at';
 const csvParse = Promise.promisify(csv.parse);
 const csvStringify = Promise.promisify(csv.stringify);
 const readDir = Promise.promisify(Fs.readdir);
@@ -78,7 +82,11 @@ function getSortKey(orderId, itemType) {
 }
 
 function zeroPad(num) {
-  return ("0000" + num).slice(-4);
+  return ('0000' + num).slice(-4);
+}
+
+function spacePad(num, width=4) {
+  return (Array(width+1).join(' ') + num).slice(-width);
 }
 
 function getAllBadgeItems() {
@@ -141,7 +149,6 @@ function processCSV(filename, group = [{}]) {
     cache[lineItems[0] || filename] = group;
     return;
   }
-
 }
 
 function readCSV(filename) {
@@ -569,6 +576,75 @@ function summarizeOtherItems() {
   });
 }
 
+function summarizeMonthlySales() {
+  // Per month, report on number of badge sales, merch sales, and fan XP sales.  Use table format.
+  // If possible, report on average based on the item price.  Ignore discount codes for this?
+  
+  const monthlySales = [...Array(12)].map(() => ({
+    badge: [],
+    star: [],
+    DWTS: [],
+    merch: [],
+    unknown: [],
+    discount: [],
+    total: [],
+  }));
+  
+  let lastDate = '';
+  summary.forEach(item => {
+    const type = item[LINEITEM_KEY];
+    const total = parseInt(item[ORDER_TOTAL] || 0, 10);
+    const price = parseInt(item[LINEITEM_PRICE], 10); // NOTE: assuming 'Lineitem quantity' is always '1'
+    const discount = parseInt(item[DISCOUNTAMOUNT_KEY] || '0', 10); // Only count this once per order    
+    const typeKey = type.match(/Star.*Badge/) ? 'star'
+      : type.match(/Dinner/) ? 'DWTS'
+      : type.match(badgeRegex) ? 'badge'
+      : 'merch';
+
+    lastDate = item[PAIDAT_KEY] || lastDate; // YYYY-MM-DD HH:MM:SS [-]\d{4}
+    const month = parseInt(lastDate.split('-')[1], 10) - 1; // make it a zero-based integer    
+    const data = monthlySales[month];
+    data[typeKey].push(price);
+    if (total) { data.total.push(total); }
+    if (discount) { data.discount.push(discount); }
+    
+    // console.log(month, typeKey, price, discount);
+    // console.log(JSON.stringify(monthlySales));
+  });
+
+  const banner = Array(85).fill('=').join('');
+  const star = monthlySales.map(data => spacePad(data.star.reduce((acc, value) => acc + value, 0), 5))
+  const badgeCount = monthlySales.map(data => spacePad(data.badge.length, 5));
+  const avg = (data) => (data.badge.reduce((acc, value) => acc + value, 0) / data.badge.length) || 0;
+  const avgBadgePrice = monthlySales.map(data => spacePad(avg(data).toFixed(2), 5));
+  const badge = monthlySales.map(data => spacePad(data.badge.reduce((acc, value) => acc + value, 0), 5));
+  const DWTS = monthlySales.map(data => spacePad(data.DWTS.reduce((acc, value) => acc + value, 0), 5));
+  const merch = monthlySales.map(data => spacePad(data.merch.reduce((acc, value) => acc + value, 0), 5));
+  const discount = monthlySales.map(data => spacePad(data.discount.reduce((acc, value) => acc + value, 0), 5));
+  const total = monthlySales.map(data => spacePad(data.total.reduce((acc, value) => acc + value, 0), 5));
+  console.log();
+  console.log(`Month-by-month Report:
+${banner}
+=            Jan   Feb   Mar   Apr   May   Jun   Jul   Aug   Sep   Oct   Nov   Dec  =
+= badge#:  ${badgeCount.join(' ')}  =
+= (avg):   ${avgBadgePrice.join(' ')}  =
+= badges:  ${badge.join(' ')}  =
+= star:    ${star.join(' ')}  =
+= DWTS:    ${DWTS.join(' ')}  =
+= merch:   ${merch.join(' ')}  =
+= discnts: ${discount.join(' ')}  =
+= total:   ${total.join(' ')}  =
+${banner}`);
+  
+  
+  // LINEITEM_KEY
+  // LINEITEM_PRICE
+  // DISCOUNTAMOUNT_KEY
+  // .filter(item => item[LINEITEM_KEY].match(fanExperienceRegex))
+  // .filter(item => item[LINEITEM_KEY].match(badgeRegex));
+
+}
+
 function generateCrossReferences() {
   // map real name to: billing name, billing email, unifying email
   const realNameCrossRef = getAllItems()
@@ -613,7 +689,8 @@ function generateCrossReferences() {
 
 function main() {
   if (process.argv.length < 3) {
-    console.error('You must specify a folder path, where the input CSV files can be found.');
+    console.error('Error: You must specify a folder path, where the input CSV files can be found.');
+    console.error('Usage: <CSVFolder> [metadata.json]');
     process.exit(-1);
   }
 
@@ -637,6 +714,7 @@ function main() {
     .then(summarizeOtherItems)
     .then(() => console.log(`\nVendor count: ${vendors.length}`))
     .then(printDiscountCodeCounts)
+    .then(summarizeMonthlySales)
     .then(generateMailMergeFiles)
     .then(generateUnicodeKeyFile)
     .then(generateCrossReferences)
