@@ -128,25 +128,6 @@ function processInputData(folder) {
   return readSpreadsheets(folder);
 }
 
-// function generateChildBadgeMailMerge(filename, group) {
-  // const columns = ['Order ID', 'Badge Number', 'Adult Name', 'Adult Phone', 'Adult Email'];
-  // const records = group
-    // .sort((a,b) => a.badgeNum - b.badgeNum)
-    // .map(item => {
-      // const {
-        // badgeNum,
-        // [ORDERID_KEY]: orderId,
-        // [ADULTNAME_KEY]: adultName,
-        // [ADULTPHONE_KEY]: adultPhone,
-        // [ADULTEMAIL_KEY]: adultEmail
-      // } = item;
-      // return [orderId, zeroPad(badgeNum), adultName, adultPhone.trim(), adultEmail];
-    // });
-
-  // if (!records.length) return;
-  // return writeMailMergeFile(`Mailmerge ${filename} BACK.tab`, records, columns);
-// }
-
 function printSummary() {
   const baseFee = (getTransactions().find(t => t[CARD_ENTRY_METHOD] === 'Swiped') || {})[FEE_PERCENTAGE] || 2.75;
   const totals = getTransactions().reduce((acc, transaction) => {
@@ -241,6 +222,44 @@ function printBadgeCount() {
     });
   console.log('  Total:', badgeSales.total);
 }
+
+function printSaleSummary() {
+  const widths = { category: 0, item: 0 };
+  const sales = getTransactions().reduce((acc, transaction) => {
+    const items = transaction.items.map(item => {
+      const count = +item[QUANTITY];
+      const category = item[CATEGORY];
+      const itemType = item[ITEM];
+      const net = item[NET_SALES];
+      const seed = { count: 0, net: 0 };
+      acc[category] = acc[category] || { [itemType]: seed };
+      acc[category][itemType] = acc[category][itemType] || seed;
+      acc[category][itemType].count += count;
+      acc[category][itemType].net += net;
+      widths.category = Math.max(widths.category, category.length);
+      widths.item = Math.max(widths.item, itemType.length);
+    });
+    return acc;
+  }, {});
+
+  console.log('\nAll sales summary:', '\nCategory'.padEnd(widths.category, ' '), ' Item'.padEnd(widths.item, ' '), ' Count', '$Total');
+  Object.entries(sales)
+  .sort((a,b) => a[0].localeCompare(b[0])) // ([key, value])
+  .forEach(([category, items]) => {
+    Object.entries(items)
+    .sort((a,b) => a[0].localeCompare(b[0])) // ([key, value])
+    .forEach(([item, data]) => {
+      const output = [
+        category.padEnd(widths.category, ' '),
+        item.padEnd(widths.item, ' '),
+        data.count.toString().padStart(5, ' '),
+        data.net.toString().padStart(6, ' '),
+      ];
+      console.log(output.join(' '));
+    });
+  });
+}
+
 
 function calculateTimestamps() {
   getTransactions().forEach(transaction => {
@@ -339,6 +358,7 @@ function main() {
     .then(printSummary)
     .then(printBadgeCount)
     .then(printFanExperienceReport)
+    .then(printSaleSummary)
     .then(generateShiftTotalReport)
     .then(generateShiftCashReport)
     .then(() => console.log('\nDone!'))

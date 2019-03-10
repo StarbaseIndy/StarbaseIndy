@@ -1,0 +1,15 @@
+{
+  "name": "csv-parsing",
+  "version": "0.1.0",
+  "description": "CSV parsing POC",
+  "scripts": {
+    "start": "node index.js",
+    "health-check": "npm outdated & nsp check"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "csv": "^2.0.0",
+    "node": "^8.11.1",
+    "wreck": "^14.0.2"
+  }
+}
