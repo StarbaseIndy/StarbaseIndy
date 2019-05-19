@@ -66,6 +66,12 @@
                '&orderSubmittedOnMax=' + encodeURIComponent(getSquareSpaceYearDateRange(year).end);
       }
 
+      function appendCopyLink(elementId) {
+        // Add the " (copy)" text for the element.
+        const copyText =' <a style="cursor: copy;" onclick="copyToClipboard(\'' + elementId + '\')"><small> (copy)</small></a>';
+        document.getElementById(elementId).outerHTML = document.getElementById(elementId).outerHTML + copyText;
+      }
+      
       function assignSquareSpaceHref(year, linkId, productId = '') {
         const elementId = year + linkId;
         document.getElementById(elementId).href = getSquareSpaceUrl(year, productId);
@@ -74,6 +80,9 @@
         linkIDs['SquareSpace'] = linkIDs['SquareSpace'] || {};
         linkIDs['SquareSpace'][year] = linkIDs['SquareSpace'][year] || [];
         linkIDs['SquareSpace'][year].push(elementId);
+
+        // Add the "(copy)" text for the element.
+        appendCopyLink(elementId);
       }
       
       function assignSquareHref(year, type) {
@@ -84,32 +93,53 @@
         linkIDs['Square'] = linkIDs['Square'] || {};
         linkIDs['Square'][year] = linkIDs['Square'][year] || [];
         linkIDs['Square'][year].push(elementId);
+
+        // Add the "(copy)" text for the element.
+        appendCopyLink(elementId);
       }
-      
-      function downloadSquareYearData(year) {
+
+      function assignGoogleHref(year, type, url) {
+        const elementId = year + type;
+        document.getElementById(elementId).href = url;
+
+        // Queue linkID to click on it later.
+        linkIDs['SquareSpace'] = linkIDs['Square'] || {};
+        linkIDs['SquareSpace'][year] = linkIDs['Square'][year] || [];
+        linkIDs['SquareSpace'][year].push(elementId);
+
+        // Add the "(copy)" text for the element.
+        appendCopyLink(elementId);
+      }
+
+      function downloadYearData(year, queue, timeout=5000) {
         let delay = 0;
         // Click on each queued element, with a delay between each.
-        linkIDs['Square'][year].sort().forEach((elementId, index, array) => {
-          setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * 5000);
+        linkIDs[queue][year].sort().forEach((elementId, index, array) => {
+          setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * timeout);
 
           if(index === array.length - 1) {
-            setTimeout(() => document.getElementById("finishedDialog").open = true, delay++ * 5000);
+            setTimeout(() => document.getElementById("finishedDialog").open = true, delay++ * timeout);
           }
         });
       }
-      
-      function downloadSquareSpaceYearData(year) {
-        let delay = 0;
-        // Click on each queued element, with a delay between each.
-        linkIDs['SquareSpace'][year].sort().forEach((elementId, index, array) => {
-          setTimeout(() => { document.getElementById(elementId).click(); }, delay++ * 2000); 
 
-          if(index === array.length - 1) {
-            setTimeout(() => document.getElementById("finishedDialog").open = true, delay++ * 2000);
-          }
-        });
+      function copyToClipboard(containerId) {
+        if (document.selection) {
+          const range = document.body.createTextRange();
+          range.moveToElementText(document.getElementById(containerId));
+          range.select().createTextRange();
+          document.execCommand('copy');
+          document.selection.empty();
+        } else if (window.getSelection) {
+          const range = document.createRange();
+          range.selectNode(document.getElementById(containerId));
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+        }
       }
-      
+
       function onLoad() {
         // 2017
         assignSquareHref(2017, 'Transactions');
@@ -138,9 +168,7 @@
         assignSquareSpaceHref(2018, 'DWTSKlingon', '5ba18cc84ae23767f1671f67');
 
         // Vendors come from google sheets, and not Square or SquareSpace.
-        const vendorSheet2018 = 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034';
-        document.getElementById('2018BadgeVendor').href = vendorSheet2018;
-        linkIDs['SquareSpace'][2018].push('2018BadgeVendor');
+        assignGoogleHref(2018, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034');
         
         assignSquareHref(2018, 'Transactions');
         assignSquareHref(2018, 'Items');
@@ -178,7 +206,7 @@
 
     <br/>
     <hr/>
-    <button onclick="downloadSquareSpaceYearData(2019)">Download 2019 SquareSpace + Google Drive data</button>
+    <button onclick="downloadYearData(2019, 'SquareSpace', 2000)">Download 2019 SquareSpace + Google Drive data</button>
     <br/>
     <br/>
     <a href="#" id="2019BadgeStar"     >2019 Badge Star.csv</a><br/>
@@ -188,14 +216,14 @@
     <a href="#" id="2019Summary"       >2019 Summary.csv</a><br/>
     <br/>
     <hr/>
-    <button onclick="downloadSquareYearData(2019)">Download 2019 Square data</button>
+    <button onclick="downloadYearData(2019, 'Square', 5000)">Download 2019 Square data</button>
     <br/>
     <br/>
     <a href="#" id="2019Transactions"  >2019 Square Transactions</a> (Square)<br/>
     <a href="#" id="2019Items"         >2019 Square Detailed Items</a> (Square)<br/>
     <br/>
     <hr/>
-    <button onclick="downloadSquareSpaceYearData(2018)">Download 2018 SquareSpace + Google Drive data</button>
+    <button onclick="downloadYearData(2018, 'SquareSpace', 2000)">Download 2018 SquareSpace + Google Drive data</button>
     <br/>
     <br/>
     <a href="#" id="2018BadgeChild"    >2018 Badge Child.csv</a><br/>
@@ -221,14 +249,14 @@
     <a href="#" id="2018Summary"       >2018 Summary.csv</a><br/>
     <br/>
     <hr/>
-    <button onclick="downloadSquareYearData(2018)">Download 2018 Square data</button>
+    <button onclick="downloadYearData(2018, 'Square', 5000)">Download 2018 Square data</button>
     <br/>
     <br/>
     <a href="#" id="2018Transactions"  >2018 Square Transactions</a> (Square)<br/>
     <a href="#" id="2018Items"         >2018 Square Detailed Items</a> (Square)<br/>
     <br/>
     <hr/>
-    <button onclick="downloadSquareYearData(2017)">Download 2017 Square data</button>
+    <button onclick="downloadYearData(2017, 'Square', 5000)">Download 2017 Square data</button>
     <br/>
     <br/>
     <a href="#" id="2017Transactions"  >2017 Square Transactions</a> (Square)<br/>
