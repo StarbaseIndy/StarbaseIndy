@@ -248,7 +248,7 @@ function generateBadgeNumbers() {
     .map(item => ((item.badgeNum = (badgeNum >= 400 ? 1100 : 0) + badgeNum++), item));
     // .filter(item => item[LINEITEM_KEY].match(/Shopping/))
     // .map(item => console.log(item.badgeNum, item[LINEITEM_KEY], item.responsibleParty));
-  return badgeNum;
+  return badgeNum - 1;
 }
 
 function processInputData(folder, metadataFile) {
@@ -579,6 +579,10 @@ function summarizeOtherItems() {
 function summarizeMonthlySales() {
   // Per month, report on number of badge sales, merch sales, and fan XP sales.  Use table format.
   // If possible, report on average based on the item price.  Ignore discount codes for this?
+  if (!summary.length) {
+    console.log('\nWARNING: Summary file missing.  Cannot provide month-to-month summary report.');
+    return;
+  }
   
   const monthlySales = [...Array(12)].map(() => ({
     badge: [],
@@ -600,7 +604,7 @@ function summarizeMonthlySales() {
       : type.match(/Dinner/) ? 'DWTS'
       : type.match(badgeRegex) ? 'badge'
       : 'merch';
-
+      
     lastDate = item[PAIDAT_KEY] || lastDate; // YYYY-MM-DD HH:MM:SS [-]\d{4}
     const month = parseInt(lastDate.split('-')[1], 10) - 1; // make it a zero-based integer    
     const data = monthlySales[month];
