@@ -47,7 +47,6 @@ const badgeRegex = /(Child|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge
 const childBadgeRegex = /Child.*Badge/;
 
 // The unique ID generator needs to give us a unique sequence number for every order number
-// TODO FOR 2019: the suffix number should be zero-padded so '1' will sort before '10'
 const uniqueIds = {};
 function getSortKey(orderId, itemType) {
   // Provide a lookup table of suffixes that will cause the items to sort the way we want for envelope printing.
@@ -77,7 +76,7 @@ function getSortKey(orderId, itemType) {
   const key = orderId + orderIdSuffix;
   // console.log(itemType, key, fanXPMatch || badgeMatch, orderIdSuffix);
 
-  uniqueIds[key] = uniqueIds[key] + 1 || 1;
+  uniqueIds[key] = (uniqueIds[key] + 1 || 1).toString().padStart(3, '0');
   return `${key}#${uniqueIds[key]}`;
 }
 
@@ -239,13 +238,12 @@ function readMetadata(file) {
     .then(verifyMetadata);
 }
 
-// TODO FOR 2019: remove this hack
 function generateBadgeNumbers() {
   let badgeNum = 1;
   getAllBadgeItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     // HACK: bump pre-order numbers out of the range of vendor badges
-    .map(item => ((item.badgeNum = (badgeNum >= 400 ? 1100 : 0) + badgeNum++), item));
+    .map(item => ((item.badgeNum = badgeNum++), item));
     // .filter(item => item[LINEITEM_KEY].match(/Shopping/))
     // .map(item => console.log(item.badgeNum, item[LINEITEM_KEY], item.responsibleParty));
   return badgeNum - 1;
@@ -491,11 +489,11 @@ function generateEnvelopeMailMerge(filename, group) {
    .then(data => writeFile('Xerf Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
-// TODO FOR 2019: add an extra 100 buffer to provide room for late arrivals in the store.
-// OR, just spit-balling here, print the bloody vendor badges last, perhaps even after the onsite sale badges.
 function getVendorStartingBadgeNumber() {
   const lastBadge = getAllBadgeItems().sort((a,b) => sortByBadgeNumFn(b,a))[0].badgeNum;
-  return (~~((lastBadge + 99) / 100) * 100); // round to next 100
+  // Note: The double tilde truncates the decimal value
+  const nextHundred = (~~((lastBadge + 99) / 100) * 100); // round to next 100
+  return Math.max(600, nextHundred);
 }
 
 function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
