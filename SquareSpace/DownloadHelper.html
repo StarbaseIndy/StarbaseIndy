@@ -58,7 +58,7 @@
       
       function getSquareSpaceUrl(year, productId = '') {
         return 'https://heather-cottingham-r34y.squarespace.com/api/commerce/orders/export' +
-               '?orderStates=PENDING' +
+               '?orderStates=PENDING%2CFULFILLED' +
                '&productType=' +
                '&includeProductForm=' + (productId ? 'true' : 'false') +
 			         '&productId=' + productId +

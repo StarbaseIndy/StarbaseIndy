@@ -376,7 +376,7 @@ function generateChildBadgeMailMerge(filename, group) {
   return writeMailMergeFile(`Mailmerge ${filename} BACK.tab`, records, columns);
 }
 
-function generateEnvelopeMailMerge(filename, group) {
+function generateEnvelopeMailMerge() {
   // Front of Packets:
 
   // The top information (name, email) needs to uniquely identify who can pick up the packet.
@@ -486,7 +486,7 @@ function generateEnvelopeMailMerge(filename, group) {
   return csvStringify(envelopeMailMerge, options)
    .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
    .then(() => csvStringify(crossReference, options))
-   .then(data => writeFile('Xerf Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
+   .then(data => writeFile('Xref Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }));
 }
 
 function getVendorStartingBadgeNumber() {
@@ -510,6 +510,40 @@ function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
       }));
     })
     .reduce((acc, badges) => acc.concat(badges), []);
+}
+
+function generatePurchaserEmailList() {
+  // Save a file that contains the first/last/email of everyone who purchased a badge
+  const badges = getAllBadgeItems();
+  // DPM
+  const byEmail = {};
+  badges.forEach(item => {
+    const email = item[UNIFYING_EMAIL] || item[BILLINGEMAIL_KEY];
+    if (email !== 'admin@starbaseindy.org' && !item[LINEITEM_KEY].match(childBadgeRegex)) {
+      const name = reverseName(item.responsibleParty);
+      byEmail[email] = byEmail[email] || {};
+      byEmail[email][name] = item[BADGENAME_KEY];
+    }
+  });
+  
+  const csvData = Object.entries(byEmail)
+    .map(([email, names]) => Object.keys(names)
+      .map(name => ({
+        Email: email,
+        Name: name,
+        Badge: names[name],
+      })),
+    )
+    .reduce((acc, item) => acc.concat(...item), []);
+
+  const options = {
+    header: true,
+    quotedString: true,
+    delimiter: '\t',
+  };
+
+  return csvStringify(csvData, options)
+   .then(data => writeFile('Purchaser Emails.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
 }
 
 function generateMailMergeFiles() {
@@ -720,6 +754,7 @@ function main() {
     .then(generateMailMergeFiles)
     .then(generateUnicodeKeyFile)
     .then(generateCrossReferences)
+    .then(generatePurchaserEmailList)
     .then(() => console.log('\nDone!'))
     .catch((err) => console.log('Error!', err));
 }

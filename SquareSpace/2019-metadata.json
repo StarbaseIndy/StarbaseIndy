@@ -1,0 +1,117 @@
+[{
+  "Note": "This file should be used to adorn badges for the following Departments: Board, [Staff], VIP, Press, and Presenter",
+  "Note2": "Note that Vendor data is sourced separately, and metadata in this file is not (currently) applied to that data set."
+}, {
+  "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
+}, {
+  "Note": "==================== Board ==============================================================================",
+  "Note2": "President, Ambassador, Treasurer, Chief Operations Officer, Con Chair, Secretary, Webmaster"
+}, {
+  "sortKey": "",
+  "Name": "Lisa Meece",
+  "Department": "Board",
+  "DepartmentColor": "Purple",
+  "Tagline": "President / Ambassador"
+}, {
+  "Note": "==================== [Staff] Finance ====================================================================",
+  "Note2": "Process Enforcement, Registration, Vendor Hall, Charity Auction"
+}, {
+  "sortKey": "",
+  "Name": "Dave Mott",
+  "Department": "Finance",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Process Enforcement"
+}, {
+  "Note": "==================== [Staff] Marketing ==================================================================",
+  "Note2": "Attendee Recruitment, Graphic Design, Webmaster, Publications, Photographer"
+}, {
+  "sortKey": "",
+  "Name": "Mark Gaddo",
+  "Department": "Marketing",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Attendee Recruitment"
+}, {
+  "Note": "==================== [Staff] Facilities =================================================================",
+  "Note2": "Audio Visual, Engineering"
+}, {
+  "sortKey": "",
+  "Name": "Ricky Lile",
+  "Department": "Facilities",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Audio Visual"
+}, {
+  "Note": "==================== [Staff] Programming ================================================================",
+  "Note2": "Media Guest Relations, Party Liaison, Panel Coordinator, Hall Tables, Uhura Training Academy, Masquerade, Stage Manager"
+}, {
+  "sortKey": "",
+  "Name": "Bryan Neely",
+  "Department": "Programming",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Media Guest Relations"
+}, {
+  "Note": "==================== [Staff] Tactical ===================================================================",
+  "Note2": "Operations, Security, Volunteer Coordinator"
+}, {
+  "sortKey": "",
+  "Name": "Charity Robertson",
+  "Department": "Tactical",
+  "DepartmentColor": "Light Blue",
+  "Tagline": "Operations"
+}, {
+  "Note": "==================== VIP (Media Guests) =================================================================",
+  "Note2": "Geeky Astrophysicist, Intergalactic Cosmetologist, Klingon Pop Star, Klingon Linguist, Master of Ceremonies"
+}, {
+  "sortKey": "",
+  "Name": "Dr. Erin Macdonald",
+  "Department": "VIP",
+  "DepartmentColor": "Yellow",
+  "Tagline": "Geeky Astrophysicist"
+}, {
+  "Note": "==================== Presenter ========================================================================"
+}, {
+  "sortKey": "",
+  "Name": "James Engle",
+  "Department": "Presenter",
+  "DepartmentColor": "Green",
+  "Tagline": "Brewmaster"
+}, {
+  "Note": "==================== Entertainer ========================================================================",
+  "Note2": "The Shake Ups / 5YM, Myst Brigade"
+}, {
+  "sortKey": "",
+  "Name": "Patrick O'Connor",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups / 5YM"
+}, {
+  "Note": "==================== Triumvirate ========================================================================"
+}, {
+  "sortKey": "",
+  "Name": "Kim Huff",
+  "DepartmentColor": "White",
+  "Tagline": "Triumvirate / Shadowhunter"
+}, {
+  "sortKey": "",
+  "Name": "Judy Eudaly",
+  "DepartmentColor": "White",
+  "Tagline": "Triumvirate"
+}, {
+  "sortKey": "",
+  "Name": "Lillian Sams",
+  "DepartmentColor": "White",
+  "Tagline": "Triumvirate"
+}, {
+  "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
+}, {
+  "sortKey": "",
+  "BadgeName": "Jon Schalburg"
+}, {
+  "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
+}, {
+  "sortKey": "",
+  "Name": "Reed Hartman",
+  "BadgeName": "Reed",
+  "Tagline": "AV Redshirt",
+  "Department": "",
+  "DepartmentColor": "White"
+}]
