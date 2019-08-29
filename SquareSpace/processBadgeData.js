@@ -522,17 +522,18 @@ function generatePurchaserEmailList() {
     if (email !== 'admin@starbaseindy.org' && !item[LINEITEM_KEY].match(childBadgeRegex)) {
       const name = reverseName(item.responsibleParty);
       byEmail[email] = byEmail[email] || {};
-      byEmail[email][name] = item[BADGENAME_KEY];
+      byEmail[email][name] = {
+        Email: email,
+        Name: name,
+        Badge: item[BADGENAME_KEY],
+        Type: item[LINEITEM_KEY],
+      };
     }
   });
   
-  const csvData = Object.entries(byEmail)
-    .map(([email, names]) => Object.keys(names)
-      .map(name => ({
-        Email: email,
-        Name: name,
-        Badge: names[name],
-      })),
+  const csvData = Object.values(byEmail)
+    .map(names => Object.keys(names)
+      .map(name => names[name]),
     )
     .reduce((acc, item) => acc.concat(...item), []);
 
