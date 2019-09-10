@@ -517,16 +517,21 @@ function generatePurchaserEmailList() {
   const badges = getAllBadgeItems();
   // DPM
   const byEmail = {};
-  badges.forEach(item => {
-    const email = item[UNIFYING_EMAIL] || item[BILLINGEMAIL_KEY];
+  let lastDate = ''; // DPM TODO: calculate this upfront along with uniqueID
+  let lastEmail = '';
+
+  badges
+  .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
+  .forEach(item => {
+    const email = item[BILLINGEMAIL_KEY] || lastEmail;
+    lastDate = item[PAIDAT_KEY] || lastDate; // YYYY-MM-DD HH:MM:SS [-]\d{4}
     if (email !== 'admin@starbaseindy.org' && !item[LINEITEM_KEY].match(childBadgeRegex)) {
       const name = reverseName(item.responsibleParty);
       byEmail[email] = byEmail[email] || {};
+      // Note: This consolidates multiple orders down to an email+name pair
       byEmail[email][name] = {
         Email: email,
         Name: name,
-        Badge: item[BADGENAME_KEY],
-        Type: item[LINEITEM_KEY],
       };
     }
   });
