@@ -21,8 +21,12 @@ const ADULTEMAIL_KEY = 'Product Form: Responsible Adult\'s Email';
 const PRIVATE_NOTES = 'Private Notes';
 const ORDER_TOTAL = 'Total'; // only appears once per order
 
+// 2018 vendor keys
 const VENDORNAME_KEY = 'Business Name';
 const VENDORNUMBADGES_KEY = '#Badges';
+// 2019 vendor keys
+const VENDORNAME2_KEY = 'Company Name';
+const VENDORCONFIRMED_KEY = 'Confirmed';
 
 const PRESENTER_FIRSTNAME = 'name.0';
 const PRESENTER_LASTNAME = 'name.1';
@@ -110,9 +114,15 @@ function processCSV(filename, group = [{}]) {
   const lineItems = group.map(item => item[LINEITEM_KEY]).filter(uniqueFilter);
   // console.log('Processing CSV file', (lineItems.length > 1 ? 'summary' : lineItems[0]), filename);
 
-  // Look for the vendor CSV file.  It's a different format.
+  // Look for the 2018 vendor CSV file.  It's a different format.
   if ((group[0] || {})[VENDORNAME_KEY]) {
     vendors.push(...group.filter(item => item[VENDORNAME_KEY] && item[VENDORNAME_KEY] !== 'Total'));
+    return;
+  }
+
+  // Look for the 2019 vendor CSV file.  It's a different format.
+  if ((group[0] || {})[VENDORNAME2_KEY]) {
+    vendors.push(...group.filter(item => !!item[VENDORCONFIRMED_KEY].match(/^[yY]/)));
     return;
   }
 
@@ -144,6 +154,12 @@ function processCSV(filename, group = [{}]) {
       // Also replicate the billing email
       item[BILLINGEMAIL_KEY] = transactionData[orderId].email =
         item[BILLINGEMAIL_KEY] || transactionData[orderId].email;
+
+      // Grab any additional metadata from the notes section.  Keys are as they would appear in the downloaded spreadsheet.
+      ((item[PRIVATE_NOTES] || '').match(/meta: ([^\n]+)/g) || [])
+        .reverse()
+        .map(it => JSON.parse(it.slice(6)))
+        .map(it => Object.assign(item, it));
     });
     cache[lineItems[0] || filename] = group;
     return;
@@ -205,6 +221,7 @@ function mixinMetadata() {
     const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};
     const [ badgeName, tagline = '' ] = (metaItem.BadgeName || item[BADGENAME_KEY] || '').split('»');
 
+    // Object.assign(item, metaItem); // allow any spreadsheet value to be overridden by the metadata
     item[BADGENAME_KEY] = badgeName;
     item.tagline = metaItem.Tagline || tagline;
     item.department = metaItem.Department;
@@ -499,11 +516,13 @@ function getVendorStartingBadgeNumber() {
 function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
   return vendors
     .map(item => {
-      const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10) || 0;
+      const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10)
+        || parseInt(item[VENDORCONFIRMED_KEY].split(/\s+-\s+/, 2)[1] || '0', 10)
+        || 0;
       return [...Array(numBadges)].map(() => ({
         sortKey: 'none',
         badgeNum: startingBadgeNum++,
-        [BADGENAME_KEY]: item[VENDORNAME_KEY],
+        [BADGENAME_KEY]: item[VENDORNAME_KEY] || item[VENDORNAME2_KEY],
         department: 'Vendor',
         tagline: '',
         departmentColor: 'Orange',
@@ -515,7 +534,6 @@ function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
 function generatePurchaserEmailList() {
   // Save a file that contains the first/last/email of everyone who purchased a badge
   const badges = getAllBadgeItems();
-  // DPM
   const byEmail = {};
   let lastDate = ''; // DPM TODO: calculate this upfront along with uniqueID
   let lastEmail = '';
@@ -760,7 +778,7 @@ function main() {
     .then(generateMailMergeFiles)
     .then(generateUnicodeKeyFile)
     .then(generateCrossReferences)
-    .then(generatePurchaserEmailList)
+    // .then(generatePurchaserEmailList)
     .then(() => console.log('\nDone!'))
     .catch((err) => console.log('Error!', err));
 }

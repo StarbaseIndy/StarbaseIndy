@@ -108,10 +108,15 @@
 }, {
   "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
 }, {
-  "sortKey": "",
-  "Name": "Reed Hartman",
-  "BadgeName": "Reed",
-  "Tagline": "AV Redshirt",
-  "Department": "",
-  "DepartmentColor": "White"
+  "sortKey": "1656D#001",
+  "BadgeName": "TBD",
+  "Product Form: Real Name": "Michelle Wells",
+  "Product Form: Email": "mawells@asu.edu",
+  "Product Form: Badge Name": "TBD"
+}, {
+  "sortKey": "1657D#001",
+  "BadgeName": "TBD",
+  "Product Form: Real Name": "Jeremy Cowan",
+  "Product Form: Email": "jdmcowan@yahoo.com",
+  "Product Form: Badge Name": "TBD"
 }]

@@ -56,6 +56,14 @@
         return 'https://squareup.com/v2/reports/' + type + '.csv?beemo_request=' + encodeURIComponent(JSON.stringify(postData));
       }
       
+      // How to get the productId?
+      // 1. In Chrome Developer Tools (F12), select Network tab, and click the "Preserve Logs" checkbox
+      // 2. Navigate to the SquareSpace Orders page
+      // 3. Click Export 
+      // 4. On step 3, select "Specific Product" and search for + select the specific product
+      // 5. Be sure that "Include product form data" is selected
+      // 6. Press the "Save" button
+      // 7. In Chrome Developer Tools (F12), in the Network tab, look at the "export" network call form data to find the productId query parameter.
       function getSquareSpaceUrl(year, productId = '') {
         return 'https://heather-cottingham-r34y.squarespace.com/api/commerce/orders/export' +
                '?orderStates=PENDING%2CFULFILLED' +
@@ -169,7 +177,7 @@
 
         // Vendors come from google sheets, and not Square or SquareSpace.
         assignGoogleHref(2018, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1u81KrU4Vn6HFzaq4en40Llrv77q4pZ1RRC0WVgtMDME/export?format=csv&gid=1515616034');
-        
+
         assignSquareHref(2018, 'Transactions');
         assignSquareHref(2018, 'Items');
         
@@ -178,7 +186,20 @@
         assignSquareSpaceHref(2019, 'BadgeStudent', '5c7dc6e3e4966ba25abc9d4a');
         assignSquareSpaceHref(2019, 'BadgeStar', '5c7dc78e9b747a7942c5399d');
         assignSquareSpaceHref(2019, 'Summary');
+
+        // DWTS: Chieffo: N/A
+        assignSquareSpaceHref(2019, 'DWTSHausladen', '5d93d6290d53922e4503f9f5');
+        assignSquareSpaceHref(2019, 'DWTSGunn', '5d93d4df9fb89852bc5a5ea3');
+        assignSquareSpaceHref(2019, 'DWTSCocco', '5d8fc9ea3ac23f0958e865ac');
+        assignSquareSpaceHref(2019, 'DWTSDoohan', '5d93d45ce68a734273f792d8');
+        assignSquareSpaceHref(2019, 'DWTSPopWarrior', '5d93d5c79fb89852bc5a6a3d');
+        assignSquareSpaceHref(2019, 'DWTSMacdonald', '5d93d54f0d53922e4503ebc9');
+
         // TODO: add the other items here.
+
+        // Vendors come from google sheets, and not Square or SquareSpace.
+        assignGoogleHref(2019, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1LDZ2u5Q73a-O-NuwJei5R-8VnmFNpkGkvVR8J0h2G_w/export?format=csv&gid=0');
+
         assignSquareHref(2019, 'Transactions');
         assignSquareHref(2019, 'Items');
 
@@ -198,7 +219,8 @@
     <h3>Instructions:</h3>
     <ul>
       <li>Log into <a target="_blank" href="https://heather-cottingham-r34y.squarespace.com/config">SBI SquareSpace</a> (will open in new tab)</li>
-      <li>Log into <a target="_blank" href="https://drive.google.com/drive/u/1/folders/16nKCDo2RRU2M6T502mD1Rl38nOW3R2fm">SBI Google Drive</a> (will open in new tab)</li>
+      <li>Log into <a target="_blank" href="https://drive.google.com/drive/u/1/folders/16nKCDo2RRU2M6T502mD1Rl38nOW3R2fm">SBI Google Drive (2018)</a> (will open in new tab)</li>
+      <li>Log into <a target="_blank" href="https://drive.google.com/drive/u/0/folders/0APUQzYMACYslUk9PVA">SBI Google Drive (2019-*)</a> (will open in new tab)</li>
       <li>Log into <a target="_blank" href="https://squareup.com/login">Square</a> (will open in new tab)</li>
       <li>Right-click each link below, and select 'Save link as...'</li>
       <li>Rename the file before saving</li>
@@ -214,6 +236,14 @@
     <a href="#" id="2019BadgeStudent"  >2019 Badge Student.csv</a><br/>
     <a href="#" id="2019BadgeWeekend"  >2019 Badge Weekend.csv</a><br/>
     <a href="#" id="2019Summary"       >2019 Summary.csv</a><br/>
+    <a href="#" id="2019BadgeVendor"   >2019 Badge Vendor.csv</a> (Google Drive)<br/>
+    <br/>
+    <a href="#" id="2019DWTSCocco"     >2019 DWTS Cocco.csv</a><br/>
+    <a href="#" id="2019DWTSGunn"      >2019 DWTS Gunn.csv</a><br/>
+    <a href="#" id="2019DWTSHausladen" >2019 DWTS Hausladen.csv</a><br/>
+    <a href="#" id="2019DWTSDoohan"    >2019 DWTS Doohan.csv</a><br/>
+    <a href="#" id="2019DWTSPopWarrior">2019 DWTS PopWarrior.csv</a><br/>
+    <a href="#" id="2019DWTSMacdonald" >2019 DWTS Macdonald.csv</a><br/>
     <br/>
     <hr/>
     <button onclick="downloadYearData(2019, 'Square', 5000)">Download 2019 Square data</button>
