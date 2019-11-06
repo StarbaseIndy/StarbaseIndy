@@ -4,6 +4,17 @@ const csv = require('csv');
 const Promise = require('bluebird');
 const Fs = require('fs');
 
+const DepartmentColors = {
+  'Vendor': { department: 'Vendor', departmentColor: 'Orange' },
+  'VIP': { department: 'VIP', departmentColor: 'Red' },
+  'Entertainer': { department: 'VIP', departmentColor: 'Red' },
+  'Presenter': { department: 'Presenter', departmentColor: 'Purple' },
+  'GeneralAdorned': { department: '', departmentColor: 'Green' },
+  'General': { department: '', departmentColor: 'Green' },
+};
+
+const VENDOR_DEPARTMENT_COLOR = 'Orange';
+
 const BILLINGNAME_KEY = 'Billing Name';
 const BILLINGEMAIL_KEY = 'Email';
 const UNIFYING_EMAIL = 'Product Form: Email';
@@ -80,8 +91,9 @@ function getSortKey(orderId, itemType) {
   const key = orderId + orderIdSuffix;
   // console.log(itemType, key, fanXPMatch || badgeMatch, orderIdSuffix);
 
-  uniqueIds[key] = (uniqueIds[key] + 1 || 1).toString().padStart(3, '0');
-  return `${key}#${uniqueIds[key]}`;
+  uniqueIds[key] = (uniqueIds[key] + 1) || 1;
+  const uniqueIdString = uniqueIds[key].toString().padStart(3, '0');
+  return `${key}#${uniqueIdString}`;
 }
 
 function zeroPad(num) {
@@ -156,6 +168,8 @@ function processCSV(filename, group = [{}]) {
         item[BILLINGEMAIL_KEY] || transactionData[orderId].email;
 
       // Grab any additional metadata from the notes section.  Keys are as they would appear in the downloaded spreadsheet.
+      // WARNING: This will apply to ONLY THE FIRST ITEM in an order!  Use the metadata file to manipulate other items!
+      // DPM TODO: Change this logic to honor an orderId field in the metadata, add the meta to the transactionData, and apply it to only the correct item.
       ((item[PRIVATE_NOTES] || '').match(/meta: ([^\n]+)/g) || [])
         .reverse()
         .map(it => JSON.parse(it.slice(6)))
@@ -194,22 +208,19 @@ function synthesizeMetadata() {
       const discountCodes = (getAllBadgeItems().find(item => item.sortKey === sortKey) || {})[DISCOUNTCODE_KEY] || '';
 
       if (discountCodes.match('SBI_MEDIA_GUEST')) {
-        item.department = "VIP";
-        item.departmentColor = "Yellow";
+        Object.assign(item, DepartmentColors['VIP']);
       }
 
       if (discountCodes.match('SBI_ENTERTAINER')) {
-        item.department = "Entertainer";
-        item.departmentColor = "Red";
+        Object.assign(item, DepartmentColors['Entertainer']);
       }
 
       if (discountCodes.match('SBI_GURU')) {
-        item.department = "Presenter";
-        item.departmentColor = "Green";
+        Object.assign(item, DepartmentColors['Presenter']);
       }
 
-      // If a general admission badge would have a tagline, send it to the 'White' mailmerge file instead.
-      item.departmentColor = item.departmentColor || (item.tagline ? 'White' : '');
+      // If a general admission badge would have a tagline, send it to a departmentColor mailmerge file instead.
+      item.departmentColor = item.departmentColor || (item.tagline ? DepartmentColors['GeneralAdorned'].departmentColor : '');
     }
   });
 }
@@ -259,7 +270,6 @@ function generateBadgeNumbers() {
   let badgeNum = 1;
   getAllBadgeItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
-    // HACK: bump pre-order numbers out of the range of vendor badges
     .map(item => ((item.badgeNum = badgeNum++), item));
     // .filter(item => item[LINEITEM_KEY].match(/Shopping/))
     // .map(item => console.log(item.badgeNum, item[LINEITEM_KEY], item.responsibleParty));
@@ -513,6 +523,8 @@ function getVendorStartingBadgeNumber() {
   return Math.max(600, nextHundred);
 }
 
+// DPM TODO: source from presenter spreadsheet to generate presenter badges
+
 function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
   return vendors
     .map(item => {
@@ -523,12 +535,13 @@ function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
         sortKey: 'none',
         badgeNum: startingBadgeNum++,
         [BADGENAME_KEY]: item[VENDORNAME_KEY] || item[VENDORNAME2_KEY],
-        department: 'Vendor',
         tagline: '',
-        departmentColor: 'Orange',
+        ...DepartmentColors['Vendor'],
       }));
     })
     .reduce((acc, badges) => acc.concat(badges), []);
+
+  // DPM TODO: add 50 or so extra badge numbers for vendors with no name, so we can pre-print some blanks.
 }
 
 function generatePurchaserEmailList() {
@@ -574,7 +587,7 @@ function generateMailMergeFiles() {
   console.log(''); // output a newline
 
   // Export Saturday|Sunday|Weekend|Star|Student (not Children|Shopping)
-  const generalBadgesPromise = generateBadgeMailMerge('General Admission',
+  const generalBadgesPromise = generateBadgeMailMerge(DepartmentColors['General'].departmentColor,
     getAllBadgeItems()
       .filter(item => !item[LINEITEM_KEY].match(/Children|Shopping/))
       .filter(item => !item.departmentColor)
