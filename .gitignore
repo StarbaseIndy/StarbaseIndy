@@ -10,3 +10,4 @@ package-lock.json
 **/*.pdf
 **/*.xls*
 RaspberryPi
+supervisord.log

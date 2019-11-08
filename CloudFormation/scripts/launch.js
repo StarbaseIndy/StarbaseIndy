@@ -9,14 +9,14 @@ const [container, ...rest] = process.argv.slice(2);
 
 const mountArgs = [
   `-v ${cwd}:/var/workspace`,
-  `-v ${homedir}/.aws:/root/.aws:ro`,
+  `-v ${homedir}/.aws:/root/.aws`,
   `-v ${homedir}/.aws:/home/alpine/.aws:ro`,
   '-v /var/run/docker.sock:/var/run/docker.sock',
-];
+].map(entry => entry.replace(/([A-Z]):/, (_match, p1) => '/' + p1.toLowerCase()));
 
 const portArgs = [
   '-p 5900:5900',
-  '-p 22:22',
+  '-p 2222:22',
 ];
 
 const epIndex = rest.indexOf('--entrypoint');
