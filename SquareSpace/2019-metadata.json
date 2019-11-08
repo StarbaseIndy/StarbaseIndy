@@ -7,38 +7,110 @@
   "Note": "==================== Board ==============================================================================",
   "Note2": "President, Ambassador, Treasurer, Chief Operations Officer, Con Chair, Secretary, Webmaster"
 }, {
-  "sortKey": "",
+  "sortKey": "1651G#001",
   "Name": "Lisa Meece",
   "Department": "Board",
-  "DepartmentColor": "Purple",
-  "Tagline": "President / Ambassador"
+  "DepartmentColor": "Pink",
+  "Tagline": "President / Con Chair"
 }, {
-  "Note": "==================== [Staff] Finance ====================================================================",
-  "Note2": "Process Enforcement, Registration, Vendor Hall, Charity Auction"
+  "sortKey": "1624G#001",
+  "Name": "Mark Gaddo",
+  "Department": "Board",
+  "DepartmentColor": "Pink",
+  "Tagline": "Puts the FUN in fundraising"
 }, {
   "sortKey": "",
+  "Name": "Suzanne Edwards",
+  "Department": "Board",
+  "DepartmentColor": "Pink",
+  "Tagline": "Treasurer"
+}, {
+  "sortKey": "",
+  "Name": "Jennifer Powell",
+  "Department": "Board",
+  "DepartmentColor": "Pink",
+  "Tagline": "Panel Coordinator"
+}, {
+  "sortKey": "1725G#001",
+  "Name": "Amber Jones",
+  "Department": "Board",
+  "DepartmentColor": "Pink",
+  "Tagline": "Secretary / Webmaster"
+}, {
+  "Note": "==================== [Staff] Finance ====================================================================",
+  "Note2": "Process Enforcement, Registration, Vendor Coordinator, Charity Auction"
+}, {
+  "sortKey": "1651G#002",
   "Name": "Dave Mott",
   "Department": "Finance",
-  "DepartmentColor": "Light Blue",
+  "DepartmentColor": "Blue",
   "Tagline": "Process Enforcement"
+}, {
+  "sortKey": "1701G#001",
+  "Name": "Debbie Harland",
+  "Department": "Finance",
+  "DepartmentColor": "Blue",
+  "Tagline": "Charity Auction"
+}, {
+  "sortKey": "",
+  "Name": "Susan Milfs",
+  "Department": "Finance",
+  "DepartmentColor": "Blue",
+  "Tagline": "Vendor Coordinator"
+}, {
+  "sortKey": "1770G#001",
+  "Name": "Amanda Cash",
+  "Department": "Finance",
+  "DepartmentColor": "Blue",
+  "Tagline": "Registration"
 }, {
   "Note": "==================== [Staff] Marketing ==================================================================",
   "Note2": "Attendee Recruitment, Graphic Design, Webmaster, Publications, Photographer"
 }, {
   "sortKey": "",
-  "Name": "Mark Gaddo",
+  "Name": "Chris Ludden",
   "Department": "Marketing",
-  "DepartmentColor": "Light Blue",
-  "Tagline": "Attendee Recruitment"
+  "DepartmentColor": "Blue",
+  "Tagline": "Graphic Design"
+}, {
+  "sortKey": "1785G#001",
+  "Name": "Gabriel Duval",
+  "Department": "Marketing",
+  "DepartmentColor": "Blue",
+  "Tagline": "Photographer"
 }, {
   "Note": "==================== [Staff] Facilities =================================================================",
   "Note2": "Audio Visual, Engineering"
 }, {
-  "sortKey": "",
+  "sortKey": "1810G#001",
   "Name": "Ricky Lile",
   "Department": "Facilities",
-  "DepartmentColor": "Light Blue",
+  "DepartmentColor": "Blue",
   "Tagline": "Audio Visual"
+}, {
+  "sortKey": "",
+  "Name": "Ron Rogers",
+  "Department": "Facilities",
+  "DepartmentColor": "Blue",
+  "Tagline": "Audio Visual"
+}, {
+  "sortKey": "",
+  "Name": "Reed Hartman",
+  "Department": "Facilities",
+  "DepartmentColor": "Blue",
+  "Tagline": "Audio Visual"
+}, {
+  "sortKey": "1710G#001",
+  "Name": "Scott Johnson",
+  "Department": "Facilities",
+  "DepartmentColor": "Blue",
+  "Tagline": "Engineering"
+}, {
+  "sortKey": "1710G#002",
+  "Name": "Shelley Johnson",
+  "Department": "Facilities",
+  "DepartmentColor": "Blue",
+  "Tagline": "Engineering"
 }, {
   "Note": "==================== [Staff] Programming ================================================================",
   "Note2": "Media Guest Relations, Party Liaison, Panel Coordinator, Hall Tables, Uhura Training Academy, Masquerade, Stage Manager"
@@ -46,17 +118,29 @@
   "sortKey": "",
   "Name": "Bryan Neely",
   "Department": "Programming",
-  "DepartmentColor": "Light Blue",
+  "DepartmentColor": "Blue",
+  "Tagline": "Media Guest Relations"
+}, {
+  "sortKey": "",
+  "Name": "Bruce Levy",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
   "Tagline": "Media Guest Relations"
 }, {
   "Note": "==================== [Staff] Tactical ===================================================================",
   "Note2": "Operations, Security, Volunteer Coordinator"
 }, {
-  "sortKey": "",
+  "sortKey": "1805G#001",
   "Name": "Charity Robertson",
   "Department": "Tactical",
-  "DepartmentColor": "Light Blue",
+  "DepartmentColor": "Blue",
   "Tagline": "Operations"
+}, {
+  "sortKey": "",
+  "Name": "Robert Jackson",
+  "Department": "Tactical",
+  "DepartmentColor": "Blue",
+  "Tagline": "Security"
 }, {
   "Note": "==================== VIP (Media Guests) =================================================================",
   "Note2": "Geeky Astrophysicist, Intergalactic Cosmetologist, Klingon Pop Star, Klingon Linguist, Master of Ceremonies"
@@ -64,59 +148,181 @@
   "sortKey": "",
   "Name": "Dr. Erin Macdonald",
   "Department": "VIP",
-  "DepartmentColor": "Yellow",
+  "DepartmentColor": "Red",
   "Tagline": "Geeky Astrophysicist"
+}, {
+  "sortKey": "",
+  "Name": "Mary Chieffo",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": ""
+}, {
+  "sortKey": "",
+  "Name": "Chris Doohan",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": ""
+}, {
+  "sortKey": "",
+  "Name": "Tracee Cocco",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": ""
+}, {
+  "sortKey": "",
+  "Name": "Mimi Craven",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": ""
+}, {
+  "sortKey": "",
+  "Name": "Keith DeCandido",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": ""
 }, {
   "Note": "==================== Presenter ========================================================================"
 }, {
   "sortKey": "",
-  "Name": "James Engle",
+  "Name": "Blake Hausladen",
   "Department": "Presenter",
-  "DepartmentColor": "Green",
-  "Tagline": "Brewmaster"
+  "DepartmentColor": "Purple",
+  "Tagline": "Writing Workshop"
+}, {
+  "sortKey": "",
+  "Name": "Deanna Sjolander",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Writing Workshop"
+}, {
+  "sortKey": "",
+  "Name": "JL Gribble",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Writing Workshop"
+}, {
+  "sortKey": "",
+  "Name": "Anna La Voie",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Writing Workshop"
 }, {
   "Note": "==================== Entertainer ========================================================================",
   "Note2": "The Shake Ups / 5YM, Myst Brigade"
 }, {
   "sortKey": "",
+  "Name": "Moxie Anne Magnus",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": "Intergalactic Cosmetologist"
+}, {
+  "sortKey": "",
+  "Name": "Jennifer Usellis",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": "Klingon Pop Star"
+}, {
+  "sortKey": "",
   "Name": "Patrick O'Connor",
   "Department": "Entertainer",
   "DepartmentColor": "Red",
-  "Tagline": "The Shake Ups / 5YM"
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "",
+  "Name": "Savannah O'Connor",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "",
+  "Name": "Lee Cherolis",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "",
+  "Name": "Luisanna Rodriguez",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "",
+  "Name": "Ed Cho",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "",
+  "Name": "Steve Hinckley",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "The Shake Ups"
+}, {
+  "sortKey": "1799G#001",
+  "Name": "Joe Green",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Myst Brigade"
+}, {
+  "sortKey": "1800G#001",
+  "Name": "Laura Kramer",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Myst Brigade"
+}, {
+  "sortKey": "1801G#001",
+  "Name": "Craig Kramer",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Myst Brigade"
+}, {
+  "sortKey": "1802G#001",
+  "Name": "Stephen Benson",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Myst Brigade"
+}, {
+  "sortKey": "",
+  "Name": "Mark Gunn",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Celtic Musician"
+}, {
+  "sortKey": "",
+  "Name": "Mikey Mason",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Geeky Musician"
 }, {
   "Note": "==================== Triumvirate ========================================================================"
 }, {
   "sortKey": "",
   "Name": "Kim Huff",
-  "DepartmentColor": "White",
+  "DepartmentColor": "Green",
   "Tagline": "Triumvirate / Shadowhunter"
 }, {
   "sortKey": "",
   "Name": "Judy Eudaly",
-  "DepartmentColor": "White",
+  "DepartmentColor": "Green",
   "Tagline": "Triumvirate"
 }, {
-  "sortKey": "",
+  "sortKey": "1812G#001",
   "Name": "Lillian Sams",
-  "DepartmentColor": "White",
+  "DepartmentColor": "Green",
   "Tagline": "Triumvirate"
 }, {
   "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
 }, {
+  "Note": "template",
   "sortKey": "",
-  "BadgeName": "Jon Schalburg"
+  "BadgeName": ""
 }, {
   "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
 }, {
-  "sortKey": "1656D#001",
-  "BadgeName": "TBD",
-  "Product Form: Real Name": "Michelle Wells",
-  "Product Form: Email": "mawells@asu.edu",
-  "Product Form: Badge Name": "TBD"
-}, {
-  "sortKey": "1657D#001",
-  "BadgeName": "TBD",
-  "Product Form: Real Name": "Jeremy Cowan",
-  "Product Form: Email": "jdmcowan@yahoo.com",
-  "Product Form: Badge Name": "TBD"
+  "Note": "template",
+  "sortKey": "",
+  "BadgeName": "",
+  "Product Form: Real Name": "",
+  "Product Form: Email": "",
+  "Product Form: Badge Name": ""
 }]
