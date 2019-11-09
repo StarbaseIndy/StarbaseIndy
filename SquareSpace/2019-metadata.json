@@ -67,7 +67,7 @@
   "Note": "==================== [Staff] Marketing ==================================================================",
   "Note2": "Attendee Recruitment, Graphic Design, Webmaster, Publications, Photographer"
 }, {
-  "sortKey": "",
+  "sortKey": "1846G#001",
   "Name": "Chris Ludden",
   "Department": "Marketing",
   "DepartmentColor": "Blue",
@@ -88,8 +88,8 @@
   "DepartmentColor": "Blue",
   "Tagline": "Audio Visual"
 }, {
-  "sortKey": "",
-  "Name": "Ron Rogers",
+  "sortKey": "1711G#001",
+  "Name": "Ron Rodgers",
   "Department": "Facilities",
   "DepartmentColor": "Blue",
   "Tagline": "Audio Visual"
@@ -136,7 +136,7 @@
   "DepartmentColor": "Blue",
   "Tagline": "Operations"
 }, {
-  "sortKey": "",
+  "sortKey": "1848G#001",
   "Name": "Robert Jackson",
   "Department": "Tactical",
   "DepartmentColor": "Blue",
@@ -145,41 +145,11 @@
   "Note": "==================== VIP (Media Guests) =================================================================",
   "Note2": "Geeky Astrophysicist, Intergalactic Cosmetologist, Klingon Pop Star, Klingon Linguist, Master of Ceremonies"
 }, {
-  "sortKey": "",
+  "sortKey": "1839G#004",
   "Name": "Dr. Erin Macdonald",
   "Department": "VIP",
   "DepartmentColor": "Red",
   "Tagline": "Geeky Astrophysicist"
-}, {
-  "sortKey": "",
-  "Name": "Mary Chieffo",
-  "Department": "VIP",
-  "DepartmentColor": "Red",
-  "Tagline": ""
-}, {
-  "sortKey": "",
-  "Name": "Chris Doohan",
-  "Department": "VIP",
-  "DepartmentColor": "Red",
-  "Tagline": ""
-}, {
-  "sortKey": "",
-  "Name": "Tracee Cocco",
-  "Department": "VIP",
-  "DepartmentColor": "Red",
-  "Tagline": ""
-}, {
-  "sortKey": "",
-  "Name": "Mimi Craven",
-  "Department": "VIP",
-  "DepartmentColor": "Red",
-  "Tagline": ""
-}, {
-  "sortKey": "",
-  "Name": "Keith DeCandido",
-  "Department": "VIP",
-  "DepartmentColor": "Red",
-  "Tagline": ""
 }, {
   "Note": "==================== Presenter ========================================================================"
 }, {
@@ -195,7 +165,7 @@
   "DepartmentColor": "Purple",
   "Tagline": "Writing Workshop"
 }, {
-  "sortKey": "",
+  "sortKey": "1845G#001",
   "Name": "JL Gribble",
   "Department": "Presenter",
   "DepartmentColor": "Purple",
@@ -210,13 +180,13 @@
   "Note": "==================== Entertainer ========================================================================",
   "Note2": "The Shake Ups / 5YM, Myst Brigade"
 }, {
-  "sortKey": "",
+  "sortKey": "1838G#001",
   "Name": "Moxie Anne Magnus",
   "Department": "VIP",
   "DepartmentColor": "Red",
   "Tagline": "Intergalactic Cosmetologist"
 }, {
-  "sortKey": "",
+  "sortKey": "1837G#013",
   "Name": "Jennifer Usellis",
   "Department": "VIP",
   "DepartmentColor": "Red",
@@ -282,13 +252,13 @@
   "DepartmentColor": "Red",
   "Tagline": "Myst Brigade"
 }, {
-  "sortKey": "",
+  "sortKey": "1838G#002",
   "Name": "Mark Gunn",
   "Department": "Entertainer",
   "DepartmentColor": "Red",
   "Tagline": "Celtic Musician"
 }, {
-  "sortKey": "",
+  "sortKey": "1838G#003",
   "Name": "Mikey Mason",
   "Department": "Entertainer",
   "DepartmentColor": "Red",
@@ -296,13 +266,13 @@
 }, {
   "Note": "==================== Triumvirate ========================================================================"
 }, {
-  "sortKey": "",
+  "sortKey": "1836G#001",
   "Name": "Kim Huff",
   "DepartmentColor": "Green",
   "Tagline": "Triumvirate / Shadowhunter"
 }, {
-  "sortKey": "",
-  "Name": "Judy Eudaly",
+  "sortKey": "1847G#001",
+  "Name": "Judy Eudaley",
   "DepartmentColor": "Green",
   "Tagline": "Triumvirate"
 }, {
