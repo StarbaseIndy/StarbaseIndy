@@ -20,26 +20,15 @@ Follow the instructions for using chocolatey.
 
 Be sure to configure port forwarding for VNC, which is 5900:5900
 
-For volume mounts, the following three folders need to be configured:
-- AWS (for root)
-  - Folder path: Your AWS credentials folder, e.g. c:\Users\dpmot\.aws
-  - Mount point: /root/.aws
-  - Read-only: no
-  - Auto-mount: yes
-  - Make permenant: yes
-- AWS (for alpine)
-  - Folder path: Your AWS credentials folder, e.g. c:\Users\dpmot\.aws
-  - Mount point: /home/alpine/.aws
-  - Auto-mount: yes
-  - Read-only: yes
-  - Make permenant: yes
+For volume mounts, if your development directory is not under c:\Users, then the following folder need to be configured:
 - Working directory
-  - Folder path: wherever you'll be developing, e.g. C:\temp\StarbaseIndy\CloudFormation
+  - Folder path: wherever you'll be developing, e.g. C:\temp
   - Mount point: /var/workspace
   - Read-only: no
   - Auto-mount: yes
   - Make permenant: yes
 
+Note: You should be able to run `npm run sh` and then, inside that shell, `ls` and see your chosen working directory (as mapped by the `launch.js` script). If that doesn't work, try running (from a git bash prompt) `docker-machine restart default`.
 
 Additionally, before any of the package.json scripts will work, you'll need to:
 - Restart VSCode
@@ -81,5 +70,8 @@ From Powershell:
 # Other resources
 
 Check out the concepts here:
+ - https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-hello-world.html
  - https://docs.aws.amazon.com/lambda/latest/dg/with-on-demand-https-example.html
+ - https://docs.aws.amazon.com/lambda/latest/dg/with-ddb-example.html
+ - https://github.com/awslabs/aws-sam-cli
 

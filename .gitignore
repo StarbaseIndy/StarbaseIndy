@@ -11,3 +11,7 @@ package-lock.json
 **/*.xls*
 RaspberryPi
 supervisord.log
+supervisord.pid
+CloudFormation/sam-app
+CloudFormation/hello-node
+CloudFormation/konopas-automation

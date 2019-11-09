@@ -1,8 +1,8 @@
-FROM python:3-alpine as aws-sam
+FROM python:3.7-alpine as aws-sam
 
-RUN apk update \
-    && apk upgrade \
-    && apk add --no-cache --virtual .build-deps build-base \
+# RUN apk update && apk upgrade
+RUN apk add git npm nodejs
+RUN apk add --no-cache --virtual .build-deps build-base \
     && pip3 install --no-cache-dir aws-sam-cli awscli \
     && apk del .build-deps \
     && apk add --no-cache docker-cli
@@ -24,7 +24,7 @@ ENV TZ_AREA America
 ENV TZ_CITY Indianapolis
 
 # main packages
-RUN apk add setup-box supervisor nano \
+RUN apk add setup-box supervisor nano groff less curl \
     && apk add xvfb x11vnc tzdata \
     && cp /usr/share/zoneinfo/$TZ_AREA/$TZ_CITY /etc/localtime \
     && echo "$TZ_AREA/$TZ_CITY" >  /etc/timezone 
