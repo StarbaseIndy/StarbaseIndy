@@ -25,7 +25,7 @@
   "DepartmentColor": "Pink",
   "Tagline": "Treasurer"
 }, {
-  "sortKey": "",
+  "sortKey": "1851G#001",
   "Name": "Jennifer Powell",
   "Department": "Board",
   "DepartmentColor": "Pink",
@@ -126,6 +126,12 @@
   "Department": "Programming",
   "DepartmentColor": "Blue",
   "Tagline": "Media Guest Relations"
+}, {
+  "sortKey": "1626G#001",
+  "Name": "Miranda Montooth",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Head of Guest Relations"
 }, {
   "Note": "==================== [Staff] Tactical ===================================================================",
   "Note2": "Operations, Security, Volunteer Coordinator"
