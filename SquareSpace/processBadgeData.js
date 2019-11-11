@@ -13,8 +13,6 @@ const DepartmentColors = {
   'General': { department: '', departmentColor: 'Green' },
 };
 
-const VENDOR_DEPARTMENT_COLOR = 'Orange';
-
 const BILLINGNAME_KEY = 'Billing Name';
 const BILLINGEMAIL_KEY = 'Email';
 const UNIFYING_EMAIL = 'Product Form: Email';
@@ -57,7 +55,7 @@ const summary = [];
 const vendors = []; // sourced separately
 const metadata = [];
 
-const fanExperienceRegex = /(Dinner|T-Shirt|V-Neck Shirt|Hoodie|Photo)/;
+const fanExperienceRegex = /(Dinner|T-Shirt|V-Neck|Hoodie|Tank Top|Photo)/;
 const badgeRegex = /(Child|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
 const childBadgeRegex = /Child.*Badge/;
 
@@ -199,12 +197,12 @@ function synthesizeMetadata() {
   // 1. Any use of SBI_GURU where there's not already adornment should adorn as presenter
   // 2. When adding the stragglers to the store, we should use a different code for entertainers, and a different code for guests.
   // 3. Same treatment as #1 for codes for entertainers and media guests
-  // SBI_ENTERTAINER (Entertainer/Red), SBI_MEDIA_GUEST (VIP/Yellow), SBI_GURU (Presenter/Green)
+  //    SBI_ENTERTAINER, SBI_MEDIA_GUEST, SBI_GURU
 
   getAllBadgeItems().forEach(item => {
     // DPM TODO: exclude children and students from being shuffled.  This happened a lot for the SBI_GURU discount code.
     if (!item.departmentColor && !item[LINEITEM_KEY].match(childBadgeRegex)) {
-      const sortKey = item[ORDERID_KEY] + 'G#1';
+      const sortKey = item[ORDERID_KEY] + 'G#001'; // Need to x-ref to the first item in the order to get discount code
       const discountCodes = (getAllBadgeItems().find(item => item.sortKey === sortKey) || {})[DISCOUNTCODE_KEY] || '';
 
       if (discountCodes.match('SBI_MEDIA_GUEST')) {
