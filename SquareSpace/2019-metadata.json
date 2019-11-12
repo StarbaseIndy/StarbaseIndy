@@ -133,6 +133,30 @@
   "DepartmentColor": "Blue",
   "Tagline": "Head of Guest Relations"
 }, {
+  "sortKey": "1856G#001",
+  "Name": "Eden Cosplay",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Masquerade"
+}, {
+  "sortKey": "1860G#008",
+  "Name": "Eden Sitayu",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Masquerade"
+}, {
+  "sortKey": "1857G#001",
+  "Name": "Leah Leach",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Uhura Training Academy"
+}, {
+  "sortKey": "1860G#010",
+  "Name": "Leah Leach",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Uhura Training Academy"
+}, {
   "Note": "==================== [Staff] Tactical ===================================================================",
   "Note2": "Operations, Security, Volunteer Coordinator"
 }, {
@@ -156,6 +180,10 @@
   "Department": "VIP",
   "DepartmentColor": "Red",
   "Tagline": "Geeky Astrophysicist"
+}, {
+  "sortKey": "1839G#003",
+  "Name": "Tracee Cocco",
+  "BadgeName": "Tracee Lee Cocco"
 }, {
   "Note": "==================== Presenter ========================================================================"
 }, {
@@ -289,9 +317,8 @@
 }, {
   "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
 }, {
-  "Note": "template",
-  "sortKey": "",
-  "BadgeName": ""
+  "sortKey": "1860G#003",
+  "BadgeName": "Who's Yer Gamers"
 }, {
   "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
 }, {

@@ -37,12 +37,6 @@ const VENDORNUMBADGES_KEY = '#Badges';
 const VENDORNAME2_KEY = 'Company Name';
 const VENDORCONFIRMED_KEY = 'Confirmed';
 
-const PRESENTER_FIRSTNAME = 'name.0';
-const PRESENTER_LASTNAME = 'name.1';
-const PRESENTER_PREFIX = 'name.2';
-const PRESENTER_SUFFIX = 'name.3';
-const PRESENTER_ID = 'id';
-
 const ORDERID_KEY = 'Order ID';
 const PAIDAT_KEY = 'Paid at';
 const csvParse = Promise.promisify(csv.parse);
@@ -213,7 +207,7 @@ function synthesizeMetadata() {
         Object.assign(item, DepartmentColors['Entertainer']);
       }
 
-      if (discountCodes.match('SBI_GURU')) {
+      if (discountCodes.match('SBI_GURU')) { // TODO: Move these codes into the DepartmentColors object
         Object.assign(item, DepartmentColors['Presenter']);
       }
 
