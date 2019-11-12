@@ -13,6 +13,8 @@ const DepartmentColors = {
   'General': { department: '', departmentColor: 'Green' },
 };
 
+const BADGENAME_MAX_LEN = 30;
+
 const BILLINGNAME_KEY = 'Billing Name';
 const BILLINGEMAIL_KEY = 'Email';
 const UNIFYING_EMAIL = 'Product Form: Email';
@@ -365,7 +367,9 @@ function generateBadgeMailMerge(filename, group, sortFn = sortByBadgeNumFn) {
         sortKey } = item;
 
       if (!badgeName) {
-        console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`);
+        console.warn(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`);
+      } else if (badgeName.length > BADGENAME_MAX_LEN) {
+        console.warn(`WARNING: Order ${sortKey} badge name exceeds maximum recommended length: '${badgeName}'`);
       }
 
       return [sortKey, zeroPad(badgeNum), badgeName, department, tagline];

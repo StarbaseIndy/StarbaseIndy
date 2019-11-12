@@ -62,6 +62,18 @@
   "Name": "Amanda Cash",
   "Department": "Finance",
   "DepartmentColor": "Blue",
+  "Tagline": "Head of Registration"
+}, {
+  "sortKey": "1862G#001",
+  "Name": "Kristina Bayer",
+  "Department": "Finance",
+  "DepartmentColor": "Blue",
+  "Tagline": "Registration"
+}, {
+  "sortKey": "1731G#001",
+  "Name": "Kathy Wolfe",
+  "Department": "Finance",
+  "DepartmentColor": "Blue",
   "Tagline": "Registration"
 }, {
   "Note": "==================== [Staff] Marketing ==================================================================",
@@ -319,6 +331,10 @@
 }, {
   "sortKey": "1860G#003",
   "BadgeName": "Who's Yer Gamers"
+}, {
+  "sortKey": "1833G#001",
+  "BadgeName": "Rex Wood",
+  "Tagline": "Commander USS Hunter S. Thompson"
 }, {
   "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
 }, {
