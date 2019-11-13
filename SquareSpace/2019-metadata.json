@@ -62,6 +62,18 @@
   "Name": "Amanda Cash",
   "Department": "Finance",
   "DepartmentColor": "Blue",
+  "Tagline": "Head of Registration"
+}, {
+  "sortKey": "1862G#001",
+  "Name": "Kristina Bayer",
+  "Department": "Finance",
+  "DepartmentColor": "Blue",
+  "Tagline": "Registration"
+}, {
+  "sortKey": "1731G#001",
+  "Name": "Kathy Wolfe",
+  "Department": "Finance",
+  "DepartmentColor": "Blue",
   "Tagline": "Registration"
 }, {
   "Note": "==================== [Staff] Marketing ==================================================================",
@@ -133,6 +145,30 @@
   "DepartmentColor": "Blue",
   "Tagline": "Head of Guest Relations"
 }, {
+  "sortKey": "1856G#001",
+  "Name": "Eden Cosplay",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Masquerade"
+}, {
+  "sortKey": "1860G#008",
+  "Name": "Eden Sitayu",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Masquerade"
+}, {
+  "sortKey": "1857G#001",
+  "Name": "Leah Leach",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Uhura Training Academy"
+}, {
+  "sortKey": "1860G#010",
+  "Name": "Leah Leach",
+  "Department": "Programming",
+  "DepartmentColor": "Blue",
+  "Tagline": "Uhura Training Academy"
+}, {
   "Note": "==================== [Staff] Tactical ===================================================================",
   "Note2": "Operations, Security, Volunteer Coordinator"
 }, {
@@ -156,6 +192,10 @@
   "Department": "VIP",
   "DepartmentColor": "Red",
   "Tagline": "Geeky Astrophysicist"
+}, {
+  "sortKey": "1839G#003",
+  "Name": "Tracee Cocco",
+  "BadgeName": "Tracee Lee Cocco"
 }, {
   "Note": "==================== Presenter ========================================================================"
 }, {
@@ -289,9 +329,12 @@
 }, {
   "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
 }, {
-  "Note": "template",
-  "sortKey": "",
-  "BadgeName": ""
+  "sortKey": "1860G#003",
+  "BadgeName": "Who's Yer Gamers"
+}, {
+  "sortKey": "1833G#001",
+  "BadgeName": "Rex Wood",
+  "Tagline": "Commander USS Hunter S. Thompson"
 }, {
   "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
 }, {

@@ -13,6 +13,8 @@ const DepartmentColors = {
   'General': { department: '', departmentColor: 'Green' },
 };
 
+const BADGENAME_MAX_LEN = 30;
+
 const BILLINGNAME_KEY = 'Billing Name';
 const BILLINGEMAIL_KEY = 'Email';
 const UNIFYING_EMAIL = 'Product Form: Email';
@@ -36,12 +38,6 @@ const VENDORNUMBADGES_KEY = '#Badges';
 // 2019 vendor keys
 const VENDORNAME2_KEY = 'Company Name';
 const VENDORCONFIRMED_KEY = 'Confirmed';
-
-const PRESENTER_FIRSTNAME = 'name.0';
-const PRESENTER_LASTNAME = 'name.1';
-const PRESENTER_PREFIX = 'name.2';
-const PRESENTER_SUFFIX = 'name.3';
-const PRESENTER_ID = 'id';
 
 const ORDERID_KEY = 'Order ID';
 const PAIDAT_KEY = 'Paid at';
@@ -213,7 +209,7 @@ function synthesizeMetadata() {
         Object.assign(item, DepartmentColors['Entertainer']);
       }
 
-      if (discountCodes.match('SBI_GURU')) {
+      if (discountCodes.match('SBI_GURU')) { // TODO: Move these codes into the DepartmentColors object
         Object.assign(item, DepartmentColors['Presenter']);
       }
 
@@ -371,7 +367,9 @@ function generateBadgeMailMerge(filename, group, sortFn = sortByBadgeNumFn) {
         sortKey } = item;
 
       if (!badgeName) {
-        console.error(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`);
+        console.warn(`WARNING: Order ${sortKey} has no badge name! Update the metadata.json file.`);
+      } else if (badgeName.length > BADGENAME_MAX_LEN) {
+        console.warn(`WARNING: Order ${sortKey} badge name exceeds maximum recommended length: '${badgeName}'`);
       }
 
       return [sortKey, zeroPad(badgeNum), badgeName, department, tagline];
