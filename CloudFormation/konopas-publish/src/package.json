@@ -1,0 +1,14 @@
+{
+  "name": "knoopas-publish",
+  "version": "1.0.0",
+  "description": "AWS SAM deployment of KonOpas metadata generator. Be sure to set the AWS_PROFILE env variable properly.",
+  "main": "app.js",
+  "author": "dpmott@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@hapi/wreck": "^16.0.1",
+    "aws-sdk": "^2.568.0",
+    "csv": "^5.1.3",
+    "octokat": "^0.10.0"
+  }
+}

@@ -1,7 +1,7 @@
 'use strict';
 
 const csv = require('csv');
-const Wreck = require('wreck');
+const Wreck = require('@hapi/wreck');
 const { promisify } = require('util');
 
 async function processPage(key, gid) {

@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'knoopas-publish
+
+  AWS SAM deployment for automating KonOpas metadata generation in github repositories
+
+  '
+Globals:
+  Function:
+    Timeout: 30
+Resources:
+  PublishFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://sbi-s3-bucket/f0fcfbe5f835993b76531f0322c2ec00
+      Handler: publish.lambdaHandler
+      Runtime: nodejs10.x
+      Policies:
+        DynamoDBReadPolicy:
+          TableName:
+            Ref: ConfigTable
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: ConfigTable
+      Events:
+        Publish:
+          Type: Api
+          Properties:
+            Path: /publish
+            Method: get
+  ConfigurationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://sbi-s3-bucket/a4b661bffaf11fb15d886805ddd9101c
+      Handler: configuration.lambdaHandler
+      Runtime: nodejs10.x
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName:
+            Ref: ConfigTable
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: ConfigTable
+      Events:
+        Configuration:
+          Type: Api
+          Properties:
+            Path: /configuration
+            Method: post
+  ConfigTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: ConfigTable
+      SSESpecification:
+        SSEEnabled: true
+      PrimaryKey:
+        Name: id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+Outputs:
+  KonOpasBaseUrl:
+    Description: ''
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
