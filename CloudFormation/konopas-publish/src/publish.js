@@ -13,9 +13,11 @@ exports.lambdaHandler = async (event) => {
 
   const promise = Promise.resolve()
     .then(() => convention && year ? '' : Promise.reject('You must specify query params "convention" and "year"'))
-    .then(() => docClient.get({ Key: { id } }).promise())
-    .catch(() => Promise.reject(`Could not find configuration for ${id}. Email dpmott@gmail.com for help!`))
-    .then(result => result.Item.value)
+    .then(() => docClient.get({ Key: { id } })
+      .promise()
+      .then(result => result.Item.value)
+      .catch(() => Promise.reject(`Could not find configuration for ${id}. Email dpmott@gmail.com for help!`))
+    )    
     .then(config => updateKonopasFiles(config))
     .then(() => 'KnoOpas metadata files have been written to your github repository.');
 

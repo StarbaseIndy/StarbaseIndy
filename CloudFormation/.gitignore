@@ -5,3 +5,4 @@
 **/local-env.json
 **/.aws-sam
 **/node_modules
+**/packaged.yaml
