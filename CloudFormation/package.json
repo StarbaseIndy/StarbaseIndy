@@ -1,29 +1,25 @@
 {
   "name": "github-scripting",
   "version": "1.0.0",
-  "description": "POC for scripting against github API",
+  "description": "Cloud-hosted KonOpas metadata generator. Be sure to set the AWS_PROFILE env variable properly.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "docker-build-aws-sam": "docker build -t aws-sam-cli --target aws-sam -f ./docker/Dockerfile .",
-    "docker-build-x11-vnc-ssh": "docker build -t x11-vnc-ssh --target x11-vnc-ssh -f ./docker/Dockerfile .",
-    "docker-build": "npm run docker-build-aws-sam && npm run docker-build-x11-vnc-ssh",
-    "sh": "node scripts/launch.js aws-sam-cli --entrypoint /bin/sh",
-    "aws": "node scripts/launch.js aws-sam-cli --entrypoint aws",
-    "sam": "node scripts/launch.js aws-sam-cli",
-    "x11-vnc-ssh": "node scripts/launch.js x11-vnc-ssh",
-    "bash": "node scripts/launch.js x11-vnc-ssh --entrypoint /bin/bash",
-    "down": "docker-compose -f docker/docker-compose.yml down -v",
+    "build": "cd konopas-publish && sam build",
+    "prepack": "npm run build",
+    "pack": "cd konopas-publish && sam package --output-template-file packaged.yaml --s3-bucket %S3_BUCKET%",
+    "predeploy": "npm run pack",
+    "deploy": "cd konopas-publish && sam deploy --template-file packaged.yaml --region us-east-1 --capabilities CAPABILITY_IAM --stack-name konopas-deploy",
+    "view-stack": "aws cloudformation describe-stacks --stack-name konopas-deploy --region us-east-1 --query \"Stacks[].Outputs\"",
+    "delete-stack": "aws cloudformation delete-stack --stack-name konopas-deploy",
+    "view-bucket": "aws s3 ls s3://%S3_BUCKET%",
+    "prestart-local": "cd konopas-publish/src && npm install",
+    "start-local": "cd konopas-publish && sam local start-api --profile dpmott --env-vars local-env.json --template template.yaml",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "dpmott@gmail.com",
+  "license": "MIT",
   "dependencies": {
-    "@octokit/rest": "^16.34.1",
-    "cross-env": "^6.0.3",
-    "csv": "^5.1.3",
-    "octokat": "^0.10.0",
-    "slash": "^3.0.0",
-    "wreck": "^14.2.0"
+    "@hapi/wreck": "^16.0.1"
   }
 }

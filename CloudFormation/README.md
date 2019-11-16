@@ -1,77 +1,144 @@
-# Overview
+# Cloud-hosted KonOpas metadata generator
 
-This project offers the following capabilities:
-- Docker definition file and supporting package.json scripting to build and use a docker container offering the `aws` and `sam` commands, which are needed to deploy applications to the AWS cloud as a CloudFormation stack
-- Docker definition file and supporting package.json scripting to launch an X11 VNC docker container mapped to your current working directory, AWS credentials directory, and docker control socket such that all CLoundFormation development can be performed within the VM, with the artifacts stored in your local working directory.
+Welcome!
 
-# Prerequisites
-
-## Docker for Windows 10 Pro
-This project requires Docker, which can be installed on Windows 10 Pro.
-Direct download link (without loginwall) here: https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe
-
-## Docker for Windows 10 Home
-
-If you're running Windows 10 Home, then Docker for Windows will not run on your machine.
-You can alternatively install a set of tools that will allow docker commands to execute via VirtualBox and docker-machine:
-https://www.sitepoint.com/docker-windows-10-home/
-
-Follow the instructions for using chocolatey.
-
-Be sure to configure port forwarding for VNC, which is 5900:5900
-
-For volume mounts, if your development directory is not under c:\Users, then the following folder need to be configured:
-- Working directory
-  - Folder path: wherever you'll be developing, e.g. C:\temp
-  - Mount point: /var/workspace
-  - Read-only: no
-  - Auto-mount: yes
-  - Make permenant: yes
-
-Note: You should be able to run `npm run sh` and then, inside that shell, `ls` and see your chosen working directory (as mapped by the `launch.js` script). If that doesn't work, try running (from a git bash prompt) `docker-machine restart default`.
-
-Additionally, before any of the package.json scripts will work, you'll need to:
-- Restart VSCode
-- Initialize the environment variables in your powershell:
-  - `& "C:\ProgramData\chocolatey\lib\docker-machine\bin\docker-machine.exe" env default --shell powershell | Invoke-Expression`
-
-Note that the package.json commands will not work in Git Bash.  Sorry.
-
-# Build the docker containers
-
-Do this once to make the `aws` and `sam` commands available to you:
-- `npm run docker-build`
+This project is intended to provide a cloud-based solution for generating KonOpas metadata from a Google Sheet and committing those
+artifacts to your GitHub repository.
 
 
-# Getting started with AWS:
+## Pre-requisites
 
-Follow the steps outlined in "Tutorial: Deploying a Hello World Application"
-- https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-hello-world.html
+You need to have an AWS account.  If you need to create an AWS account, see here:
+- https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/
+
+You need to have `aws` installed.  See here:
+- https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html
+
+You need to have `sam` installed.  See here:
+- https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
+
+You need to have an S3 bucket for this project.  You only need to create it once, ever.  To create the bucket:
+- `aws s3 mb s3://YOUR_BUCKET_NAME --region YOUR_REGION`  # Example regions: us-east-1, ap-east-1, eu-central-1, sa-east-1
+
+Set the `S3_BUCKET` environment variable to _YOUR_BUCKET_NAME_ for future commands.
 
 
-When you need to run an `aws` or `sam` command, you can do so via `npm run aws` and `npm run sam`, respectively, e.g.
-- `npm run aws configure`
+# Assumptions
 
-Notes:
-- The `alpine` user in the X11/VNC virtual machine does not have root permissions by default.  For instance, that user would need to use `sudo` to run a docker command.
-- The virtual machine path `/root/.aws` is mounted as read-write, so commands issued in this way can write your credentials.
-- The virtual machine path `/home/alpine/.aws` is mounted as read-only.
+- This project assumes that you're running in Windows.  If that's not the case, you'll need to edit the package.json `pack` and
+`view-bucket` scripts to specify the `S3_BUCKET` environment variable differently, or you'll need to run the steps by-hand at the
+command line.
 
 
-# Usage
+## Deploying (and un-deploying) the KonOpas metadata generator
 
-From Powershell:
-- `npm run sh` will open a shell in the aws/sam container
-- `npm run bash` will open a shell in the X11/VNC container
-- `npm run x11-vnc-ssh` will run the X11 server in the X11/VNC container.  Just point your VNC client to `localhost` to get into it.
-  - The default user is `alpine`
-  - The password for both `alpine` and `root` is: `alpine`
+To deploy the KonOpas metadata generator:
+- `npm run deploy`
 
-# Other resources
+If you ever want to remove the deployment:
+- `npm run delete-stack`
 
-Check out the concepts here:
- - https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-hello-world.html
- - https://docs.aws.amazon.com/lambda/latest/dg/with-on-demand-https-example.html
- - https://docs.aws.amazon.com/lambda/latest/dg/with-ddb-example.html
- - https://github.com/awslabs/aws-sam-cli
+After removing the deployment, you can also choose to clean up the S3 bucket:
+- `aws s3 ls s3://YOUR_BUCKET_NAME`
+- Per ID output from above command: `aws s3 rm s3://YOUR_BUCKET_NAME/ID_FROM_VIEW_BUCKET`
+
+
+## Getting the URL of the KonOpas metadata generator
+
+To get the deployed URL of the KonOpas metadata generator:
+- `npm run view-stack`
+- Note the URL listed in the output.  This is the _KonOpas-Base-URL_.  This URL will be needed in later steps.
+
+
+## Writing the configuration
+
+The KonOpas metadata generator must be configured for your project before it can generate metadata for your project.
+
+1. Create a GitHub personal access token with the minimum permissions needed to commit code to your project's GitHub repository:
+   
+   https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
+
+   Be sure to record the token ID after generating it; you will not be able to retrieve it later, nor will this toolchain will not reveal it to you later.
+
+2. Create or locate the Google Sheet which holds your convention's programming events which should be converted to KonOpas metadata.
+
+   When you have opened the document for editing on the `program` tab, the URL in your browser will look a lot like this:
+  
+   https://docs.google.com/spreadsheets/d/**1Qe_AiFvB7wAiCXkb2jhXAN6kA8tBbY0_FTpJz2rXXhs**/edit#gid=**0**
+
+   When you click on the `people` tab, the URL changes to something like this:
+  
+   https://docs.google.com/spreadsheets/d/**1Qe_AiFvB7wAiCXkb2jhXAN6kA8tBbY0_FTpJz2rXXhs**/edit#gid=**958660582**
+
+   Note the bolded portion in the URLs above.  The _key_ follows the `/d/`, whereas the _gid_ follows the `gid=`
+   Take note of the _key_ and both of the _gid_ values. You'll need these in later steps.
+
+3. Create a JSON file with the following structure:
+   ```
+   {
+     "github": {
+       "token": "GITHUB PERSONAL TOKEN FROM STEP #1",
+       "username": "GITHUB LOGIN ID ASSOCIATED WITH THE TOKEN",
+       "reponame": "GITHUB REPOSITORY NAME"
+     },
+     "repository": {
+       "branch": "heads/master",
+       "subdir": "SUBFOLDER FOR KONOPAS METADATA, e.g. 2019"
+     },
+     "gdrive": {
+       "program": {
+         "key": "KEY FROM STEP #2",
+         "gid": "PROGRAM TAB GID FROM STEP #2"
+       },
+       "people": {
+         "key": "KEY FROM STEP #2",
+         "gid": "PEOPLE TAB GID FROM STEP #2"
+       }
+     }
+   }
+   ```
+  
+4. Send the configuration
+
+   To send the configuration:
+   - `node index.js KONOpAS-BASE-URL/configuration FILENAME-FROM-STEP-#3`
+
+
+## Local development
+
+Pre-requisites:
+- You will need to have docker installed.  Docker ***does not run*** on Windows 10 Home.
+  Direct download link (without loginwall) here: https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe
+
+
+1. Create a file `konopas-publish\local-env.json` that contains the following content:
+   ```
+   {
+     "PublishFunction": {
+       "TABLE_NAME": "YOUR_S3_BUCKET_NAME"
+     },
+     "ConfigurationFunction": {
+       "TABLE_NAME": "YOUR_S3_BUCKET_NAME"
+     }
+   }
+   ```
+
+2. In your command shell, set the `AWS_PROFILE` environment variable to equal your local AWS profile name.
+
+3. To run the API locally:
+   - `npm run start-local`
+
+4. Use the `index.js` to write your configuration file to your locally deployed instance:
+   - `node index.js http://127.0.0.1:3000/configuration FILENAME-FROM-STEP-#3`
+
+5. Navigate your browser to the `publish` endpoint to test your configuration:
+   - http://127.0.0.1:3000/publish?convention=_YOUR_CONVENTION_&year=_YOUR_YEAR_
+
+   The value for the query parameters `convention` and `year` must match the `reponame` and `subdir` values in your configuration file, respectively.
+
+6. In your git repository run:
+   - `git pull`
+   - `git log`
+
+   You should see a commit with a message of `Scripted publish.`
 
