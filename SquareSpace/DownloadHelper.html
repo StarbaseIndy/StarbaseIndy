@@ -55,7 +55,7 @@
         };
         return 'https://squareup.com/v2/reports/' + type + '.csv?beemo_request=' + encodeURIComponent(JSON.stringify(postData));
       }
-      
+
       // How to get the productId?
       // 1. In Chrome Developer Tools (F12), select Network tab, and click the "Preserve Logs" checkbox
       // 2. Navigate to the SquareSpace Orders page
@@ -196,6 +196,10 @@
         assignSquareSpaceHref(2019, 'DWTSPopWarrior', '5d93d5c79fb89852bc5a6a3d');
         assignSquareSpaceHref(2019, 'DWTSMacdonald', '5d93d54f0d53922e4503ebc9');
 
+        assignSquareSpaceHref(2019, 'MerchTeeShirt', '5dae361ecf12162d5dc9aa34');
+        assignSquareSpaceHref(2019, 'MerchVeeNeck', '5dae386b34270331589b65ae');
+        assignSquareSpaceHref(2019, 'MerchHoodie', '5dae38c8a1b6605ac783f5f0');
+
         // TODO: add the other items here.
 
         // Vendors come from google sheets, and not Square or SquareSpace.
@@ -246,6 +250,10 @@
     <a href="#" id="2019DWTSDoohan"    >2019 DWTS Doohan.csv</a><br/>
     <a href="#" id="2019DWTSPopWarrior">2019 DWTS PopWarrior.csv</a><br/>
     <a href="#" id="2019DWTSMacdonald" >2019 DWTS Macdonald.csv</a><br/>
+    <br/>
+    <a href="#" id="2019MerchHoodie"   >2019 Merch Hoodie.csv</a><br/>
+    <a href="#" id="2019MerchTeeShirt" >2019 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2019MerchVeeNeck"  >2019 Merch Vee Neck Tee.csv</a><br/>
     <br/>
     <hr/>
     <button onclick="downloadYearData(2019, 'Square', 5000)">Download 2019 Square data</button>

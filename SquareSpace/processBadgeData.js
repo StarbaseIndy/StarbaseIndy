@@ -60,11 +60,12 @@ const uniqueIds = {};
 function getSortKey(orderId, itemType) {
   // Provide a lookup table of suffixes that will cause the items to sort the way we want for envelope printing.
   const fanXPLookup = {
-    'Dinner':       '#1D',
-    'Photo':        '#2P',
-    'Hoodie':       '#3H',
-    'T-Shirt':      '#4T',
-    'V-Neck Shirt': '#5V',
+    'Dinner':   '#1D',
+    'Photo':    '#2P',
+    'Hoodie':   '#3H',
+    'T-Shirt':  '#4T',
+    'V-Neck':   '#5V',
+    'Tank Top': '#6TT',
   };
 
   // Make badge items sort deterministically so we can traverse all badge types in a given order deterministically while assigning badge numbers.
@@ -523,6 +524,7 @@ function getVendorStartingBadgeNumber() {
 
 function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
   return vendors
+    .concat({ [VENDORNUMBADGES_KEY]: 42, [VENDORNAME_KEY]: '\t' })
     .map(item => {
       const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10)
         || parseInt(item[VENDORCONFIRMED_KEY].split(/\s+-\s+/, 2)[1] || '0', 10)
@@ -536,8 +538,6 @@ function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
       }));
     })
     .reduce((acc, badges) => acc.concat(badges), []);
-
-  // DPM TODO: add 50 or so extra badge numbers for vendors with no name, so we can pre-print some blanks.
 }
 
 function generatePurchaserEmailList() {
