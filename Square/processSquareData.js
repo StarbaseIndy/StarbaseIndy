@@ -176,8 +176,8 @@ function printSummary() {
 }
 
 function printFanExperienceReport() {
-  const typeRegex = /Photo|Autograph|Selfie/;
-  const fanXPFilter = (item) => item[ITEM].match(typeRegex) && ['Fan Experience', 'Guest Handler'].includes(item[CATEGORY]);
+  const itemTypes = ['Combo', 'Photo', 'Autograph', 'Selfie'];
+  const fanXPFilter = (item) => item[ITEM].match(itemTypes.join('|')) && ['Fan Experience', 'Guest Handler'].includes(item[CATEGORY]);
   const fanXPSales = getTransactions().reduce((acc, transaction) => {
     const fanXPItems = transaction.items.filter(fanXPFilter);
     fanXPItems.map(item => {
@@ -185,7 +185,8 @@ function printFanExperienceReport() {
       const modifiers = item[MODIFIERS].split(', ');
 
       modifiers.map(mod => {
-        const type = (item[ITEM].match(typeRegex) || ['?'])[0];
+        // Note: Prefer 'Combo' over all other categories by taking the first item types match (ordered)
+        const type = itemTypes.filter(type => item[ITEM].match(type))[0] || '?';
         const key = [item[ITEM], mod].filter(Boolean).join('/');
         acc[key] = (acc[key] || 0) + count;
         acc[`Total ${type}s`] = (acc[`Total ${type}s`] || 0) + count;

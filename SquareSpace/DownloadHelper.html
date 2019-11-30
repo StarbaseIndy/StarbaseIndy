@@ -111,8 +111,8 @@
         document.getElementById(elementId).href = url;
 
         // Queue linkID to click on it later.
-        linkIDs['SquareSpace'] = linkIDs['Square'] || {};
-        linkIDs['SquareSpace'][year] = linkIDs['Square'][year] || [];
+        linkIDs['SquareSpace'] = linkIDs['SquareSpace'] || {};
+        linkIDs['SquareSpace'][year] = linkIDs['SquareSpace'][year] || [];
         linkIDs['SquareSpace'][year].push(elementId);
 
         // Add the "(copy)" text for the element.
