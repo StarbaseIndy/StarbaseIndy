@@ -15,11 +15,15 @@
     "view-bucket": "aws s3 ls s3://%S3_BUCKET%",
     "prestart-local": "cd konopas-publish/src && npm install",
     "start-local": "cd konopas-publish && sam local start-api --profile dpmott --env-vars local-env.json --template template.yaml",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "dpmott@gmail.com",
   "license": "MIT",
   "dependencies": {
     "@hapi/wreck": "^16.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
   }
 }

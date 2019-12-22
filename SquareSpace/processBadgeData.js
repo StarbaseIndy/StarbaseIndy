@@ -1,4 +1,4 @@
-'use strict;'
+'use strict';
 
 const csv = require('csv');
 const Promise = require('bluebird');
@@ -352,7 +352,7 @@ function generateUnicodeKeyFile() {
     .reduce((acc, collection) => acc.concat(collection), []);
 
   if (!records.length) return;
-  return writeMailMergeFile(`Unicode key.tab`, records, columns);
+  return writeMailMergeFile('Unicode key.tab', records, columns);
 }
 
 function generateBadgeMailMerge(filename, group, sortFn = sortByBadgeNumFn) {
@@ -432,7 +432,7 @@ function generateEnvelopeMailMerge() {
   const envelopes = getAllItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .reduce((acc, item) => {
-      const { [BILLINGEMAIL_KEY]: billingEmail, [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName } = item;
+      const { [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName } = item;
 
       // When the 'admin@starbaseindy.org' email is encountered:
       // replace the email with the form real name to force a new envelope to be created.
@@ -450,11 +450,8 @@ function generateEnvelopeMailMerge() {
     envelopes[email].reduce((acc, item) => {
       const {
         [LINEITEM_KEY]: badgeType,
-        [BADGENAME_KEY]: badgeName,
-        [DISCOUNTCODE_KEY]: discountCode,
         [REALNAME_KEY]: realName,
         [PRIVATE_NOTES]: notes,
-        [ORDERID_KEY]: orderId,
         [BILLINGEMAIL_KEY]: billingEmail,
         badgeNum,
         sortKey,
@@ -616,7 +613,7 @@ function generateMailMergeFiles() {
       generateChildBadgeMailMerge(key, cache[key])
         .then(() => generateBadgeMailMerge(key, cache[key])));
 
-  promises = [
+  const promises = [
     generalBadgesPromise,
     ...staffBadgesPromises,
     ...childPromises,
@@ -787,7 +784,7 @@ function main() {
     .then(generateMailMergeFiles)
     .then(generateUnicodeKeyFile)
     .then(generateCrossReferences)
-    // .then(generatePurchaserEmailList)
+    .then(generatePurchaserEmailList)
     .then(() => console.log('\nDone!'))
     .catch((err) => console.log('Error!', err));
 }

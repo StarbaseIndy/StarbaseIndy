@@ -1,4 +1,4 @@
-'use strict;'
+'use strict';
 
 const csv = require('csv');
 const Promise = require('bluebird');
@@ -240,7 +240,7 @@ function printBadgeCount() {
 function printSaleSummary() {
   const widths = { category: 0, item: 0 };
   const sales = getTransactions().reduce((acc, transaction) => {
-    const items = transaction.items.map(item => {
+    transaction.items.forEach(item => {
       const count = +item[QUANTITY];
       const category = item[CATEGORY];
       const itemType = item[ITEM];

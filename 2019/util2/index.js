@@ -1,4 +1,4 @@
-'use strict;'
+'use strict';
 
 const csv = require('csv');
 const Wreck = require('wreck');
