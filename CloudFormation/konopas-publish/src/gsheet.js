@@ -10,7 +10,7 @@ async function processPage(key, gid) {
     columns: (ary) => ary.map((value) => value.match(/^\d+$/) ? false : value),
   };
 
-  const response = await Wreck.get(`https://docs.google.com/spreadsheets/d/${key}/export?format=csv&gid=${gid}`);
+  const response = await Wreck.get(`https://docs.google.com/spreadsheets/d/${key}/export?format=csv&gid=${gid}`, { redirects: 1 });
   console.log('Response status:', response.res.statusCode);
   const payload = response.payload;
 
