@@ -1,1 +1,1 @@
-var program = [{"id":"1","title":"Placeholder event","date":"2021-11-26","time":"17:00","mins":"50","desc":"Placeholder event","loc":["Panel Room"],"tags":["Placeholder","Mingle"],"people":[{"name":"David Mott","id":"1"}]}];
+var program = [{"id":"1","title":"Placeholder event","date":"2021-11-26","time":"17:00","mins":"50","desc":"Placeholder event","loc":["Panel Room"],"tags":["Placeholder","Mingle"],"people":[{"name":"David Mott","id":"1"},{"name":"Lisa Meece"}]}];
