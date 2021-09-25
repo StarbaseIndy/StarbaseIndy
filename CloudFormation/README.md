@@ -2,8 +2,7 @@
 
 Welcome!
 
-This project is intended to provide a cloud-based solution for generating KonOpas metadata from a Google Sheet and committing those
-artifacts to your GitHub repository.
+This project is intended to provide a cloud-based solution for generating KonOpas metadata from a Google Sheet and committing those artifacts to your GitHub repository.
 
 
 ## Pre-requisites
