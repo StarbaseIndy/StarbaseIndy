@@ -10,8 +10,12 @@
       function getSquareSpaceYearDateRange(year) {
         const ranges = {
           // Update this with each year of interest
+          //   start: last year show's Friday morning 00:00
+          //   end: this year's show's Friday morning 00:00
           2018: { start: '2018-04-20T00:00:00.000Z', end: '2018-11-23T00:00:00.000Z' },
           2019: { start: '2018-11-23T00:00:00.001Z', end: '2019-11-29T00:00:00.000Z' },
+          2020: { start: '2019-11-29T00:00:00.000Z', end: '2021-11-26T00:00:00.000Z'},
+          2021: { start: '2019-11-29T00:00:00.000Z', end: '2021-11-26T00:00:00.000Z'},
         };
         
         return ranges[year];
@@ -21,9 +25,12 @@
         const ranges = {
           // Update this with each year of interest
           // Note: 2018 vendors are also invoiced from location '21PTCF9NNTCRJ'
+          //   start: Friday of show
+          //   end: Monday after show
           2017: { start: '2017-11-24', end: '2017-11-27', location: '21PTCF9NNTCRJ' }, // 'The Starbase'
           2018: { start: '2018-11-23', end: '2018-11-26', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2019: { start: '2019-11-29', end: '2019-12-02', location: 'WR6MC29WH0P5Z' }, // 'SBI'
+          2021: { start: '2021-11-26', end: '2021-11-28', location: 'WR6MC29WH0P5Z' }, // 'SBI'
         };
         
         return ranges[year];
@@ -66,10 +73,11 @@
       // 7. In Chrome Developer Tools (F12), in the Network tab, look at the "export" network call form data to find the productId query parameter.
       function getSquareSpaceUrl(year, productId = '') {
         return 'https://heather-cottingham-r34y.squarespace.com/api/commerce/orders/export' +
-               '?orderStates=PENDING%2CFULFILLED' +
+               '?orderStates=' + (year===2020 ? 'PENDING' : 'PENDING%2CFULFILLED') +
                '&productType=' +
                '&includeProductForm=' + (productId ? 'true' : 'false') +
 			         '&productId=' + productId +
+               '&productId=5dca06846cd8232bdf6fdd26' + // DPM TESTING
                '&orderSubmittedOnMin=' + encodeURIComponent(getSquareSpaceYearDateRange(year).start) +
                '&orderSubmittedOnMax=' + encodeURIComponent(getSquareSpaceYearDateRange(year).end);
       }
@@ -200,16 +208,48 @@
         assignSquareSpaceHref(2019, 'MerchVeeNeck', '5dae386b34270331589b65ae');
         assignSquareSpaceHref(2019, 'MerchHoodie', '5dae38c8a1b6605ac783f5f0');
 
-        // TODO: add the other items here.
-
         // Vendors come from google sheets, and not Square or SquareSpace.
         assignGoogleHref(2019, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1LDZ2u5Q73a-O-NuwJei5R-8VnmFNpkGkvVR8J0h2G_w/export?format=csv&gid=0');
 
         assignSquareHref(2019, 'Transactions');
         assignSquareHref(2019, 'Items');
 
-        // 2020
-        // TODO: add 2020 items here.
+        // 2020: no convention
+
+        // 2021
+        assignSquareSpaceHref(2020, 'BadgeWeekend', '5dca06846cd8232bdf6fdd26');
+        assignSquareSpaceHref(2020, 'BadgeStar', '5e4c8155a149a66b7086a47a');
+        // assignSquareSpaceHref(2020, 'BadgeChild', '5e4c83b53e282f0d587bda75'); // All 2020 children's badges were refunded
+        
+        assignSquareSpaceHref(2021, 'BadgeWeekend', '60a2fc3fb6646b3517517e45');
+        assignSquareSpaceHref(2021, 'BadgeStar', '60a2fd7749614752110fbfd8');
+        assignSquareSpaceHref(2021, 'BadgeChild', '60a2ff02c493386b70d88a5d');
+        assignSquareSpaceHref(2021, 'BadgeStudent', '60a2fe50a63438697a0e6d3b');
+        assignSquareSpaceHref(2021, 'Summary');
+
+        // DWTS: Schuck: N/A
+        assignSquareSpaceHref(2021, 'DWTSFrank', '612e7faf89646b19f5ad3d2c');
+        assignSquareSpaceHref(2021, 'DWTSJairala', '612e8128f8aa3078b02af121');
+        assignSquareSpaceHref(2021, 'DWTSCocco', '612e85f38853d920a9af6815');
+        assignSquareSpaceHref(2021, 'DWTSLucy', '612e85968bd12f5dfa95aa9e');
+        assignSquareSpaceHref(2021, 'DWTSPopWarrior', '612e7cc3ba1d837e56c5773b');
+        assignSquareSpaceHref(2021, 'DWTSMagnus', '612e8649532d716a014f58a7');
+        assignSquareSpaceHref(2021, 'DWTSLeach', '612e86b2e855fd19705be4ad');
+
+        // Merch: Hoodie: N/A
+        assignSquareSpaceHref(2021, 'MerchTeeShirt', '60ca97a2389caf28eb4d3fc2');
+        assignSquareSpaceHref(2021, 'MerchVeeNeck', '60ca9fdbfc131831a73e1daf');
+        assignSquareSpaceHref(2021, 'MerchMask', '6124fb61a1cb315ed1c95875');
+
+        // Vendors come from google sheets, and not Square or SquareSpace.
+        assignGoogleHref(2021, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/10Gyva-Nv1UBW2cYbRSH44O_oGe10KQH1dywAheVSFTU/export?format=csv&gid=0');
+
+        assignSquareHref(2021, 'Transactions');
+        assignSquareHref(2021, 'Items');
+
+        // 2022
+        // TODO: add 2022 items here.
+        // TODO: add the other items here.
       }
     </script>
   </head>
@@ -231,6 +271,40 @@
       <li>Rename the file before saving</li>
     </ul>
     Note: The Past-Year-Badge-Data.xlsx is located in the <a target="_blank" href="https://drive.google.com/drive/folders/0APUQzYMACYslUk9PVA">Data</a> folder.<br/>
+
+
+    <br/>
+    <hr/>
+    <button onclick="downloadYearData(2021, 'SquareSpace', 2000)">Download 2021 SquareSpace + Google Drive data</button>
+    <br/>
+    <br/>
+    <a href="#" id="2020BadgeWeekend"  >2020 Badge Weekend.csv</a><br/>
+    <a href="#" id="2020BadgeStar"     >2020 Badge Star.csv</a><br/>
+    <!-- All 2020 children's badges were refunded
+    <a href="#" id="2020BadgeChild"    >2020 Badge Child.csv</a><br/>
+    -->
+    <br/>
+    <a href="#" id="2021BadgeStar"     >2021 Badge Star.csv</a><br/>
+    <a href="#" id="2021BadgeStudent"  >2021 Badge Student.csv</a><br/>
+    <a href="#" id="2021BadgeWeekend"  >2021 Badge Weekend.csv</a><br/>
+    <a href="#" id="2021BadgeChild"    >2021 Badge Child.csv</a><br/>
+    <a href="#" id="2021Summary"       >2021 Summary.csv</a><br/>
+    <a href="#" id="2021BadgeVendor"   >2021 Badge Vendor.csv</a> (Google Drive)<br/>
+    <br/>
+
+    <a href="#" id="2021DWTSFrank"     >2021 DWTS Frank.csv</a><br/>
+    <a href="#" id="2021DWTSJairala"   >2021 DWTS Jairala.csv</a><br/>
+    <a href="#" id="2021DWTSCocco"     >2021 DWTS Cocco.csv</a><br/>
+    <a href="#" id="2021DWTSLucy"      >2021 DWTS Lucy.csv</a><br/>
+    <a href="#" id="2021DWTSPopWarrior">2021 DWTS PopWarrior.csv</a><br/>
+    <a href="#" id="2021DWTSMagnus"    >2021 DWTS Magnus.csv</a><br/>
+    <a href="#" id="2021DWTSLeach"     >2021 DWTS Leach.csv</a><br/>
+    <br/>
+    <a href="#" id="2021MerchMask"     >2021 Merch Mask.csv</a><br/>
+    <a href="#" id="2021MerchTeeShirt" >2021 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2021MerchVeeNeck"  >2021 Merch Vee Neck Tee.csv</a><br/>
+    <br/>
+    <hr/>
 
     <br/>
     <hr/>
