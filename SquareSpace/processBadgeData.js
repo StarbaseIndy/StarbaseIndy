@@ -38,6 +38,9 @@ const VENDORNUMBADGES_KEY = '#Badges';
 // 2019 vendor keys
 const VENDORNAME2_KEY = 'Company Name';
 const VENDORCONFIRMED_KEY = 'Confirmed';
+// 2021 vendor keys
+const VENDORCONFIRMED2_KEY = 'Confirmed?';
+const VENDORBADGECOUNT_KEY = 'How many badges do you need';
 
 const ORDERID_KEY = 'Order ID';
 const PAIDAT_KEY = 'Paid at';
@@ -51,7 +54,7 @@ const summary = [];
 const vendors = []; // sourced separately
 const metadata = [];
 
-const fanExperienceRegex = /(Dinner|T-Shirt|V-Neck|Hoodie|Tank Top|Photo)/;
+const fanExperienceRegex = /(Dinner|T-Shirt|V-Neck|Hoodie|Tank Top|Photo|Mask)/;
 const badgeRegex = /(Child|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
 const childBadgeRegex = /Child.*Badge/;
 
@@ -129,7 +132,7 @@ function processCSV(filename, group = [{}]) {
 
   // Look for the 2019 vendor CSV file.  It's a different format.
   if ((group[0] || {})[VENDORNAME2_KEY]) {
-    vendors.push(...group.filter(item => !!item[VENDORCONFIRMED_KEY].match(/^[yY]/)));
+    vendors.push(...group.filter(item => !!(item[VENDORCONFIRMED_KEY] || item[VENDORCONFIRMED2_KEY]).match(/^[yY]/)));
     return;
   }
 
@@ -521,10 +524,11 @@ function getVendorStartingBadgeNumber() {
 
 function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
   return vendors
-    .concat({ [VENDORNUMBADGES_KEY]: 42, [VENDORNAME_KEY]: '\t' })
+    .concat({ [VENDORNUMBADGES_KEY]: 42, [VENDORNAME_KEY]: '\t' }) // Note: This reserves some blank badges
     .map(item => {
       const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10)
-        || parseInt(item[VENDORCONFIRMED_KEY].split(/\s+-\s+/, 2)[1] || '0', 10)
+        || parseInt(item[VENDORBADGECOUNT_KEY], 10)
+        || parseInt((item[VENDORCONFIRMED_KEY]).split(/\s+-\s+/, 2)[1] || '0', 10)
         || 0;
       return [...Array(numBadges)].map(() => ({
         sortKey: 'none',
