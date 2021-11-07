@@ -5,49 +5,55 @@
   "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
 }, {
   "Note": "==================== Board ==============================================================================",
-  "Note2": "President, Ambassador, Treasurer, Chief Operations Officer, Con Chair, Secretary, Webmaster"
+  "Note2": "President, Ambassador, Treasurer, Chief Operations Officer, Con Chair, Secretary, Webmaster, Chair-Apparent"
 }, {
-  "sortKey": "",
+  "sortKey": "2000G#001",
   "Name": "Amber Jones",
   "Department": "Board",
   "DepartmentColor": "Pink",
-  "Tagline": "President"
+  "Tagline": "Head of Operations / Board President"
 }, {
-  "sortKey": "",
+  "sortKey": "1900G#001",
   "Name": "Mark Gaddo",
   "Department": "Board",
   "DepartmentColor": "Pink",
-  "Tagline": "Puts the FUN in fundraising"
+  "Tagline": "Head of Charity Auction & Fundraising"
 }, {
-  "sortKey": "",
+  "sortKey": "2001G#001",
   "Name": "Suzanne Edwards",
   "Department": "Board",
   "DepartmentColor": "Pink",
-  "Tagline": "Treasurer"
+  "Tagline": "Board Treasurer"
 }, {
-  "sortKey": "",
-  "Name": "Charity Robinson",
+  "sortKey": "1893G#001",
+  "Name": "Charity Robertson",
   "Department": "Board",
   "DepartmentColor": "Pink",
-  "Tagline": "Con Chair"
+  "Tagline": "Con Chair / Head of Guest Relations"
 }, {
-  "sortKey": "",
+  "sortKey": "2051G#001",
   "Name": "Jen Powell",
   "Department": "Board",
   "DepartmentColor": "Pink",
-  "Tagline": ""
+  "Tagline": "Board Member"
 }, {
   "sortKey": "2030G#001",
   "Name": "Amanda Cash",
   "Department": "Board",
   "DepartmentColor": "Pink",
-  "Tagline": "Secretary"
+  "Tagline": "Board Secretary"
 }, {
   "sortKey": "1899G#001", 
   "Name": "Lisa Meece",
   "Department": "Board",
   "DepartmentColor": "Pink",
-  "Tagline": ""
+  "Tagline": "Head of Programming / Chair Emeritus"
+}, {
+  "sortKey": "1899G#002", 
+  "Name": "Dave Mott",
+  "Department": "Board",
+  "DepartmentColor": "Pink",
+  "Tagline": "Head of Registration / Chair Apparent"
 }, {
   "Note": "==================== [Staff] Finance ====================================================================",
   "Note2": "Process Enforcement, Registration, Vendor Coordinator, Charity Auction"
@@ -59,19 +65,19 @@
   "Tagline": "Process Enforcement"
 }, {
   "sortKey": "",
-  "Name": "Mark Gaddo",
+  "Name": "",
   "Department": "Finance",
   "DepartmentColor": "Blue",
   "Tagline": "Charity Auction"
 }, {
-  "sortKey": "",
+  "sortKey": "2051G#003",
   "Name": "Amber Skaggs",
   "Department": "Finance",
   "DepartmentColor": "Blue",
   "Tagline": "Vendor Coordinator"
 }, {
-  "sortKey": "1899G#002",
-  "Name": "David Mott",
+  "sortKey": "",
+  "Name": "",
   "Department": "Finance",
   "DepartmentColor": "Blue",
   "Tagline": "Head of Registration"
@@ -86,10 +92,16 @@
   "Note2": "Attendee Recruitment, Graphic Design, Webmaster, Publications, Photographer"
 }, {
   "sortKey": "",
-  "Name": "Leah Leach",
+  "Name": "",
   "Department": "Marketing",
   "DepartmentColor": "Blue",
   "Tagline": "Graphic Design"
+}, {
+  "sortKey": "2051G#004",
+  "Name": "Scott Thien",
+  "Department": "Marketing",
+  "DepartmentColor": "Blue",
+  "Tagline": "Social Media"
 }, {
   "sortKey": "1987D#001",
   "Name": "Gabriel Duval",
@@ -100,7 +112,7 @@
   "Note": "==================== [Staff] Facilities =================================================================",
   "Note2": "Audio Visual, Engineering"
 }, {
-  "sortKey": "",
+  "sortKey": "2051G#002",
   "Name": "Ricky Lile",
   "Department": "Facilities",
   "DepartmentColor": "Blue",
@@ -118,7 +130,7 @@
   "DepartmentColor": "Blue",
   "Tagline": "Audio Visual"
 }, {
-  "sortKey": "",
+  "sortKey": "2039G#001",
   "Name": "Chris Harden",
   "Department": "Facilities",
   "DepartmentColor": "Blue",
@@ -146,85 +158,251 @@
   "Tagline": "Head of Guest Relations"
 }, {
   "sortKey": "",
-  "Name": "Leah Leach",
+  "Name": "",
   "Department": "Programming",
   "DepartmentColor": "Blue",
-  "Tagline": "Uhura Training Academy"
+  "Tagline": ""
 }, {
   "Note": "==================== [Staff] Tactical ===================================================================",
   "Note2": "Operations, Security, Volunteer Coordinator"
 }, {
   "sortKey": "",
-  "Name": "Amber Jones",
+  "Name": "",
   "Department": "Tactical",
   "DepartmentColor": "Blue",
   "Tagline": "Operations"
 }, {
-  "sortKey": "",
+  "sortKey": "2003G#001",
+  "Name": "Marinda Darnell",
+  "Department": "Tactical",
+  "DepartmentColor": "Blue",
+  "Tagline": "Information Technology"
+}, {
+  "sortKey": "2051G#005",
   "Name": "Robert Jackson",
   "Department": "Tactical",
   "DepartmentColor": "Blue",
   "Tagline": "Security"
 }, {
-  "Note": "==================== VIP (Media Guests) =================================================================",
+  "Note": "==================== VIP (Media Guests, DWTS) =================================================================",
   "Note2": "Geeky Astrophysicist, Klingon Linguist, Master of Ceremonies"
 }, {
-  "sortKey": "",
+  "sortKey": "2044G#001",
   "Name": "Juniper Jairala",
   "Department": "VIP",
   "DepartmentColor": "Red",
-  "Tagline": "NASA Engineer"
+  "Tagline": "Science Ambassador"
 }, {
-  "sortKey": "",
+  "sortKey": "2044G#002",
   "Name": "Gary Frank",
   "Department": "VIP",
   "DepartmentColor": "Red",
-  "Tagline": "Actor"
+  "Tagline": "Federation Ambassador"
 }, {
-  "sortKey": "",
+  "sortKey": "2044G#003",
   "Name": "John Schuck",
   "Department": "VIP",
   "DepartmentColor": "Red",
-  "Tagline": "Actor"
+  "Tagline": "Federation Ambassador"
 }, {
-  "sortKey": "",
+  "sortKey": "2044G#004",
   "Name": "Tracee Cocco",
   "BadgeName": "Tracee Lee Cocco",
   "Department": "VIP",
   "DepartmentColor": "Red",
-  "Tagline": "Actress"
+  "Tagline": "Federation Ambassador"
+}, {
+  "sortKey": "1925G#001",
+  "Name": "Klingon Pop Warrior",
+  "BadgeName": "",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": "Klingon Pop Warrior"
+}, {
+  "sortKey": "2049G#001",
+  "Name": "Captain Lucy (Lillian Sams)",
+  "BadgeName": "",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": "Longest serving Captain in Barfleet"
+}, {
+  "sortKey": "2046G#008",
+  "Name": "Dr. Leah Leach",
+  "BadgeName": "",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": "Lead Graphics Designer / Uhura Training Academy"
+}, {
+  "sortKey": "2044G#005",
+  "Name": "Moxie Magnus",
+  "BadgeName": "",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": "Intergalactic Xenocosmotologist"
 }, {
   "Note": "==================== Presenter ========================================================================"
 }, {
-  "sortKey": "",
-  "Name": "",
+  "sortKey": "1907G#001",
+  "Name": "Matthew Baron",
   "Department": "Presenter",
   "DepartmentColor": "Purple",
-  "Tagline": "Writing Workshop"
+  "Tagline": ""
+}, {
+  "sortKey": "1912D#001",
+  "Name": "Dr. Ann Burton, MD",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": ""
+}, {
+  "sortKey": "2022G#001",
+  "Name": "K. Michell Carpenter-Allen",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": ""
+}, {
+  "sortKey": "1943G#001",
+  "Name": "Shannon Fauver",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": ""
+}, {
+  "sortKey": "1939G#001",
+  "Name": "Beckie Margedant",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": ""
+}, {
+  "sortKey": "1894D#001",
+  "Name": "Colin McKinney",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": ""
+}, {
+  "sortKey": "2031G#001",
+  "Name": "Thomas Rathjen",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": ""
+}, {
+  "sortKey": "2035G#001",
+  "Name": "Bill Sullivan",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": ""
+}, {
+  "sortKey": "2024G#001",
+  "Name": "Todd Wiley",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": ""
+}, {
+  "sortKey": "2046G#012",
+  "Name": "Matt Borsma",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Motley Kids"
+}, {
+  "sortKey": "2046G#013",
+  "Name": "Nikki Borsma",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Motley Kids"
+}, {
+  "sortKey": "2046G#006",
+  "Name": "Bonnie Fillenwarth",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Uhura Training Academy"
+}, {
+  "sortKey": "2046G#007",
+  "Name": "Joshua Leach",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Uhura Training Academy"
+}, {
+  "sortKey": "2046G#009",
+  "Name": "Samantha Leach",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Uhura Training Academy"
+}, {
+  "sortKey": "2046G#014",
+  "Name": "Nayr",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "StarPodLog"
+}, {
+  "sortKey": "2046G#004",
+  "Name": "Kavura",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "StarPodLog"
+}, {
+  "sortKey": "2046G#002",
+  "Name": "Rachel Cochran",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Indiana Sciences"
+}, {
+  "sortKey": "2046G#003",
+  "Name": "Rufus Cochran",
+  "Department": "Presenter",
+  "DepartmentColor": "Purple",
+  "Tagline": "Indiana Sciences"
 }, {
   "Note": "==================== Entertainer ========================================================================",
   "Note2": "The Shake Ups / 5YM, Intergalactic Cosmetologist, Klingon Pop Warrior, Myst Brigade"
 }, {
-  "sortKey": "",
-  "Name": "Moxie Anne Magnus",
-  "Department": "Entertainer",
-  "DepartmentColor": "Red",
-  "Tagline": "Intergalactic Cosmetologist"
-}, {
-  "sortKey": "1925G#001",
-  "Name": "Jennifer Usellis",
-  "Department": "Entertainer",
-  "DepartmentColor": "Red",
-  "Tagline": "Klingon Pop Warrior"
-}, {
-  "sortKey": "",
-  "Name": "",
+  "sortKey": "2045G#001",
+  "Name": "Aaron White",
   "Department": "Entertainer",
   "DepartmentColor": "Red",
   "Tagline": "Boldly Go!"
 }, {
-  "sortKey": "",
-  "Name": "",
+  "sortKey": "2045G#002",
+  "Name": "Alex Smith",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Boldly Go!"
+}, {
+  "sortKey": "2045G#003",
+  "Name": "Chris Gibson",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Boldly Go!"
+}, {
+  "sortKey": "2045G#004",
+  "Name": "Nick Keck",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Boldly Go!"
+}, {
+  "sortKey": "2045G#005",
+  "Name": "Justin Gore",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Boldly Go!"
+}, {
+  "sortKey": "1919G#001",
+  "Name": "Ethan Ransdell",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Geeks & Grooves"
+}, {
+  "sortKey": "2045G#012",
+  "Name": "Brian Gibson",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Geeks & Grooves"
+}, {
+  "sortKey": "2045G#010",
+  "Name": "Jerry Schafer",
+  "Department": "Entertainer",
+  "DepartmentColor": "Red",
+  "Tagline": "Geeks & Grooves"
+}, {
+  "sortKey": "2045G#011",
+  "Name": "John Weldy",
   "Department": "Entertainer",
   "DepartmentColor": "Red",
   "Tagline": "Geeks & Grooves"
@@ -247,16 +425,18 @@
   "DepartmentColor": "Green",
   "Tagline": "Triumvirate"
 }, {
-  "sortKey": "1812G#001",
+  "sortKey": "",
   "Name": "Lillian Sams",
   "DepartmentColor": "Green",
   "Tagline": "Triumvirate"
 }, {
   "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
 }, {
+  "Note": "template",
   "sortKey": "",
   "BadgeName": ""
 }, {
+  "Note": "template",
   "sortKey": "",
   "BadgeName": "",
   "Tagline": ""
@@ -269,4 +449,28 @@
   "Product Form: Real Name": "",
   "Product Form: Email": "",
   "Product Form: Badge Name": ""
+}, {
+  "sortKey": "2045G#012",
+  "Name": "Karen Hudson",
+  "DepartmentColor": "Green",
+}, {
+  "sortKey": "2045G#013",
+  "Name": "Rob Wittenmeyer",
+  "DepartmentColor": "Green",
+}, {
+  "sortKey": "2045G#006",
+  "Name": "Brittany Fury",
+  "DepartmentColor": "Green",
+}, {
+  "sortKey": "2045G#007",
+  "Name": "Erica Keck",
+  "DepartmentColor": "Green",
+}, {
+  "sortKey": "2040G#001",
+  "Name": "Shelley Johnson",
+  "Tagline": "Starship Remodeling Specialist"
+}, {
+  "sortKey": "2040G#002",
+  "Name": "Scott Johnson",
+  "Tagline": "Starship Remodeling Specialist"
 }]
