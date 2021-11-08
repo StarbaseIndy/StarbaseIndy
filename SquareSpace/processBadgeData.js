@@ -5,12 +5,12 @@ const Promise = require('bluebird');
 const Fs = require('fs');
 
 const DepartmentColors = {
-  'Vendor': { department: 'Vendor', departmentColor: 'Orange' },
+  'Vendor': { department: 'Vendor', departmentColor: 'Yellow' },
   'VIP': { department: 'VIP', departmentColor: 'Red' },
   'Entertainer': { department: 'VIP', departmentColor: 'Red' },
-  'Presenter': { department: 'Presenter', departmentColor: 'Purple' },
-  'GeneralAdorned': { department: '', departmentColor: 'Green' },
-  'General': { department: '', departmentColor: 'Green' },
+  'Presenter': { department: 'Presenter', departmentColor: 'Red' },
+  'GeneralAdorned': { department: '', departmentColor: 'Blue' },
+  'General': { department: '', departmentColor: 'Blue' },
 };
 
 const BADGENAME_MAX_LEN = 30;
