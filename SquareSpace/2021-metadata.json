@@ -226,28 +226,24 @@
 }, {
   "sortKey": "1925G#001",
   "Name": "Klingon Pop Warrior",
-  "BadgeName": "",
   "Department": "VIP",
   "DepartmentColor": "Red",
   "Tagline": "Klingon Pop Warrior"
 }, {
   "sortKey": "2049G#001",
   "Name": "Captain Lucy (Lillian Sams)",
-  "BadgeName": "",
   "Department": "VIP",
   "DepartmentColor": "Red",
   "Tagline": "Longest serving Captain in Barfleet"
 }, {
   "sortKey": "2046G#008",
   "Name": "Dr. Leah Leach",
-  "BadgeName": "",
   "Department": "VIP",
   "DepartmentColor": "Red",
   "Tagline": "Lead Graphics Designer / Uhura Training Academy"
 }, {
   "sortKey": "2044G#005",
   "Name": "Moxie Magnus",
-  "BadgeName": "",
   "Department": "VIP",
   "DepartmentColor": "Red",
   "Tagline": "Intergalactic Xenocosmotologist"
@@ -309,13 +305,15 @@
   "Tagline": ""
 }, {
   "sortKey": "2046G#012",
-  "Name": "Matt Borsma",
+  "Name": "Matt Boersma",
+  "BadgeName": "Matt Boersma",
   "Department": "Presenter",
   "DepartmentColor": "Red",
   "Tagline": "Motley Kids"
 }, {
   "sortKey": "2046G#013",
   "Name": "Nikki Borsma",
+  "BadgeName": "Nikki Boersma",
   "Department": "Presenter",
   "DepartmentColor": "Red",
   "Tagline": "Motley Kids"

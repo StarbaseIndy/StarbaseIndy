@@ -69,6 +69,7 @@ function getSortKey(orderId, itemType) {
     'T-Shirt':  '#4T',
     'V-Neck':   '#5V',
     'Tank Top': '#6TT',
+    'Mask':     '#7M',
   };
 
   // Make badge items sort deterministically so we can traverse all badge types in a given order deterministically while assigning badge numbers.
@@ -435,7 +436,10 @@ function generateEnvelopeMailMerge() {
   const envelopes = getAllItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .reduce((acc, item) => {
-      const { [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName } = item;
+      let { [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName, [BILLINGEMAIL_KEY]: billingEmail } = item;
+
+      // If the form data doesn't have a unifying email (oops, that's a process failure), then fall back to the billing email
+      email = email || billingEmail;
 
       // When the 'admin@starbaseindy.org' email is encountered:
       // replace the email with the form real name to force a new envelope to be created.
