@@ -218,7 +218,7 @@ function synthesizeMetadata() {
         Object.assign(item, DepartmentColors['Presenter']);
       }
 
-      // If a general admission badge would have a tagline, send it to a departmentColor mailmerge file instead.
+      // General admission badges with tagline but no department color get sent to the GeneralAdorned file.
       item.departmentColor = item.departmentColor || (item.tagline ? DepartmentColors['GeneralAdorned'].departmentColor : '');
     }
   });

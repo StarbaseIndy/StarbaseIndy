@@ -58,12 +58,14 @@
   "Note": "==================== [Staff] Finance ====================================================================",
   "Note2": "Process Enforcement, Registration, Vendor Coordinator, Silent Auction"
 }, {
+  "Note": "Ignore for 2021",
   "sortKey": "",
   "Name": "",
   "Department": "Finance",
   "DepartmentColor": "Orange",
   "Tagline": "Process Enforcement"
 }, {
+  "Note": "Ignore for 2021",
   "sortKey": "",
   "Name": "",
   "Department": "Finance",
@@ -76,21 +78,17 @@
   "DepartmentColor": "Orange",
   "Tagline": "Vendor Coordinator"
 }, {
+  "Note": "Ignore for 2021",
   "sortKey": "",
   "Name": "",
   "Department": "Finance",
   "DepartmentColor": "Orange",
   "Tagline": "Head of Registration"
 }, {
-  "sortKey": "",
-  "Name": "Kristina Bayer",
-  "Department": "Finance",
-  "DepartmentColor": "Orange",
-  "Tagline": "Registration"
-}, {
   "Note": "==================== [Staff] Marketing ==================================================================",
   "Note2": "Attendee Recruitment, Graphic Design, Webmaster, Publications, Photographer"
 }, {
+  "Note": "Ignore for 2021",
   "sortKey": "",
   "Name": "",
   "Department": "Marketing",
@@ -124,12 +122,6 @@
   "DepartmentColor": "Orange",
   "Tagline": "Audio Visual"
 }, {
-  "sortKey": "",
-  "Name": "Reed Hartman",
-  "Department": "Facilities",
-  "DepartmentColor": "Orange",
-  "Tagline": "Audio Visual"
-}, {
   "sortKey": "2039G#001",
   "Name": "Chris Harden",
   "Department": "Facilities",
@@ -151,7 +143,7 @@
   "DepartmentColor": "Orange",
   "Tagline": "Media Guest Relations"
 }, {
-  "sortKey": "",
+  "sortKey": "2074G#001",
   "Name": "Chris Hally",
   "Department": "Programming",
   "DepartmentColor": "Orange",
@@ -163,12 +155,14 @@
   "DepartmentColor": "Orange",
   "Tagline": "Media Guest Relations"
 }, {
+  "Note": "Ignore for 2021",
   "sortKey": "",
   "Name": "",
   "Department": "Programming",
   "DepartmentColor": "Orange",
   "Tagline": "Head of Guest Relations"
 }, {
+  "Note": "Ignore for 2021",
   "sortKey": "",
   "Name": "",
   "Department": "Programming",
@@ -178,6 +172,7 @@
   "Note": "==================== [Staff] Tactical ===================================================================",
   "Note2": "Operations, Security, Volunteer Coordinator"
 }, {
+  "Note": "Ignore for 2021",
   "sortKey": "",
   "Name": "",
   "Department": "Tactical",
@@ -417,24 +412,25 @@
   "DepartmentColor": "Red",
   "Tagline": "Geeks & Grooves"
 }, {
-  "sortKey": "",
-  "Name": "Joe Green",
+  "sortKey": "2075G#001",
+  "Name": "Joe Greene",
   "Department": "Entertainer",
   "DepartmentColor": "Red",
   "Tagline": "Myst Brigade"
 }, {
   "Note": "==================== Triumvirate ========================================================================"
 }, {
-  "sortKey": "1836G#001",
+  "sortKey": "2047G#001",
   "Name": "Kim Huff",
   "DepartmentColor": "Blue",
   "Tagline": "Triumvirate / Shadowhunter"
 }, {
-  "sortKey": "1847G#001",
+  "sortKey": "2048G#001",
   "Name": "Judy Eudaley",
   "DepartmentColor": "Blue",
   "Tagline": "Triumvirate"
 }, {
+  "Note": "Ignore for 2021",
   "sortKey": "",
   "Name": "Lillian Sams",
   "DepartmentColor": "Blue",

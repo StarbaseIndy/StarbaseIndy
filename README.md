@@ -25,8 +25,3 @@ Repository for web content, such as the (future) registration system, online poc
 * Update OnlineMap.jpg
 * If necessary, update title.jpg, favicon.192.png, and favicon.ico
 
-### Future TODOs:
-* Fix konopas reliance on app-cache:
-* * https://github.com/GoogleChromeLabs/sw-appcache-behavior
-
-
