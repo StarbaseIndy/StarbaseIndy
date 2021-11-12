@@ -116,12 +116,6 @@
   "DepartmentColor": "Orange",
   "Tagline": "Audio Visual"
 }, {
-  "sortKey": "",
-  "Name": "Ron Rodgers",
-  "Department": "Facilities",
-  "DepartmentColor": "Orange",
-  "Tagline": "Audio Visual"
-}, {
   "sortKey": "2039G#001",
   "Name": "Chris Harden",
   "Department": "Facilities",
@@ -477,12 +471,6 @@
 }, {
   "sortKey": "2045G#008",
   "DepartmentColor": "Blue"
-}, {
-  "sortKey": "2040G#001",
-  "Tagline": "Starship Remodeling Specialist"
-}, {
-  "sortKey": "2040G#002",
-  "Tagline": "Starship Remodeling Specialist"
 }, {
   "sortKey": "2041G#001",
   "BadgeName": "Lilly the Great",
