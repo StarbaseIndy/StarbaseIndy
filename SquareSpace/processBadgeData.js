@@ -603,10 +603,22 @@ function generateMailMergeFiles() {
         return Object.assign({}, item, extra);
       }));
 
-  // Export staff badges
+  // Export staff badges without taglines
   const staffBadgesPromises = getAllBadgeItems()
     .filter(item => item.departmentColor)
-    .concat(getVendorGroup())
+    .filter(item => !item.tagline)
+    .concat(getVendorGroup()) // Vendors don't have taglines
+    .reduce((acc, item) => {
+      acc[0][item.departmentColor] = acc[0][item.departmentColor] || [];
+      acc[0][item.departmentColor].push(item);
+      return acc;
+    }, [{}])
+    .map(acc => Object.keys(acc).map(key => generateBadgeMailMerge(`Non-Adorned ${key}`, acc[key])));
+
+  // Export staff badges with taglines
+  const staffAdornedBadgesPromises = getAllBadgeItems()
+    .filter(item => item.departmentColor)
+    .filter(item => item.tagline)
     .reduce((acc, item) => {
       acc[0][item.departmentColor] = acc[0][item.departmentColor] || [];
       acc[0][item.departmentColor].push(item);
@@ -624,6 +636,7 @@ function generateMailMergeFiles() {
   const promises = [
     generalBadgesPromise,
     ...staffBadgesPromises,
+    ...staffAdornedBadgesPromises,
     ...childPromises,
     // generateVendorMailMerge(),
     generateEnvelopeMailMerge(),

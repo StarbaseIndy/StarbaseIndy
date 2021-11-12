@@ -194,6 +194,12 @@
   "Note": "==================== VIP (Media Guests, DWTS) =================================================================",
   "Note2": "Geeky Astrophysicist, Klingon Linguist, Master of Ceremonies"
 }, {
+  "sortKey": "2060G#001",
+  "Name": "Ned Keitt-Pride",
+  "Department": "VIP",
+  "DepartmentColor": "Red",
+  "Tagline": "Master of Ceremonies"
+}, {
   "sortKey": "2044G#001",
   "Name": "Juniper Jairala",
   "Department": "VIP",
@@ -267,7 +273,8 @@
   "Name": "Shannon Fauver",
   "Department": "Presenter",
   "DepartmentColor": "Red",
-  "Tagline": ""
+  "BadgeName": "1st Officer Fauver",
+  "Tagline": "USS Hunter S. Thompson"
 }, {
   "sortKey": "1939G#001",
   "Name": "Beckie Margedant",
@@ -394,7 +401,7 @@
   "DepartmentColor": "Red",
   "Tagline": "Geeks & Grooves"
 }, {
-  "sortKey": "2045G#012",
+  "sortKey": "2045G#009",
   "Name": "Brian Gibson",
   "Department": "Entertainer",
   "DepartmentColor": "Red",
@@ -457,26 +464,43 @@
   "Product Form: Badge Name": ""
 }, {
   "sortKey": "2045G#012",
-  "Name": "Karen Hudson",
   "DepartmentColor": "Blue"
 }, {
   "sortKey": "2045G#013",
-  "Name": "Rob Wittenmeyer",
   "DepartmentColor": "Blue"
 }, {
   "sortKey": "2045G#006",
-  "Name": "Brittany Fury",
   "DepartmentColor": "Blue"
 }, {
   "sortKey": "2045G#007",
-  "Name": "Erica Keck",
+  "DepartmentColor": "Blue"
+}, {
+  "sortKey": "2045G#008",
   "DepartmentColor": "Blue"
 }, {
   "sortKey": "2040G#001",
-  "Name": "Shelley Johnson",
   "Tagline": "Starship Remodeling Specialist"
 }, {
   "sortKey": "2040G#002",
-  "Name": "Scott Johnson",
   "Tagline": "Starship Remodeling Specialist"
+}, {
+  "sortKey": "2041G#001",
+  "BadgeName": "Lilly the Great",
+  "Tagline": "Mistress of Dragons"
+}, {
+  "sortKey": "2023G#001",
+  "BadgeName": "Admiral Rex A. Wood",
+  "Tagline": "STARFLEET Command Admiralty Board"
+}, {
+  "sortKey": "1920G#003",
+  "BadgeName": "Capt. qorDan sutai-QanaSon",
+  "Tagline": "Commanding Officer Global Fleet"
+}, {
+  "sortKey": "1920G#001",
+  "BadgeName": "Capt. (IXL) Alenis Naprem tai-QanaSon",
+  "Tagline": "Science Officer IKV chI jev"
+}, {
+  "sortKey": "1973D#001",
+  "BadgeName": "Admiral Michelle Wells",
+  "Tagline": "(Michael Herbert)"
 }]
