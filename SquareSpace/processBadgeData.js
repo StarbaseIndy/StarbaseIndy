@@ -151,6 +151,8 @@ function processCSV(filename, group = [{}]) {
       item[ORDERID_KEY] = orderId; // make order ID numeric
       // combine different form names for same information
       item[UNIFYING_EMAIL] = (item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2] || '').toLowerCase();
+      // If the form data doesn't have a unifying email (oops, that's a process failure), then fall back to the billing email
+      item[UNIFYING_EMAIL] = (item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2] || item[BILLINGEMAIL_KEY] || '').toLowerCase();
 
       item.sortKey = getSortKey(orderId, lineItems[0]);
 
@@ -436,10 +438,7 @@ function generateEnvelopeMailMerge() {
   const envelopes = getAllItems()
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .reduce((acc, item) => {
-      let { [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName, [BILLINGEMAIL_KEY]: billingEmail } = item;
-
-      // If the form data doesn't have a unifying email (oops, that's a process failure), then fall back to the billing email
-      email = email || billingEmail;
+      const { [UNIFYING_EMAIL]: email, [REALNAME_KEY]: realName } = item;
 
       // When the 'admin@starbaseindy.org' email is encountered:
       // replace the email with the form real name to force a new envelope to be created.
