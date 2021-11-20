@@ -310,12 +310,7 @@ function printDiscountCodeCounts() {
 }
 
 function writeMailMergeFile(filename, records, columns) {
-  const options = {
-    columns,
-    header: true,
-    quotedString: true,
-    delimiter: '\t',
-  };
+  const options = { columns, header: true, quotedString: true, delimiter: '\t' };
 
   return csvStringify(records, options)
    .then(data => writeFile(filename, '\uFEFF' + data, { encoding: 'utf16le' }));
@@ -405,6 +400,31 @@ function generateChildBadgeMailMerge(filename, group) {
   if (!records.length) return;
   return writeMailMergeFile(`Mailmerge ${filename} BACK.tab`, records, columns);
 }
+
+function generateVendorEnvelopeMailMerge() {
+  // Generate envelopes with the business name, and the associated badge numbers
+  const records = getVendorGroup()
+    .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
+    .filter(vendor => (vendor[BADGENAME_KEY] || '').match(/\S/))
+    .reduce((acc, item) => {
+      const { [BADGENAME_KEY]: vendor } = item;
+      if (acc[vendor]) {
+        acc[vendor].Badges += 1;
+      } else {
+        acc[vendor] = { Vendor: vendor, Badges: 1 }
+      }
+      return acc;
+    }, {});
+
+  const envelopeMailMerge = Object.values(records);
+  console.log('Vendor mailmerge:', JSON.stringify(envelopeMailMerge));
+
+  const options = { header: true, quotedString: true, delimiter: '\t' };
+
+  return csvStringify(envelopeMailMerge, options)
+   .then(data => writeFile('Mailmerge Vendor Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
+}
+
 
 function generateEnvelopeMailMerge() {
   // Front of Packets:
@@ -504,11 +524,7 @@ function generateEnvelopeMailMerge() {
     .reduce((acc, item) => acc.concat(...item), [])
     .sort((a,b) => a.RealName.localeCompare(b.RealName));
 
-  const options = {
-    header: true,
-    quotedString: true,
-    delimiter: '\t',
-  };
+  const options = { header: true, quotedString: true, delimiter: '\t' };
 
   return csvStringify(envelopeMailMerge, options)
    .then(data => writeFile('Mailmerge Envelope.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
@@ -573,11 +589,7 @@ function generatePurchaserEmailList() {
     )
     .reduce((acc, item) => acc.concat(...item), []);
 
-  const options = {
-    header: true,
-    quotedString: true,
-    delimiter: '\t',
-  };
+  const options = { header: true, quotedString: true, delimiter: '\t' };
 
   return csvStringify(csvData, options)
    .then(data => writeFile('Purchaser Emails.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
@@ -639,6 +651,7 @@ function generateMailMergeFiles() {
     ...childPromises,
     // generateVendorMailMerge(),
     generateEnvelopeMailMerge(),
+    generateVendorEnvelopeMailMerge(),
   ];
 
   return Promise.each(promises, p => p)
@@ -761,11 +774,7 @@ function generateCrossReferences() {
   .filter(uniqueFilter)
   .map(item => JSON.parse(item));
 
-  const options = {
-    header: true,
-    quotedString: true,
-    delimiter: '\t',
-  };
+  const options = { header: true, quotedString: true, delimiter: '\t' };
 
   return csvStringify(realNameCrossRef, options)
    .then(data => writeFile('Xref Real Name.tab', '\uFEFF' + data, { encoding: 'utf16le' }))
