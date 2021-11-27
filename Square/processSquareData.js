@@ -72,8 +72,14 @@ const transactions = {};
 
 function getTransactions() {
   const filterDate = argv.date;
+  const getLocalISODate = timestamp => {
+    const copy = new Date(timestamp);
+    copy.setUTCMinutes(-copy.getTimezoneOffset());
+    return copy.toISOString().slice(0,10);
+  };
+
   return Object.values(transactions)
-    .filter(it => !filterDate || !it.timestamp || filterDate === it.timestamp.toISOString().slice(0,10));
+    .filter(it => !filterDate || !it.timestamp || filterDate === getLocalISODate(it.timestamp));
 }
 
 function formatCurrency(value) {
