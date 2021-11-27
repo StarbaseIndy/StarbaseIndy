@@ -72,14 +72,8 @@ const transactions = {};
 
 function getTransactions() {
   const filterDate = argv.date;
-  const getLocalISODate = timestamp => {
-    const copy = new Date(timestamp);
-    copy.setUTCMinutes(-copy.getTimezoneOffset());
-    return copy.toISOString().slice(0,10);
-  };
-
   return Object.values(transactions)
-    .filter(it => !filterDate || !it.timestamp || filterDate === getLocalISODate(it.timestamp));
+    .filter(it => !filterDate || !it.timestamp || filterDate === getDateAndTime(it.timestamp)[0]);
 }
 
 function formatCurrency(value) {
@@ -337,6 +331,7 @@ function generateShiftReport(title, dataset = getTransactions(), key = TOTAL_COL
   console.log(`\nShift report: ${title}:`);
   summary
     .sort((a,b) => a.start - b.start)
+    .filter(group => group.amount)
     .forEach(group => {
       const { start, end, amount, device } = group;
       const [startDate, startTime] = getDateAndTime(start);
@@ -362,7 +357,7 @@ function generateShiftTotalReport() {
 }
 
 function generateShiftCashReport() {
-  generateShiftReport('Cash transactions', getTransactions().filter(t => t[CASH] !== 0), CASH);
+  generateShiftReport('Cash transactions', getTransactions(), CASH);
 }
 
 function main() {
