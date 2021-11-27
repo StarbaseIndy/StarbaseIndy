@@ -362,7 +362,7 @@ function generateShiftTotalReport() {
 }
 
 function generateShiftCashReport() {
-  generateShiftReport('Cash transactions', getTransactions().filter(t => t[CASH] !== '$0.00'), CASH);
+  generateShiftReport('Cash transactions', getTransactions().filter(t => t[CASH] !== 0), CASH);
 }
 
 function main() {
