@@ -417,7 +417,6 @@ function generateVendorEnvelopeMailMerge() {
     }, {});
 
   const envelopeMailMerge = Object.values(records);
-  console.log('Vendor mailmerge:', JSON.stringify(envelopeMailMerge));
 
   const options = { header: true, quotedString: true, delimiter: '\t' };
 
