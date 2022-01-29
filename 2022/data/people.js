@@ -1,0 +1,1 @@
+var people = [{"id":"1","bio":"Starbase Indy 2022 Convention Chair","name":["David","Mott"],"links":{"img":"https://starbaseindy.github.io/StarbaseIndy/2022/images/dpmott.jpg","fb":"dpmott","twitter":"dpmott"},"prog":["1","2","3"]}];

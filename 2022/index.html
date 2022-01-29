@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html data-last-updated="konopas.appcache">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="skin/konopas.css">
+<meta name="HandheldFriendly" content="true">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+
+<!-- Android + favicon -->
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="shortcut icon" sizes="196x196" href="data/favicon.192.png">
+
+<!-- iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<!--
+<link rel="apple-touch-icon"                 href="data/icon.apple.60.png">
+<link rel="apple-touch-icon" sizes="76x76"   href="data/icon.apple.76.png">
+<link rel="apple-touch-icon" sizes="120x120" href="data/icon.apple.120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="data/icon.apple.152.png">
+<link rel="apple-touch-startup-image" href="data/start.apple.1536x2008.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.2048x1496.png" media="(device-width: 1536px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.768x1004.png"  media="(device-width: 768px) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="data/start.apple.1024x748.png"  media="(device-width: 768px) and (orientation: landscape)">
+<link rel="apple-touch-startup-image" href="data/start.apple.640x920.png"   media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)">
+<link rel="apple-touch-startup-image" href="data/start.apple.320x460.png"   media="(device-width: 320px)">
+-->
+
+<!-- Windows Phone 8.1 -->
+<!--
+<meta name="msapplication-TileColor"         content="#ffffff">
+<meta name="msapplication-square70x70logo"   content="data/icon.ie.png">
+<meta name="msapplication-square150x150logo" content="data/icon.ie.png">
+<meta name="msapplication-square310x310logo" content="data/icon.ie.png">
+-->
+
+<title>SBI 2022 Program Guide</title>
+
+<body><div id="top"></div>
+<div id="load_disable"></div>
+
+<div id="time"></div>
+<div id="scroll"><a href="#top" id="scroll_link" data-txt>Scroll up</a></div>
+
+<div id="banner">
+<div id="server_connect"></div>
+
+<h1><a href="#info" alt="Starbase Indy 2022" title="Starbase Indy 2022">
+<img id="title-small" src="data/title.jpg" style="width: 240px;">
+<img id="title" src="data/title.jpg" style="width: 200px;"></a></h1>
+
+<ul id="tabs">
+<li id="tab_star"><a href="#star" data-txt>My Events</a>
+<li id="tab_prog"><a href="#" data-txt>Program</a><div id="day-sidebar" class="sub-side"></div>
+<li id="tab_part"><a href="#part" data-txt>People</a><div id="part-sidebar" class="sub-side"></div>
+<li id="tab_more01"><a href="#more01" data-txt>Vendors</a>
+<li id="tab_info"><a href="#info" data-txt>Info</a>
+</ul>
+
+<div id="refresh"><i class="refresh_icon"></i><span data-txt>Refresh data</span></div>
+</div>
+
+<div id="main">
+
+<div id="star_view" class="view">
+	<div id="star_data"></div>
+</div>
+
+<div id="prog_view" class="view">
+	<div id="prog_filters" class="filters">
+		<div id="prog_lists"></div>
+		<form name="search" id="search">
+			<input type="text" id="q" required data-txt="Search" data-txt-attr="placeholder">
+			<div id="q_ctrl">
+			<input type="submit" id="q_submit" data-txt="Go" data-txt-attr="value">
+			</div>
+			<div id="q_hint" class="hint"></div>
+			<div id="filter_sum_wrap">
+				<input type="reset" id="q_clear" data-txt="Clear all" data-txt-attr="value">
+				<div id="filter_sum"></div>
+			</div>
+		</form>
+	</div>
+	<div id="day-narrow" class="sub-narrow"></div>
+</div>
+
+<div id="part_view" class="view">
+	<div id="part-narrow" class="sub-narrow"></div>
+	<ul id="part_names"></ul>
+	<div id="part_info"></div>
+</div>
+
+<div id="info_view" class="view">
+<p>This is the program guide for <a href="http://starbaseindy.org">Starbase Indy 2022</a>. It should be suitable for use on most browsers and devices. It's an instance of <a href="http://konopas.org/">KonOpas</a>, an open-source project providing conventions with easy-to-use mobile-friendly guides.
+
+<p><div id="last-updated">Program and participant data were last updated <span></span>.</div>
+
+<div id="install-instructions">
+<p>This guide will work in your browser even when you don't have an internet connection.
+<h4 class="collapse">You can also install it as a home screen app</h4>
+<dl class="compact-dl">
+<dt>Safari on iPhone/iPad<dd>Tap on <i class="ios_share_icon"></i> (share), then tap <b>Add to Home Screen</b>.
+<dt>Chrome on Android<dd>Tap on <i class="android_menu_icon"></i> (menu), then tap <b>Add to Home Screen</b>.
+<dt>Firefox on Android<dd>Tap on <i class="android_menu_icon"></i> (menu), then tap <b>Bookmark</b> and select <b>Options</b>, and <b>Add to Home Screen</b>.
+<dt>IE on Windows Phone<dd>Tap on <i class="ie_menu_icon"></i> (menu), then tap <b>Pin to Start</b>
+</dl>
+</div>
+<script>
+if (navigator.standalone) document.getElementById('install-instructions').style.display = 'none';
+</script>
+
+<!-- SAMPLE SECTIONS FOR "INFO" VIEW, UNCOMMENT TO SEE -->
+<style>
+#map { width: 100% !important; }
+#map td { text-align: center !important; padding: 6px 32px; }
+#map a, #map span { font-family: 'Oswald'; font-weight: 400; font-size: 1.2em; cursor: pointer; }
+#map a:hover, #map span:hover { text-decoration: underline; }
+#map tr:hover, .quick-ref tr:hover { background: inherit !important; }
+.quick-ref dt { margin: 6px 0 3px; font-weight: bold; font-size: 120%; }
+.quick-ref table { width: auto !important; border-spacing: 0; margin-bottom: 6px; }
+.quick-ref td { text-align: left !important; vertical-align: top !important; }
+#info_view .quick-ref td.c { text-align: center !important; }
+.quick-ref td:nth-child(2) { text-align: right !important; vertical-align: top !important; padding: 0 0 0 5px; }
+.quick-ref td:nth-child(3) { padding-left: 0; }
+.quick-ref td.location { text-align: left !important; font-weight: bold; }
+</style>
+
+<h2>Maps</h2>
+<table id="map">
+<tr><td><a class="popup-link" href="data/OnlineMap.jpg">Indianapolis Mariott East</a></td></tr>
+</table>
+
+<h2>Share this app!</h2>
+<table>
+<tr><td><a class="popup-link" href="data/qr-code.png">QR code</a></td></tr>
+</table>
+
+
+<h2>Links</h2>
+<ul>
+<li><a href="http://starbaseindy.org/">Starbase Indy</a>
+</ul>
+
+<h2>Quick Reference</h2>
+<dl class="quick-ref">
+  
+<dt>Access/Handicapped Services:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Hotel Front Desk
+</table>
+
+<!--
+<dt>Registration:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Salon 6
+<tr><td>Friday<td>1:00pm-<td>8:00pm (Star Badge and Volunteer Pickup @ 12:00pm)
+<tr><td>Saturday<td>9:30am-<td>6:00pm
+<tr><td>Sunday<td>9:30am-<td>3:00pm
+</table>
+
+<dt>Vendor Hall:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Liberty Hall
+<tr><td>Friday<td>1:00pm-<td>8:00pm
+<tr><td>Saturday<td>10:00am-<td>6:00pm
+<tr><td>Sunday<td>10:00am-<td>3:00pm
+</table>
+  
+<dt>Operations:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Patriot Boardroom
+<tr><td>Friday<td>10:00am-<td>10:00pm
+<tr><td>Saturday<td>9:00am-<td>10:00pm
+<tr><td>Sunday<td>9:00am-<td>3:00pm
+</table>
+  
+<dt>Security:
+  <dd><table>
+  <tr><td>Location:<td colspan="2" class="location">Patriot Boardroom
+  <tr><td>Friday<td>10:00am-<td>10:00pm
+  <tr><td>Saturday<td>9:00am-<td>12:00am
+  <tr><td>Sunday<td>9:00am-<td>3:00pm
+</table>
+
+<dt>Silent Auction:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Salon 7
+<tr><td colspan="3" style="text-align: center !important; border-bottom: 1px solid black; padding-top: 5px !important;">Bidding Open
+<tr><td>Friday<td>2:00pm-<td>6:00pm
+<tr><td>Saturday<td>11:00am-<td>4:00pm
+<tr><td>Sunday<td>11:00am-<td>2:00pm
+<tr><td colspan="3" style="text-align: center !important; border-bottom: 1px solid black; padding-top: 5px !important;">Payment/Pickup
+<tr><td>Friday<td>6:00pm-<td>7:00pm
+<tr><td>Saturday<td>4:00pm-<td>5:00pm
+<tr><td>Sunday<td>2:00pm-<td>3:00pm
+</table>
+
+<dt>Con Suite:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">TBD
+<tr><td>Friday<td>1:00pm-<td>8:00pm
+<tr><td>Saturday<td>9:00am-<td>8:00pm
+<tr><td>Sunday<td>9:00am-<td>2:00pm
+</table>
+
+<dt>Quiet Room:
+<dd><table>
+<tr><td>Location:<td colspan="2" class="location">Wilkie
+<tr><td>Friday<td>12:00pm-<td>8:00pm
+<tr><td>Saturday<td>10:00am-<td>8:00pm
+<tr><td>Sunday<td>10:00am-<td>3:00pm
+</table>
+-->
+
+</dl>
+
+
+<!--
+<h2>COVID-19 Policy</h2>
+<div>
+<p>Starbase Indy is a convention based on Science, Technology, Engineering and Math. Furthermore, the mission of SBI is to celebrate Star Trek's vision of the future by promoting humanitarianism and STEM education today. We believe that the best way to promote the wellbeing of all of humanity is to follow the science in keeping people healthy. To this effort, it has been decided that <b>All attendees must be vaccinated against COVID-19</b> in order to attend the convention if a vaccine is approved for their age group in time to be vaccinated. <b>Please complete and upload <a href="https://docs.google.com/forms/d/e/1FAIpQLSeDS5NAYdFnGMf9Vsf8KfQkit2ipwkdrv-XoOiN_U1trS8IfA/viewform">via this form</a> proof of vaccination.</b>
+<p>At the time of the writing of this initial policy (September 1, 2021), children under the age of 12 cannot be vaccinated. However, if an EUA (Emergency Use Authorization) or authorization is made for additional age groups, this policy will be updated to reflect the current science and guidance of those authorizations.
+<p><b>MANDATORY:</b> Proof of completed COVID-19 vaccination.
+<p>Regardless of which vaccine you have chosen to receive, you should have been given a vaccination card. Completed Vaccination means that you have obtained the maximum number of injections required by your vaccine choice by November 15, 2021. This will allow for the minimum number of days after injection before your vaccination is fully effective. 
+<p></b>Please complete and upload <a href="https://docs.google.com/forms/d/e/1FAIpQLSeDS5NAYdFnGMf9Vsf8KfQkit2ipwkdrv-XoOiN_U1trS8IfA/viewform">via this form</a> proof of vaccination.</b> If you are not able to do this, you will need to bring your vaccination card or an image of it to registration at the time of badge pick up. 
+<p><b>MANDATORY:</b> Proper wearing of approved mask in all convention spaces
+<p>Appropriate facial coverings (aka masks) must be worn by all attendees over 2 years of age in all convention spaces, this includes the hallways, breakout rooms and the vendor hall. Gaiters, bandanas, and face shields are not considered appropriate facial coverings. Free masks will be provided at several locations around the convention. SBI logo masks will be available for sale at Registration for $5 and available for pre-purchase via the website. Masks must be worn covering the nose and mouth at all times. Masks should fit snugly and not have holes or vents. They must be worn covering your mouth and nose. See the CDC's guidelines for recommendations on masks. 
+<p>Per the CDC, most people with underlying medical conditions can safely wear a mask. As such, we are highly unlikely to consider a medical exemption.
+<p><b>Enforcement:</b> Staff will be trained to watch for appropriate use of masks. If an attendee is found to not be wearing a mask or wearing it inappropriately, Staff will give a verbal warning and will punch a hole in the badge of this person. If a second infraction occurs, Staff will inform the attendee that they must leave the convention space, punch a second hole, and confiscate the badge. The badge will be turned into Operations and the person will not be allowed to purchase a new badge. Two (2) holes in the badge will be equivalent to no badge at all. 
+<p><b>Refund Policy:</b> Badges purchased prior to the announcement of this vaccination requirement (September 1, 2021) can be refunded or rolled over by emailing <a href="mailto:conchair@starbaseindy.org">conchair@starbaseindy.org</a> with the names of those wishing to be refunded. 
+<p>We do ask that anyone feeling ill at the time of the convention refrain from attending. This does not require a positive COVID-19 test. If you are sick with COVID-19, a cold, the flu, *insert illness here*, please refrain from attending. Please email <a href="mailto:conchair@starbaseindy.org">conchair@starbaseindy.org</a> to obtain your refund and arrange for any purchased shirts, etc, to be obtained. 
+</div>
+
+
+<h2>StarbaseIndy Protocols</h2>
+<div>
+  <h3>Terms of Attendance</h3>
+  <p>By purchasing a membership to the Starbase Indy (SBI) convention, attendee agrees to comply with the following rules and regulations:</p>
+  <ul>
+  	<li>Each membership admits one person to the convention; no shapeshifting is allowed. NO autographs are included with membership.</li>
+    <li>Con badges must be worn on the outside of all clothing/costumes and presented when entering any part of the convention.</li>
+    <li>Your SBI badge is non-refundable, non-exchangeable and non-transferrable, no matter what the reason. SBI will not be responsible for lost or stolen ID badges. A badge can only be replaced by purchasing an additional admission.</li>
+    <li>All members hereby release SBI, its organizers and agents from any liability for loss or damage to persons or property, or infringement of any right, claim or course of action of any kind.</li>
+    <li>The organizers, staff and agents of SBI reserve the right to deny entry to, or remove from, the convention facilities any person behaving, or threatening to behave, in a manner reasonably considered to be disruptive.</li>
+    <li>Actors and guests are people too; please don’t harass them, and be respectful, especially when they are away from their autograph table. Everyone deserves some down time.</li>
+    <li>Children 12 and under must be accompanied by an adult at all times. Any children dropped off at Starbase Indy and found wandering unattended will be turned over to hotel staff.</li>
+    <li>By accepting the conditions of membership, you may be videotaped or photographed for future promotion of SBI.</li>
+  </ul>
+  <h3>Code of Conduct</h3>
+  <p>Attendees must respect common sense rules for public behavior, personal interaction, common courtesy and respect for private property. Harassing or offensive behavior will not be tolerated. Starbase Indy reserves the right to revoke, without refund, the membership and badge of any attendee not in compliance with this policy. Persons finding themselves in a situation where they feel their safety is at risk or who become aware of an attendee not in compliance with this policy should immediately locate the nearest member of security, or staff member, so that the matter can be handled in an expeditious manner.</p>
+  <h3>Weapons</h3>
+  <p>Keep it peaceful, folks. No functional weapons are allowed at Starbase Indy.</p>
+  <p>Simulated or costume weapons are allowed as a part of your costume, subject to prior approval by Masquerade officials and compliance with the following:</p>
+  <ul>
+  	<li>All costume weapons are subject to inspection by members of Masquerade staff.</li>
+    <li>All costume weapons must conform to state and federal law.</li>
+    <li>Projectile costume weapons must be rendered inoperable.</li>
+    <li>Functional (real) arrows must have their tips removed and be bundled and zip-tied to a quiver.</li>
+    <li>Weapons must be sheathed and holstered or peace-bonded.</li>
+  </ul>
+  <p>NO assassin or similar games will be allowed on hotel premises. Masquerade officials will be spot-checking costumes throughout the convention. Anyone not conforming to the rules will be required to leave.</p>
+  <h3>Harassment</h3>
+  <p>Starbase Indy is committed to providing a harassment-free conference experience for everyone, regardless of gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age or religion. We do not tolerate harassment of conference participants in any form. Convention participants violating these rules may be sanctioned or expelled from the conference (without a refund) at the discretion of the convention organizers.</p>
+  <p>Harassment includes, but is not limited to:</p>
+  <ul>
+  	<li>Verbal comments that reinforce social structures of domination related to gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, religion, etc.</li>
+  	<li>Sexual images in public spaces</li>
+  	<li>Deliberate intimidation, stalking, or following</li>
+  	<li>Harassing photography or recording</li>
+  	<li>Sustained disruption of talks or other events</li>
+  	<li>Inappropriate physical contact</li>
+  	<li>Unwelcome sexual attention</li>
+  	<li>Advocating for, or encouraging, any of the above behavior</li>
+  </ul>
+  <h3>Leash Policy</h3>
+  <p>Any animal must be attached to a fixed-length leash no more than five feet in length when not in cages or crates.</p>
+</div>
+<!--
+
+
+<!-- END SAMPLE SECTIONS FOR "INFO" VIEW -->
+
+</div>
+
+<div id="more01_view" class="view info_view">
+  <style>
+    // a, .nolink { display: inline-block; }
+    // a img, a span, .nolink img, .nolink span { vertical-align: middle; margin-right: 10px; }
+    .bizimg { float: right; margin-left: 10px; }
+    .bizname { display: block; clear: both; margin-top: 30px; }
+    // p { margin-top: 5px; ; margin-bottom: 10px; }
+  </style>
+    <p style="text-align: center;"><u>Promenade (Dealers' Room) Hours:</u>
+      November 26, from 1:00 pm - 8:00 pm
+      November 27, from 10:00 am - 6:00 pm
+      November 28, from 10:00 am - 3:00 pm
+    </p>
+  
+  <!-- Vendors -->
+  
+  
+  <!-- Vendor Template
+    <hr>
+    <a class="bizname" href="BIZLINK" target="_blank">BIZNAME</a>
+    <div>
+    <a class="bizimg" href="BIZLINK" target="_blank">
+      <img height="100" src="BIZIMAGE"/>
+    </a>
+    <p>BISDESC1
+    <p>BIZDESC2
+    </div>
+  -->
+  
+</div>
+  
+  
+
+<div id="prog_ls" class="ls"><br><div class="ls_loading">Loading program data&hellip;</div></div>
+
+</div><!-- /main -->
+
+<script src="data/program.js"></script>
+<script src="data/people.js"></script>
+<script src="konopas.min.js"></script>
+<script>
+var konopas = new KonOpas({
+	'id': 'SBI2022',
+	'default_duration': 0,
+	'time_show_am_pm': true,
+	'show_all_days_by_default': true,
+	'use_server': false,
+	'cache_refresh_interval_mins': 10
+});
+konopas.set_program(program, {
+	'day': {},
+	'area': {},
+	'tag': {}
+});
+konopas.set_people(people);
+konopas.set_view();
+</script>
