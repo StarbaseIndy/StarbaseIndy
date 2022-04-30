@@ -19,7 +19,7 @@ exports.lambdaHandler = async (event) => {
       .catch(() => Promise.reject(`Could not find configuration for ${id}. Email dpmott@gmail.com for help!`))
     )    
     .then(config => updateKonopasFiles(config))
-    .then(() => 'KnoOpas metadata files have been written to your github repository.');
+    .then(() => 'KonOpas metadata files have been written to your github repository.');
 
   return promise
     .catch(err => `ERROR: ${err.message || err}`)
