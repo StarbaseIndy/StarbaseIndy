@@ -546,7 +546,7 @@ function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
     .map(item => {
       const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10)
         || parseInt(item[VENDORBADGECOUNT_KEY], 10)
-        || parseInt((item[VENDORCONFIRMED_KEY]).split(/\s+-\s+/, 2)[1] || '0', 10)
+        || parseInt((item[VENDORCONFIRMED_KEY] || '').split(/\s+-\s+/, 2)[1] || '0', 10)
         || 0;
       return [...Array(numBadges)].map(() => ({
         sortKey: 'none',
