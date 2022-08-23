@@ -16,6 +16,7 @@
           2019: { start: '2018-11-23T00:00:00.001Z', end: '2019-11-29T00:00:00.000Z' },
           2020: { start: '2019-11-29T00:00:00.000Z', end: '2021-11-26T00:00:00.000Z'},
           2021: { start: '2019-11-29T00:00:00.000Z', end: '2021-11-26T00:00:00.000Z'},
+          2022: { start: '2021-11-26T00:00:00.001Z', end: '2022-11-25T00:00:00.000Z'},
         };
         
         return ranges[year];
@@ -31,6 +32,7 @@
           2018: { start: '2018-11-23', end: '2018-11-26', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2019: { start: '2019-11-29', end: '2019-12-02', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2021: { start: '2021-11-26', end: '2021-11-29', location: 'WR6MC29WH0P5Z' }, // 'SBI'
+          2022: { start: '2021-11-25', end: '2022-11-28', location: 'WR6MC29WH0P5Z' }, // 'SBI'
         };
         
         return ranges[year];
@@ -38,7 +40,7 @@
       
       // How to get this Square info?
       // 1. Navigate to SquareUp => Sales => Transactions
-      // 2. Select date 12/01/2017-12/01/2018
+      // 2. Select date (e.g. 12/01/2017-12/01/2018)
       // 3. Select location "SBI" only
       // 4. In Chrome Developer Tools (F12), view the page Elements, search for "_blank", and replace with "_self"
       // 5. In Chrome Developer Tools (F12), select Network tab, and click the "Preserve Logs" checkbox
@@ -66,18 +68,20 @@
       // How to get the productId?
       // 1. In Chrome Developer Tools (F12), select Network tab, and click the "Preserve Logs" checkbox
       // 2. Navigate to the SquareSpace Orders page
-      // 3. Click Export 
-      // 4. On step 3, select "Specific Product" and search for + select the specific product
-      // 5. Be sure that "Include product form data" is selected
-      // 6. Press the "Save" button
-      // 7. In Chrome Developer Tools (F12), in the Network tab, look at the "export" network call form data to find the productId query parameter.
+      // 3. Click "Download CSV" link
+      // 4. Be sure that "Include product form data" is selected
+      // 5. On step 3, select "Specific Product" and search for the specific product
+      //    Note: you can enter 2022 to get a collection of results
+      //    Note: there's NO NEED to actually download the CSV.  All needed data is in the filter query response.
+      // 6. In Chrome Developer Tools (F12), in the Network tab, look at the response to the "products?searchQuery=" network call.
+      //    This JSON payload will include product IDs (field "id") and product names/descriptions
       function getSquareSpaceUrl(year, productId = '') {
         return 'https://heather-cottingham-r34y.squarespace.com/api/commerce/orders/export' +
                '?orderStates=' + (year===2020 ? 'PENDING' : 'PENDING%2CFULFILLED') +
                '&productType=' +
                '&includeProductForm=' + (productId ? 'true' : 'false') +
 			         '&productId=' + productId +
-               '&productId=5dca06846cd8232bdf6fdd26' + // DPM TESTING
+               // '&productId=5dca06846cd8232bdf6fdd26' + // DPM TESTING
                '&orderSubmittedOnMin=' + encodeURIComponent(getSquareSpaceYearDateRange(year).start) +
                '&orderSubmittedOnMax=' + encodeURIComponent(getSquareSpaceYearDateRange(year).end);
       }
@@ -246,6 +250,30 @@
         // 2022
         // TODO: add 2022 items here.
         // TODO: add the other items here.
+
+        // 2021
+        assignSquareSpaceHref(2022, 'BadgeWeekend', '61945989ea54f441cdad9260');
+        assignSquareSpaceHref(2022, 'BadgeStar',    '61955443996d9528b36b6294');
+        assignSquareSpaceHref(2022, 'BadgeChild',   '619554a3d7ca5820bfa975af');
+        assignSquareSpaceHref(2022, 'BadgeStudent', '619553c4d5d86121d5881839');
+        assignSquareSpaceHref(2022, 'BadgeFri',     '63042639c633be34e28777f0');
+        assignSquareSpaceHref(2022, 'BadgeSat',     '63042570100c4a40f45d1bbb');
+        assignSquareSpaceHref(2022, 'BadgeSun',     '630426953c643a6de7dde716');
+        assignSquareSpaceHref(2022, 'Summary');
+
+        // DWTS: Celebrity Mixer
+        assignSquareSpaceHref(2022, 'DWTSMixer', '62ec8300aee2032f9c3419d9');
+
+        // Merch
+        assignSquareSpaceHref(2022, 'MerchMask', '6124fb61a1cb315ed1c95875');
+        // TBD: shirts, hats
+
+        // Vendors come from google sheets, and not Square or SquareSpace.
+        assignGoogleHref(2022, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1LSt6Npg867kdwgmeD_9aMoTe-BU8A1t__Bfe-XZBV7s/export?format=csv&gid=0');
+
+        assignSquareHref(2022, 'Transactions');
+        assignSquareHref(2022, 'Items');
+
       }
     </script>
   </head>
@@ -269,6 +297,39 @@
     Note: The Past-Year-Badge-Data.xlsx is located in the <a target="_blank" href="https://drive.google.com/drive/folders/0APUQzYMACYslUk9PVA">Data</a> folder.<br/>
     <br/>
 
+    <hr/>
+    <button onclick="downloadYearData(2022, 'SquareSpace', 2000)">Download 2022 SquareSpace + Google Drive data</button>
+    <br/>
+    <br/>
+    <a href="#" id="2022BadgeStar"     >2022 Badge Star.csv</a><br/>
+    <a href="#" id="2022BadgeStudent"  >2022 Badge Student.csv</a><br/>
+    <a href="#" id="2022BadgeWeekend"  >2022 Badge Weekend.csv</a><br/>
+    <a href="#" id="2022BadgeChild"    >2022 Badge Child.csv</a><br/>
+
+    <a href="#" id="2022BadgeFri"      >2022 Badge Fri Only.csv</a><br/>
+    <a href="#" id="2022BadgeSat"      >2022 Badge Sat+Sun.csv</a><br/>
+    <a href="#" id="2022BadgeSun"      >2022 Badge Sun Only.csv</a><br/>
+
+    <a href="#" id="2022Summary"       >2022 Summary.csv</a><br/>
+    <a href="#" id="2022BadgeVendor"   >2022 Badge Vendor.csv</a> (Google Drive)<br/>
+    <br/>
+
+    <a href="#" id="2022DWTSMixer"     >2022 DWTS Celebrity Mixer.csv</a><br/>
+    <br/>
+    <a href="#" id="2022MerchMask"     >2022 Merch Mask.csv</a><br/>
+<!--
+    <a href="#" id="2022MerchTeeShirt" >2022 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2022MerchVeeNeck"  >2022 Merch Vee Neck Tee.csv</a><br/>
+    <a href="#" id="2022MerchHat"      >2022 Merch Hat.csv</a><br/>
+    <br/>
+-->
+    <hr/>
+    <button onclick="downloadYearData(2022, 'Square', 5000)">Download 2022 Square data</button>
+    <br/>
+    <br/>
+    <a href="#" id="2022Transactions"  >2022 Square Transactions</a> (Square)<br/>
+    <a href="#" id="2022Items"         >2022 Square Detailed Items</a> (Square)<br/>
+    <br/>
 
     <hr/>
     <button onclick="downloadYearData(2021, 'SquareSpace', 2000)">Download 2021 SquareSpace + Google Drive data</button>
