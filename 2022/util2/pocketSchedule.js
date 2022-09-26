@@ -16,7 +16,7 @@ const vm = require('vm');
 // }
 
 
-const code = fs.readFileSync('./data/program.js', 'utf8'); // DPM TODO
+const code = fs.readFileSync('../data/program.js', 'utf8');
 const data = vm.runInNewContext(code + '; program');
 const program = data.filter(it => it.id != null && it.loc[0] != null && !(it.status || '').match(/Cancelled/i))
 
@@ -48,7 +48,6 @@ const nestedDateLocTimeData = program.reduce((acc, it) => {
 // Arrange data into a 2d array per day, with each axis sorted
 // { date: Array.from(Array(#locations), () => new Array(#timeslots)) }
 const dayGrids = {};
-
 Object.entries(nestedDateLocTimeData).sort((a,b) => a[0] > b[0]).forEach(([date, times]) => {
   const numTimeSlots = Object.keys(times).length;
   dayGrids[date] = Array.from(Array(numTimeSlots), () => new Array(allLocations.length));
@@ -84,7 +83,7 @@ Object.entries(dayGrids).forEach(([_date, grid]) => {
 
           // Warn about overlaps
           if (nextEntry.title) {
-            console.warn(`OVERLAP DETECTED: ${item.date} ${item.location}: ${item.title} ${item.time} overlaps ${nextEntry.title} ${nextEntry.time}}`)
+            console.warn(`OVERLAP DETECTED: ${item.date} ${item.location}: ${item.title} ${item.time} overlaps ${nextEntry.title} ${nextEntry.time}`)
           }
         }
       }
@@ -116,12 +115,17 @@ Object.entries(dayGrids).forEach(([date, grid]) => {
   html[date] = getTable(rows.join('\n\t'));
 });
 
+const formatDate = (date) => {
+  const dateObj = new Date(...date.split('-').map((it, idx) => idx === 1 ? it-1 : it)); // construct in localtime, not UTC
+  const weekday = (dateObj.toLocaleString('en-us', {  weekday: 'long' })) // get the weekday name
+  return `${date} ${ weekday }`;
+}
+
 let output = '';
 Object.entries(html).forEach(([date, table]) => {
-  output += `<h2>${date}</h2>\n${table}`;
+  output += `<h2>${ formatDate(date) }</h2>\n${table}`;
 });
-// console.log(output);
 
 // Write to output file
-fs.writeFileSync('pocketSchedule.html', output);
+fs.writeFileSync('../pocketSchedule.html', output);
 
