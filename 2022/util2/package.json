@@ -2,6 +2,10 @@
   "name": "csv-parsing",
   "version": "0.1.0",
   "description": "CSV parsing POC",
+  "engines" : {
+    "npm" : ">=7.0.2",
+    "node" : ">=15.0.0"
+  },
   "scripts": {
     "start": "node index.js",
     "health-check": "npm outdated & nsp check"
