@@ -1,6 +1,5 @@
 # .gitignore
 
-package-lock.json
 **/node_modules
 *.bak
 2017/public/**
