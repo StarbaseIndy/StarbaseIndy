@@ -37,7 +37,6 @@ function getUri(key, gid) {
 function checkForValidPayload(payload) {
   const regex = new RegExp('<html.*<head.*</head>.*<body.*</body>.*</html>', 'si');
   if (regex.test(payload.toString('utf8'))) {
-    console.log("DPM:", payload.toString());checkForValidPayload
     throw('ERROR: CSV content appears to be an HTML page.\n' + 
           'Please set document permissions to be publicly accessible via link without any username or password.');
   }
@@ -78,7 +77,7 @@ function processCSV(data) {
             meta[column][index] = meta[column][index] || `${item.length}`; // Note: '0' is truthy
             init(item, +meta[column][index], {})[field] = value;
           } else {
-            isIndexed ? item.push(value) : item[index] = value;
+            isIndexed && column !== 'name' ? item.push(value) : item[index] = value;
           }
         }
         delete row[name];
