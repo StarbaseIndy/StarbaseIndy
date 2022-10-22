@@ -32,17 +32,18 @@
           2018: { start: '2018-11-23', end: '2018-11-26', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2019: { start: '2019-11-29', end: '2019-12-02', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2021: { start: '2021-11-26', end: '2021-11-29', location: 'WR6MC29WH0P5Z' }, // 'SBI'
-          2022: { start: '2021-11-25', end: '2022-11-28', location: 'WR6MC29WH0P5Z' }, // 'SBI'
+          2022: { start: '2022-11-25', end: '2022-11-28', location: 'WR6MC29WH0P5Z' }, // 'SBI'
         };
         
         return ranges[year];
       }
       
       // How to get this Square info?
-      // 1. Navigate to SquareUp => Sales => Transactions
+      // 1. Navigate to SquareUp => Sales => Transactions (https://squareup.com/dashboard/sales/transactions)
       // 2. Select date (e.g. 12/01/2017-12/01/2018)
       // 3. Select location "SBI" only
       // 4. In Chrome Developer Tools (F12), view the page Elements, search for "_blank", and replace with "_self"
+      //    This will cause the CSV to download in the current tab whee the network logs can be preserved, instead of a new window that will close immediately
       // 5. In Chrome Developer Tools (F12), select Network tab, and click the "Preserve Logs" checkbox
       // 6. Click the "Export" button, and select "Transactions CSV"
       // 7. In Chrome Developer Tools (F12), in the Network tab, look at the "transactions.csv" network call form data.
@@ -88,6 +89,7 @@
 
       function appendCopyLink(elementId) {
         // Add the " (copy)" text for the element.
+        // DPM TODO: insert element in DOM after this element, instead of overwriting the outerHTML
         const copyText =' <a style="cursor: copy;" onclick="copyToClipboard(\'' + elementId + '\')"><small> (copy)</small></a>';
         document.getElementById(elementId).outerHTML = document.getElementById(elementId).outerHTML + copyText;
       }
