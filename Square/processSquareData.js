@@ -118,8 +118,8 @@ function convertDollarAmounts(ary) {
     Object.entries(item).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         convertDollarAmounts(value);
-      } else if (key !== ITEM && value.match(/^\$/)) {
-        item[key] = +value.slice(1);
+      } else if (key !== ITEM && value.match(/^[-]?\$/)) {
+        item[key] = +value.replace('$', '');
       } else if ([QUANTITY, FEE_PERCENTAGE, FEE_FIXED].includes(key)) {
         item[key] = +value;
       }
@@ -277,9 +277,18 @@ function printSaleSummary() {
 
 function calculateTimestamps() {
   getTransactions().forEach(transaction => {
-    const [month, day, year] = transaction[DATE].split('/').map(v => parseInt(v, 10));
-    const dateArgs = [year + 2000, month - 1, day, ...transaction[TIME].split(':').map(v => parseInt(v, 10))];
-    transaction.timestamp = new Date(...dateArgs)
+    // DPM TODO: date format has changed in 2022
+    if (transaction[DATE].match(/\d{2}\/\d{2}\/\d{2}/)) {
+      // OLD DATE FORMAT    
+      const [month, day, year] = transaction[DATE].split('/').map(v => parseInt(v, 10));
+      const dateArgs = [year + 2000, month - 1, day, ...transaction[TIME].split(':').map(v => parseInt(v, 10))];
+      transaction.timestamp = new Date(...dateArgs);
+    } else if (transaction[DATE].match(/\d{4}-\d{2}-\d{2}/)) {
+      // NEW 2022 FORMAT
+      transaction.timestamp = new Date(transaction[DATE] + 'T' + transaction[TIME]);
+    } else {
+      throw new Error('Unknown date format:', transaction[DATE]);
+    }
   });
 }
 
