@@ -49,12 +49,21 @@ const timeDiff = (time1, time2 = time1) => {
   return (date2 - date1) / 60000; // milliseconds to minutes
 };
 
+const getItemHeight = (item1) => {
+  return item1.mins / 15 * 20; // 20 px high for each quarter hour
+};
+
 const getDisplayTime = (item) => {
   const [hour, minute] = item.time.split(':').map(it => +it);
   return (new Date( 0, 0, 1, hour, minute)).toLocaleTimeString().replace(':00 ', '').toLowerCase();
 };
 
 const getEndTime = (item) => {
+  if (isNaN(+item.mins)) {
+    console.warn(`WARNING: ${item.date} ${item.loc[0]}: ${item.originalTitle || item.title}: invalid/missing duration (mins)`);
+    return item.time;
+  }
+
   const [hour, minute] = item.time.split(':').map(it => +it);
   const timeOfDay = new Date(0, 0, 1, hour, minute + +item.mins);
   const midnightOffset = (timeOfDay.getDate() - 1) * 24;
@@ -69,6 +78,37 @@ const getWeekdayName = (date) => {
 
 const getHashFromArgs = (arg, val) => arg.filter(it => it).reduce((acc, it) => { acc[it] = val; return acc; }, {}); 
 
+const overlapItems = (existingItem, newItem) => {
+  // Sometimes overlap is okay.
+  // Represent this by "nesting" the later entry into the earlier entry.
+  console.warn(`
+OVERLAP DETECTED:
+  ${existingItem.date} ${existingItem.loc[0]}: ${existingItem.originalTitle || existingItem.title}  ${existingItem.time}-${getEndTime(existingItem)} ${existingItem.status || ''} 
+  overlaps
+  ${newItem.originalTitle || newItem.title} ${newItem.time}-${getEndTime(newItem)} ${newItem.status || ''}`)
+  
+  // Keep track of nested items, and bring sub-nested items up
+  existingItem.originalTitle ||= existingItem.title;
+  existingItem.container ||= [];
+  existingItem.container.push(newItem, ...(newItem.container || []));
+  newItem.container = [];
+  newItem.skip = true;
+
+  // Completely reconstruct the title for existingItem 
+  existingItem.title = existingItem.originalTitle;
+  existingItem.container.forEach(it => {
+    const minHeight = getItemHeight(it);
+    const divStyle = `width:80%; border:1px solid black; border-right: none; margin-left: auto; margin-right: 0; padding: 2px; min-height: ${minHeight}px`;
+    existingItem.title += `<br/><br/><div style="${divStyle}">${it.originalTitle || it.title} ${getDisplayTime(it)}</div>`;
+  })
+
+  const endTimeDiff = timeDiff(getEndTime(existingItem), getEndTime(newItem)); // DPM TODO: verify
+  if (endTimeDiff > 0) {
+    // Existing item ends BEFORE new item end time: extend existing end time
+    existingItem.mins = +existingItem.mins + endTimeDiff;
+    console.warn(`  WARNING: time extended by ${endTimeDiff} minutes; new end time: ${getEndTime(existingItem)}`);
+  }
+}
 
 const programFile = path.resolve(argv.program);
 const code = fs.readFileSync(programFile, 'utf8');
@@ -94,22 +134,17 @@ const nestedDateLocTimeData = program.reduce((acc, it) => {
   acc[date] ||= {};
   acc[date][time] ||= {};
 
-  // Also insert a placeholder event for the end date
+  // Also insert a placeholder event for the end date, which can be overwritten by actual events
   const endTime = getEndTime(it);
   acc[date][endTime] ||= {};
   acc[date][endTime][location] ||= {};
 
-  const item = acc[date][time][location];
+  let item = acc[date][time][location];
   if (item && item.title) {
-    console.warn(`OVERLAP DETECTED: ${item.date} ${item.time} ${location}: ${item.originalTitle || item.title} ${item.status || ''} overlaps ${it.originalTitle || it.title} ${it.status || ''}`)
-
-    // Sometimes overlap is okay.
-    // Represent this by "nesting" the later entry into the earlier entry.
-    const divStyle = 'width:80%; border:1px solid black; margin-left: auto; margin-right: 0; margin-bottom: 0';
-    it.mins = Math.max(+it.mins, +item.mins);
-    it.originalTitle ||= it.title;
-    it.title += `<br/><br/><div style="${divStyle}">${item.title} ${getDisplayTime(item)}</div>`;
+    if (it.mins > item.mins) [it, item] = [item, it]; // swap items
+    overlapItems(it, item);
   }
+
   acc[date][time][location] = it;
   return acc;
 }, {});
@@ -137,25 +172,18 @@ Object.entries(nestedDateLocTimeData).sort((a,b) => a[0].localeCompare(b[0])).fo
 Object.entries(dayGrids).forEach(([_date, {grid}]) => {
   grid.forEach((_row, timeIndex, rowAry) => {
     grid[timeIndex].forEach((item, locIndex) => {
-      if (!item.title) return;
-      const itemEndTime = getEndTime(item);
+      if (!item.title || item.skip) return;
       // See if this item spans any rows
       for (let idx = timeIndex + 1; idx < rowAry.length; idx++) {
+        const itemEndTime = getEndTime(item); // Note: end time can change if it's merged with another event
         const nextEntry = grid[idx][locIndex];
         if (1 === itemEndTime.localeCompare(nextEntry.time)) {
+          // end > start overlap detected
           nextEntry.skip = true;
           item.rowSpan++;
-          // Warn about overlaps
           if (nextEntry.title) {
-            console.warn(`OVERLAP DETECTED: ${item.date} ${item.location}: ${item.originalTitle || item.title} ${item.time} overlaps ${nextEntry.originalTitle || nextEntry.title} ${nextEntry.time}`)
-
-            if (-1 != itemEndTime.localeCompare(getEndTime(nextEntry))) {
-              // Sometimes overlap is okay.
-              // Represent this by "nesting" the later entry into the earlier entry.
-              const divStyle = 'width:80%; border:1px solid black; margin-left: auto; margin-right: 0;';
-              item.originalTitle ||= item.title;
-              item.title += `<br/><br/><div style="${divStyle}">${nextEntry.title} ${getDisplayTime(nextEntry)}</div>`;
-            }
+            // Manage overlapping events
+            overlapItems(item, nextEntry);
           }
         }
       }
@@ -164,7 +192,7 @@ Object.entries(dayGrids).forEach(([_date, {grid}]) => {
 });
 
 // Generate the HTML
-const tableStyle = `style="border: 1px solid black; border-collapse: collapse; vertical-align: top;"`;
+const tableStyle = `style="border: 1px solid black; border-collapse: collapse; vertical-align: top; padding: 2px; padding-right: 0px"`;
 const makeTableElement = (elementName, content, attrs=[]) => `<${elementName} ${attrs.join(' ')}>${content}</${elementName}>`;
 const getTR = (content) => makeTableElement('tr', content, [tableStyle]);
 const getTD = (content, attr=[]) => makeTableElement('td', content, [tableStyle, ...attr]);
@@ -183,8 +211,7 @@ Object.entries(dayGrids).forEach(([date, {grid, locCounters}]) => {
       if (item.skip || !locCounters[item.location]) return;
       const rowSpan = item.rowSpan ? `rowspan=${item.rowSpan + 1}` : '';
       const bgColor = item.title ? '' : 'bgcolor="LightGray"';
-      const minRowHeight = timeDiff(item.time, (grid[timeIndex+1] || [])[locIndex]?.time) / 15 * 20;
-      columns.push(getTD(getDiv(item.title || '', minRowHeight), [rowSpan, bgColor]));
+      columns.push(getTD(getDiv(item.title || '', getItemHeight(item)), [rowSpan, bgColor]));
     });
     rows.push(getTR(columns.join('\n\t\t')));
   });
@@ -199,4 +226,4 @@ Object.entries(html).forEach(([date, table]) => {
 // Write to output file
 fs.writeFileSync('../pocketSchedule.html', output);
 
-console.log('Done!');
+console.log('\nDone!');
