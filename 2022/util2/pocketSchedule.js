@@ -101,13 +101,14 @@ const nestedDateLocTimeData = program.reduce((acc, it) => {
 
   const item = acc[date][time][location];
   if (item && item.title) {
-    console.warn(`OVERLAP DETECTED: ${item.date} ${item.time} ${location}: ${item.title} ${item.status || ''} overlaps ${it.title} ${it.status || ''}`)
+    console.warn(`OVERLAP DETECTED: ${item.date} ${item.time} ${location}: ${item.originalTitle || item.title} ${item.status || ''} overlaps ${it.originalTitle || it.title} ${it.status || ''}`)
 
     // Sometimes overlap is okay.
     // Represent this by "nesting" the later entry into the earlier entry.
-    const divStyle = 'width:80%; border:1px solid black;; margin-left: auto; margin-right: 0;';
+    const divStyle = 'width:80%; border:1px solid black; margin-left: auto; margin-right: 0; margin-bottom: 0';
     it.mins = Math.max(+it.mins, +item.mins);
-    it.title += `<br/><br/><div style="${divStyle}">${item.title}</div>`;
+    it.originalTitle ||= it.title;
+    it.title += `<br/><br/><div style="${divStyle}">${item.title} ${getDisplayTime(item)}</div>`;
   }
   acc[date][time][location] = it;
   return acc;
@@ -146,7 +147,15 @@ Object.entries(dayGrids).forEach(([_date, {grid}]) => {
           item.rowSpan++;
           // Warn about overlaps
           if (nextEntry.title) {
-            console.warn(`OVERLAP DETECTED: ${item.date} ${item.location}: ${item.title} ${item.time} overlaps ${nextEntry.title} ${nextEntry.time}`)
+            console.warn(`OVERLAP DETECTED: ${item.date} ${item.location}: ${item.originalTitle || item.title} ${item.time} overlaps ${nextEntry.originalTitle || nextEntry.title} ${nextEntry.time}`)
+
+            if (-1 != itemEndTime.localeCompare(getEndTime(nextEntry))) {
+              // Sometimes overlap is okay.
+              // Represent this by "nesting" the later entry into the earlier entry.
+              const divStyle = 'width:80%; border:1px solid black; margin-left: auto; margin-right: 0;';
+              item.originalTitle ||= item.title;
+              item.title += `<br/><br/><div style="${divStyle}">${nextEntry.title} ${getDisplayTime(nextEntry)}</div>`;
+            }
           }
         }
       }
