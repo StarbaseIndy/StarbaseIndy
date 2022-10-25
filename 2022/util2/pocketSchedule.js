@@ -98,8 +98,8 @@ OVERLAP DETECTED:
   existingItem.title = existingItem.originalTitle;
   existingItem.container.forEach(it => {
     const minHeight = getItemHeight(it);
-    const divStyle = `width:80%; border:1px solid black; border-right: none; margin-left: auto; margin-right: 0; padding: 2px; min-height: ${minHeight}px`;
-    existingItem.title += `<br/><br/><div style="${divStyle}">${it.originalTitle || it.title} ${getDisplayTime(it)}</div>`;
+    const divStyle = `min-height: ${minHeight}px`;
+    existingItem.title += `<br/><br/><div class="nested" style="${divStyle}">${it.originalTitle || it.title} ${getDisplayTime(it)}</div>`;
   })
 
   const endTimeDiff = timeDiff(getEndTime(existingItem), getEndTime(newItem)); // DPM TODO: verify
@@ -192,36 +192,86 @@ Object.entries(dayGrids).forEach(([_date, {grid}]) => {
 });
 
 // Generate the HTML
-const tableStyle = `style="border: 1px solid black; border-collapse: collapse; vertical-align: top; padding: 2px; padding-right: 0px"`;
+
+// DPM TODO: See if we can tell table rows to page-break-before: avoid, but tell rows with a rowspan to page-break-before: auto
+
 const makeTableElement = (elementName, content, attrs=[]) => `<${elementName} ${attrs.join(' ')}>${content}</${elementName}>`;
-const getTR = (content) => makeTableElement('tr', content, [tableStyle]);
-const getTD = (content, attr=[]) => makeTableElement('td', content, [tableStyle, ...attr]);
-const getTH = (content) => makeTableElement('th', content, [tableStyle]);
-const getDiv = (content, minHeight = 20) => `<div style="min-height: ${minHeight}px">${content}</div>`;
-const getTable = (content) => makeTableElement('table', content, [tableStyle]);
+const getTR = (content) => makeTableElement('tr', content);
+const getTD = (content, attr=[]) => makeTableElement('td', content, attr);
+const getTH = (content, attr=[]) => makeTableElement('th', content, attr);
+const getTHead = (content) => makeTableElement('thead', content);
+const getTBody = (content) => makeTableElement('tbody', content);
+const getDiv = (content, minHeight = 20, elClass = 'div') => `<div class="${elClass}" style="min-height: ${minHeight}px;">${content}</div>`;
+const getTable = (content) => makeTableElement('table', content);
 const html = {};
 Object.entries(dayGrids).forEach(([date, {grid, locCounters}]) => {
   const filteredLocations = Object.keys(locCounters).filter((key) => locCounters[key]);
-  const headers = ['', ...filteredLocations].map(it => getTH(it)).join('\n\t\t');
-  const rows = ['', getTR(`\n\t\t${headers}\n\t`)];
+  const headers = ['', ...filteredLocations].map(it => getTH(it));
+  const headerRows = [
+    getTR(getTH(`<h2>${ getWeekdayName(date) }</h2>`, [`colspan=${headers.length}`, `style="border: 0px; text-align: left"`])),
+    getTR(`\n\t\t${headers.join('\n\t\t')}\n\t`)
+  ];
+  const rows = [];
   grid.forEach((_row, timeIndex) => {
     const columns = [''];
     grid[timeIndex].forEach((item, locIndex) => {
-      if (locIndex === 0) columns.push(getTH(getDisplayTime(item))); // push row headers
+      if (locIndex === 0) columns.push(getTH(getDisplayTime(item))); // event time
       if (item.skip || !locCounters[item.location]) return;
       const rowSpan = item.rowSpan ? `rowspan=${item.rowSpan + 1}` : '';
-      const bgColor = item.title ? '' : 'bgcolor="LightGray"';
-      columns.push(getTD(getDiv(item.title || '', getItemHeight(item)), [rowSpan, bgColor]));
+      const tdClass = item.title ? '' : 'class="empty"';
+      columns.push(
+        getTD(
+          item.title ? getDiv(item.title || '', getItemHeight(item)) : '', 
+          [rowSpan, tdClass],
+        )
+      );
     });
     rows.push(getTR(columns.join('\n\t\t')));
   });
-  html[date] = getTable(rows.join('\n\t'));
+  html[date] = getTable(
+    getTHead(headerRows.join('\n\t'))
+    + 
+    getTBody(rows.join('\n\t')));
 });
 
-let output = '';
+let output = `<html>
+<head>
+  <style>
+    .empty {
+      background-color: lightgray
+    }
+    .nested {
+      width:80%;
+      border:1px solid black; 
+      border-right: none; 
+      margin-left: auto; 
+      margin-right: 0; 
+      padding: 2px; 
+    } 
+    .tableContainer {
+      page-break-after: always;
+    }
+    table { 
+      border-collapse: collapse; 
+    }
+    tr {
+      page-break-inside: avoid;
+    }
+    td, th {
+      border: 1px solid black; 
+      vertical-align: top; 
+      padding: 2px; 
+      padding-right: 0px;
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+`;
 Object.entries(html).forEach(([date, table]) => {
-  output += `<h2>${ getWeekdayName(date) }</h2>\n${table}`;
+  output += getDiv(table, 0, 'tableContainer');
 });
+output += '</body></html>'
 
 // Write to output file
 fs.writeFileSync('../pocketSchedule.html', output);
