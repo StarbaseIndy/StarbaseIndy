@@ -1,0 +1,76 @@
+Reading CSV files from 'c:\temp\sbi2022'
+
+Total badges sold: 195
+
+Badges sold (by type):
+  2022 Children's Badge: 4
+  2022 Saturday+Sunday Badge: 6
+  2022 Star Badge: 13
+  2022 Student Badge: 5
+  2022 Sunday Only Badge: 16
+  2022 Weekend Badge: 151
+
+Other sales counts:
+Starbase Indy Cloth Mask 3
+
+Vendor count: 25
+
+Discount codes used:
+  2BQPSLR: 1
+  ADMIN_2022: 1
+  GENCON2022: 1
+  HIPHIP_SBI2022: 1
+  MATT_SBI2022: 3
+  MOG_SBI2022: 1
+  PRESENTER_SBI2022: 22
+  PRESS-5JSXEEA: 4
+  QATLHO22: 2
+  SCIFICOFFEE_SBI2022: 1
+  TEACHERS_SBI2022: 1
+  THANK-YOU-TRGVCXG: 1
+  TRIUMVIRATE: 1
+  WZQBGPA: 1
+
+Month-by-month Report:
+=====================================================================================
+=            Jan   Feb   Mar   Apr   May   Jun   Jul   Aug   Sep   Oct   Nov   Dec  =
+= badge#:      1     2    11    14     2     3    10    17    32    65    19     7  =
+= (avg):   35.00 35.00 35.00 36.43 45.00 45.00 44.50 54.41 37.97 44.62 35.00 35.00  =
+= badges:     35    70   385   510    90   135   445   925  1215  2900   665   245  =
+= star:        0     0     0     0     0     0     0   750   750   450     0     0  =
+= DWTS:        0     0     0     0     0     0     0     0   140   140     0     0  =
+= merch:       0     0     0   100     0     0     0    20   195    40     0     0  =
+= discnts:     0     0     0     0    90     0     0   165   180  1405     0     0  =
+= total:      35    70   385   610     0   135   445  1540  2120  2125   665   245  =
+=====================================================================================
+
+WARNING: Order 2089G#001 badge name exceeds maximum recommended length: 'Capt Christina "Koala T Control" Swanson'
+WARNING: Order 2203G#001 badge name exceeds maximum recommended length: 'Kit Lynette Malone, ACLU-IN (she/her)'
+WARNING: Order none badge name exceeds maximum recommended length: 'D"s Vintage Toys and Collectibles'
+WARNING: Order none badge name exceeds maximum recommended length: 'D"s Vintage Toys and Collectibles'
+WARNING: Order none badge name exceeds maximum recommended length: 'Michael L. Romansky & T.C. Pulley'
+WARNING: Order none badge name exceeds maximum recommended length: 'Michael L. Romansky & T.C. Pulley'
+WARNING: Order none badge name exceeds maximum recommended length: 'Michael L. Romansky & T.C. Pulley'
+
+Wrote mailmerge files to C:\temp\StarbaseIndy\SquareSpace.  You're welcome.
+
+WARNING: Non-printable name for badge #52 (order 2123G#002): Sub Commander T’pol
+         Unicode characters: [ 'U+2019' ]
+WARNING: Non-printable name for badge #110 (order 2160D#001): Shepherd Añejo
+         Unicode characters: [ 'U+F1' ]
+WARNING: Non-printable name for badge #116 (order 2167A#001):  
+         Unicode characters: [
+  'U+F8DA', 'U+F8D7',
+  'U+F8D9', 'U+F8E9',
+  'U+F8DD', 'U+F8D3',
+  'U+F8DC', 'U+F8D4',
+  'U+F8D1'
+]
+WARNING: Non-printable name for badge #117 (order 2167E#001): Brachiosaurus 🦕
+         Unicode characters: [ 'U+D83E', 'U+DD95' ]
+WARNING: Non-printable name for badge #118 (order 2167E#002): 
+         Unicode characters: [ 'U+F8D2', 'U+F8D4', 'U+F8E2' ]
+WARNING: Non-printable name for badge #148 (order 2199G#001): ✨Leda✨
+         Unicode characters: [ 'U+2728', 'U+2728' ]
+
+Done!

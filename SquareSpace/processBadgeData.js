@@ -133,7 +133,7 @@ function processCSV(filename, group = [{}]) {
 
   // Look for the 2019 vendor CSV file.  It's a different format.
   if ((group[0] || {})[VENDORNAME2_KEY]) {
-    vendors.push(...group.filter(item => !!(item[VENDORCONFIRMED_KEY] || item[VENDORCONFIRMED2_KEY]).match(/^[yY]/)));
+    vendors.push(...group.filter(item => !!(item[VENDORCONFIRMED_KEY] || item[VENDORCONFIRMED2_KEY] || '').match(/^[yY]/)));
     return;
   }
 
@@ -445,7 +445,7 @@ function generateEnvelopeMailMerge() {
   // PhotoOp
   //
   // Merchandise:
-  // Tee-shirts, V-Neck Tee-shirts, Hoodies
+  // Tee-shirts, V-Neck Tee-shirts, Hoodies, Hats
   //
   // Note: We're not putting ribbons in envelopes in 2018.
   //       Volunteer ribbons will be given to volunteer coordinators.
@@ -695,7 +695,7 @@ function summarizeMonthlySales() {
     const price = parseInt(item[LINEITEM_PRICE], 10); // NOTE: assuming 'Lineitem quantity' is always '1'
     const discount = parseInt(item[DISCOUNTAMOUNT_KEY] || '0', 10); // Only count this once per order    
     const typeKey = type.match(/Star.*Badge/) ? 'star'
-      : type.match(/Dinner/) ? 'DWTS'
+      : type.match(/Dinner|Celebrity Mixer/) ? 'DWTS'
       : type.match(badgeRegex) ? 'badge'
       : 'merch';
       
