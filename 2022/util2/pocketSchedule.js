@@ -113,7 +113,8 @@ OVERLAP DETECTED:
 const programFile = path.resolve(argv.program);
 const code = fs.readFileSync(programFile, 'utf8');
 const data = vm.runInNewContext(code + '; program');
-const program = data.filter(it => it.id != null && it.loc[0] != null && !(it.status || '').match(/Cancelled/i))
+data.forEach(it => it.loc || console.log(`WARNING: ${it.title} has no location!`))
+const program = data.filter(it => it.id && it.loc?.at(0) && !(it.status || '').match(/Cancelled/i))
 const locationsHash = { // provided headers will be defined first, thus establishing table column order
   ...getHashFromArgs(argv.locations, true),
   ...program.reduce((acc, it) => { it.loc.forEach(loc => acc[loc] = true); return acc; }, {}),
