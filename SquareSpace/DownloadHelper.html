@@ -267,14 +267,30 @@
         assignSquareSpaceHref(2022, 'DWTSMixer', '631e398bf2d5fb372ddcd0a0');
 
         // Merch
-        assignSquareSpaceHref(2022, 'MerchMask', '6124fb61a1cb315ed1c95875');
+        assignSquareSpaceHref(2022, 'MerchMask',           '6124fb61a1cb315ed1c95875');
+        assignSquareSpaceHref(2022, 'MerchHoodie',         '635d87050e079e070a5add20');
+        assignSquareSpaceHref(2022, 'MerchTeeShirt',       '635d8200cb17ea3a16d83353');
+        assignSquareSpaceHref(2022, 'MerchTeeShirtFitted', '635d84d8cb17ea3a16d834a3');
+        assignSquareSpaceHref(2022, 'MerchShotGlass',      '635d8ee00e079e070a5ae026');
+        assignSquareSpaceHref(2022, 'MerchTumbler',        '635d8d970e079e070a5adfad');
+        // Merch (Old Stock)
+        assignSquareSpaceHref(2022, 'MerchTeeShirt21',   '60ca97a2389caf28eb4d3fc2');
+        assignSquareSpaceHref(2022, 'MerchVeeNeck21',    '60ca9fdbfc131831a73e1daf');
+        assignSquareSpaceHref(2022, 'MerchTeeShirt19',   '5dae361ecf12162d5dc9aa34');
+        assignSquareSpaceHref(2022, 'MerchVeeNeck19',    '5dae386b34270331589b65ae');
+        assignSquareSpaceHref(2022, 'MerchTeeShirt18',   '5baabb389140b7701afad52d');
+        assignSquareSpaceHref(2022, 'MerchSweatshirt17', '5a2f2d378165f5f9bf617234');
+        assignSquareSpaceHref(2022, 'MerchTeeShirt17',   '5baa3b6953450af1f8e4a042');
+
+        
         // TBD: shirts, hats
 
         // Vendors come from google sheets, and not Square or SquareSpace.
         assignGoogleHref(2022, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1LSt6Npg867kdwgmeD_9aMoTe-BU8A1t__Bfe-XZBV7s/export?format=csv&gid=0');
 
-        assignSquareHref(2022, 'Transactions');
-        assignSquareHref(2022, 'Items');
+        // This no longer works
+        // assignSquareHref(2022, 'Transactions');
+        // assignSquareHref(2022, 'Items');
 
       }
     </script>
@@ -318,7 +334,22 @@
 
     <a href="#" id="2022DWTSMixer"     >2022 DWTS Celebrity Mixer.csv</a><br/>
     <br/>
-    <a href="#" id="2022MerchMask"     >2022 Merch Mask.csv</a><br/>
+
+    <a href="#" id="2022MerchHoodie"          >2022 Merch Hoodie.csv</a><br/>
+    <a href="#" id="2022MerchTeeShirt"        >2022 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2022MerchTeeShirtFitted"  >2022 Merch Fitted Tee Shirt.csv</a><br/>
+    <a href="#" id="2022MerchShotGlass"       >2022 Merch Shot Glass.csv</a><br/>
+    <a href="#" id="2022MerchTumbler"         >2022 Merch Tumbler.csv</a><br/>
+    <a href="#" id="2022MerchMask"            >2022 Merch Mask.csv</a><br/>
+    <br/>
+    <a href="#" id="2022MerchTeeShirt21"   >2021 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2022MerchVeeNeck21"    >2021 Merch Vee Neck Tee.csv</a><br/>
+    <a href="#" id="2022MerchTeeShirt19"   >2019 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2022MerchVeeNeck19"    >2019 Merch Vee Neck Tee.csv</a><br/>
+    <a href="#" id="2022MerchTeeShirt18"   >2018 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2022MerchSweatshirt17" >2017 Merch SweatShirt.csv</a><br/>
+    <a href="#" id="2022MerchTeeShirt17"   >2017 Merch Tee Shirt.csv</a><br/>
+    
 <!--
     <a href="#" id="2022MerchTeeShirt" >2022 Merch Tee Shirt.csv</a><br/>
     <a href="#" id="2022MerchVeeNeck"  >2022 Merch Vee Neck Tee.csv</a><br/>
@@ -326,11 +357,7 @@
     <br/>
 -->
     <hr/>
-    <button onclick="downloadYearData(2022, 'Square', 5000)">Download 2022 Square data</button>
-    <br/>
-    <br/>
-    <a href="#" id="2022Transactions"  >2022 Square Transactions</a> (Square)<br/>
-    <a href="#" id="2022Items"         >2022 Square Detailed Items</a> (Square)<br/>
+    <p>To download Square data, run the squareup_puppeteer.js script in the StarbaseIndy/Square folder</p>
     <br/>
 
     <hr/>

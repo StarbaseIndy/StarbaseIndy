@@ -1,3 +1,18 @@
+// ============================================================================
+// Magic data:
+// 
+// The email 'admin@starbaseindy.org', 
+// The following discount codes:
+//   - SBI_MEDIA_GUEST 
+//   - SBI_ENTERTAINER 
+//   - SBI_GURU 
+//   - SBI_CELEBRITY
+// The item type contains any of the words: 
+//   - Dinner, T-Shirt, V-Neck, Hoodie, Tank Top, Photo, Mask
+// The badge name contains any of the words plus 'Badge':
+//  - Child, Saturday, Shopping, Star, Student, Sunday, Weekend
+
+
 'use strict';
 
 const csv = require('csv');
@@ -11,6 +26,9 @@ const DepartmentColors = {
   'Presenter': { department: 'Presenter', departmentColor: 'Red' },
   'GeneralAdorned': { department: '', departmentColor: 'Blue' },
   'General': { department: '', departmentColor: 'Blue' },
+  // Staff: Orange
+  // Board: Green
+
 };
 
 const BADGENAME_MAX_LEN = 30;
@@ -54,7 +72,7 @@ const summary = [];
 const vendors = []; // sourced separately
 const metadata = [];
 
-const fanExperienceRegex = /(Dinner|T-Shirt|V-Neck|Hoodie|Tank Top|Photo|Mask)/;
+const fanExperienceRegex = /(Dinner|Celebrity||T-Shirt|V-Neck|Hoodie|Tank Top|Photo|Mask)/;
 const badgeRegex = /(Child|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
 const childBadgeRegex = /Child.*Badge/;
 
@@ -63,13 +81,14 @@ const uniqueIds = {};
 function getSortKey(orderId, itemType) {
   // Provide a lookup table of suffixes that will cause the items to sort the way we want for envelope printing.
   const fanXPLookup = {
-    'Dinner':   '#1D',
-    'Photo':    '#2P',
-    'Hoodie':   '#3H',
-    'T-Shirt':  '#4T',
-    'V-Neck':   '#5V',
-    'Tank Top': '#6TT',
-    'Mask':     '#7M',
+    'Dinner':    '#1D',
+    'Celebrity': '#1C',
+    'Photo':     '#2P',
+    'Hoodie':    '#3H',
+    'T-Shirt':   '#4T',
+    'V-Neck':    '#5V',
+    'Tank Top':  '#6TT',
+    'Mask':      '#7M',
   };
 
   // Make badge items sort deterministically so we can traverse all badge types in a given order deterministically while assigning badge numbers.
@@ -149,8 +168,8 @@ function processCSV(filename, group = [{}]) {
     group.map(item => {
       const orderId = parseInt(item[ORDERID_KEY], 10);
       item[ORDERID_KEY] = orderId; // make order ID numeric
+      
       // combine different form names for same information
-      item[UNIFYING_EMAIL] = (item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2] || '').toLowerCase();
       // If the form data doesn't have a unifying email (oops, that's a process failure), then fall back to the billing email
       item[UNIFYING_EMAIL] = (item[UNIFYING_EMAIL] || item[UNIFYING_EMAIL2] || item[BILLINGEMAIL_KEY] || '').toLowerCase();
 
@@ -219,6 +238,13 @@ function synthesizeMetadata() {
       if (discountCodes.match('SBI_GURU')) { // TODO: Move these codes into the DepartmentColors object
         Object.assign(item, DepartmentColors['Presenter']);
       }
+
+      if (discountCodes.match('SBI_CELEBRITY')) {
+        Object.assign(item, DepartmentColors['Presenter']);
+      }
+
+      // DPM TODO: Anyone with one of these four discount codes should get a complimentary Celebrity Mixer ticket
+
 
       // General admission badges with tagline but no department color get sent to the GeneralAdorned file.
       item.departmentColor = item.departmentColor || (item.tagline ? DepartmentColors['GeneralAdorned'].departmentColor : '');
@@ -333,7 +359,9 @@ function generateUnicodeKeyFile() {
         sortKey } = item;
 
       if (badgeName.match(/[^ -~]+/g)) {
-        // Read more e.g. at: https://www.compart.com/en/unicode/U+30C4
+        // Read more e.g. at: 
+        // https://www.compart.com/en/unicode/U+30C4
+        // https://www.fileformat.info/info/unicode/char/F8DC/fontsupport.htm
         const unicode = badgeName
           .split('')
           .map(x => x.codePointAt(0))
