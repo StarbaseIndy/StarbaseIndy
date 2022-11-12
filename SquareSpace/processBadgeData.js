@@ -72,7 +72,7 @@ const summary = [];
 const vendors = []; // sourced separately
 const metadata = [];
 
-const fanExperienceRegex = /(Dinner|Celebrity||T-Shirt|V-Neck|Hoodie|Tank Top|Photo|Mask)/;
+const fanExperienceRegex = /(Dinner|Celebrity|T-Shirt|V-Neck|Fitted|Hoodie|Tank Top|Photo|Mask|Shot|Tumbler)/;
 const badgeRegex = /(Child|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
 const childBadgeRegex = /Child.*Badge/;
 
@@ -87,8 +87,11 @@ function getSortKey(orderId, itemType) {
     'Hoodie':    '#3H',
     'T-Shirt':   '#4T',
     'V-Neck':    '#5V',
+    'Fitted':    '#5F',
     'Tank Top':  '#6TT',
     'Mask':      '#7M',
+    'Shot':      '#8SG',
+    'Tumbler':   '#9BT',
   };
 
   // Make badge items sort deterministically so we can traverse all badge types in a given order deterministically while assigning badge numbers.
