@@ -1,0 +1,301 @@
+[{
+  "Note": "This file should be used to adorn badges for the following Departments: Board, [Staff], VIP, Press, and Presenter",
+  "Note2": "Note that Vendor data is sourced separately, and metadata in this file is not (currently) applied to that data set."
+}, {
+  "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
+}, {
+  "Note": "==================== Board ==============================================================================",
+  "Note2": "President, Ambassador, Treasurer, Chief Operations Officer, Con Chair, Secretary, Webmaster, Chair-Apparent"
+}, {
+  "sortKey": "2092G#001",
+  "Name": "Mark Gaddo",
+  "Department": "Board",
+  "Tagline": "Board President / Silent Auction"
+}, {
+  "sortKey": "2286G#009",
+  "Name": "Thomas Rathjen",
+  "Department": "Board",
+  "Tagline": "Board Treasurer"
+}, {
+  "Note": "No badge purchased",
+  "sortKey": "",
+  "Name": "Charity Robertson",
+  "Department": "Board",
+  "Tagline": "Board Member"
+}, {
+  "sortKey": "2286G#026",
+  "Name": "Jen Powell",
+  "Department": "Board",
+  "Tagline": "Board Member"
+}, {
+  "sortKey": "2286G#024",
+  "Name": "Amanda Cash",
+  "Department": "Board",
+  "BadgeName": "BookSlut",
+  "Tagline": "Board Secretary / Head of Registration"
+}, {
+  "sortKey": "2084G#001", 
+  "Name": "Dave Mott",
+  "Department": "Board",
+  "Tagline": "Convention Chair"
+}, {
+  "Note": "==================== [Staff] Finance ====================================================================",
+  "Note2": "Process Enforcement, Registration, Vendor Coordinator, Silent Auction"
+}, {
+  "Note": "Ignore for 2022",
+  "sortKey": "",
+  "Name": "",
+  "Department": "Finance",
+  "Tagline": "Process Enforcement"
+}, {
+  "sortKey": "2286G#023",
+  "Name": "Amber Skaggs",
+  "Department": "Finance",
+  "Tagline": "Vendor Coordinator"
+}, {
+  "Note": "==================== [Staff] Marketing ==================================================================",
+  "Note2": "Attendee Recruitment, Graphic Design, Webmaster, Publications, Photographer"
+}, {
+  "sortKey": "2287G#004",
+  "Name": "Jade Young",
+  "Department": "Marketing",
+  "Tagline": "Graphic Design"
+}, {
+  "sortKey": "2287G#007",
+  "Name": "Scott Thien",
+  "Department": "Marketing",
+  "Tagline": "Social Media"
+}, {
+  "sortKey": "2241G#001",
+  "Name": "Ryan Howe",
+  "Department": "Marketing",
+  "Tagline": "Hotel Liaison"
+}, {
+  "Note": "==================== [Staff] Facilities =================================================================",
+  "Note2": "Audio Visual, Engineering"
+}, {
+  "sortKey": "2287G#001",
+  "Name": "Ricky Lile",
+  "Department": "Facilities",
+  "Tagline": "Audio Visual"
+}, {
+  "Note": "No badge purchased",
+  "sortKey": "",
+  "Name": "Chris Harden",
+  "Department": "Facilities",
+  "Tagline": "Engineering"
+}, {
+  "Note": "==================== [Staff] Programming ================================================================",
+  "Note2": "Media Guest Relations, Party Liaison, Panel Coordinator, Hall Tables, Uhura Training Academy, Masquerade, Stage Manager"
+}, {
+  "sortKey": "2084G#002",
+  "Name": "Lisa Meece",
+  "Department": "Programming",
+  "Tagline": "Head of Programming / Chair Emeritus"
+}, {
+  "sortKey": "2266G#001",
+  "Name": "Bryan Neely",
+  "Department": "Programming",
+  "Tagline": "Media Guest Relations"
+}, {
+  "sortKey": "2265G#001",
+  "Name": "Bruce Levy",
+  "Department": "Programming",
+  "Tagline": "Head of Guest Relations"
+}, {
+  "sortKey": "2095G#001",
+  "BadgeName": "Priya Strongleaf",
+  "Tagline": "Killer Strumpet / Guest Handler",
+  "Department": "Programming"
+}, {
+  "sortKey": "2095G#001",
+  "BadgeName": "John McCain",
+  "Department": "Programming",
+  "Tagline": "Squatch / Guest Handler"
+}, {
+  "Note": "Need more guest handlers",
+  "sortKey": "",
+  "BadgeName": "",
+  "Department": "Programming",
+  "Tagline": "Guest Handler"
+}, {
+  "sortKey": "2287G#003",
+  "Name": "Dr. Leah Leach",
+  "Department": "VIP",
+  "Tagline": "Graphics Designer"
+}, {
+  "Note": "TODO: Confirm additional guest handlers",
+  "sortKey": "",
+  "Name": "",
+  "Department": "Programming",
+  "Tagline": "Media Guest Relations"
+}, {
+  "Note": "==================== [Staff] Tactical ===================================================================",
+  "Note2": "Operations, Security, Volunteer Coordinator"
+}, {
+  "sortKey": "2287G#008",
+  "Name": "Alan Anderson",
+  "Department": "Tactical",
+  "Tagline": "Information Technology"
+}, {
+  "sortKey": "2287G#009",
+  "Name": "Robert Jackson",
+  "Department": "Tactical",
+  "Tagline": "Security"
+}, {
+  "Note": "==================== VIP (Media Guests, DWTS) =================================================================",
+  "Note2": "Geeky Astrophysicist, Klingon Linguist, Master of Ceremonies"
+}, {
+  "sortKey": "2286G#005",
+  "Name": "Klingon Pop Warrior",
+  "Department": "VIP",
+  "Tagline": "Klingon Pop Warrior"
+}, {
+  "sortKey": "2286G#010",
+  "Name": "Barrett Caldwell",
+  "Department": "VIP",
+  "Tagline": "Science Ambassador"
+}, {
+  "sortKey": "2286G#008",
+  "Name": "Paul Allor",
+  "Department": "VIP",
+  "Tagline": "Artisan Ambassador"
+}, {
+  "sortKey": "2286G#001",
+  "Name": "Bill Blair",
+  "Department": "VIP",
+  "Tagline": "Federation Ambassador"
+}, {
+  "sortKey": "2286G#013",
+  "Name": "Mary Chieffo",
+  "Department": "VIP",
+  "Tagline": "Federation Ambassador"
+}, {
+  "sortKey": "2286G#002",
+  "Name": "Sandy Gimpel",
+  "Department": "VIP",
+  "Tagline": "Federation Ambassador"
+}, {
+  "sortKey": "2286G#032",
+  "Name": "Bonnie Gordon",
+  "Department": "VIP",
+  "Tagline": "Federation Ambassador"
+}, {
+  "sortKey": "2286G#028",
+  "Name": "Moxie Anne Magnus",
+  "Department": "VIP",
+  "Tagline": "Intergalactic Xenocosmotologist"
+}, {
+  "sortKey": "2286G#003",
+  "Name": "Dr. Robert Pyatt",
+  "Department": "VIP",
+  "Tagline": "Science Ambassador"
+}, {
+  "sortKey": "2286G#007",
+  "Name": "Gavin Smith",
+  "Department": "VIP",
+  "Tagline": "Artisan Ambassador"
+}, {
+  "sortKey": "2286G#004",
+  "Name": "Dr. Bill Sullivan",
+  "Department": "VIP",
+  "Tagline": "Science Ambassador"
+}, {
+  "sortKey": "2286G#011",
+  "Name": "Aaron Waltke",
+  "Department": "VIP",
+  "Tagline": "Federation Ambassador"
+}, {
+  "sortKey": "2286G#006",
+  "Name": "Demetrius Witherspoon",
+  "Department": "VIP",
+  "Tagline": "Artisan Ambassador"
+}, {
+  "Note": "==================== Presenter ========================================================================"
+}, {
+  "sortKey": "2215G#001",
+  "Name": "Kayawna Carpenter",
+  "Department": "Presenter",
+  "Tagline": "Chair Apparent 2024"
+}, {
+  "sortKey": "2218G#001",
+  "Name": "Nayr",
+  "Department": "Presenter",
+  "Tagline": "StarPodLog"
+}, {
+  "sortKey": "2217G#001",
+  "Name": "Kavura",
+  "Department": "Presenter",
+  "Tagline": "StarPodLog"
+}, {
+  "sortKey": "2291G#001",
+  "Name": "Rachel Cochran",
+  "Department": "Presenter",
+  "Tagline": "Indiana Sciences"
+}, {
+  "sortKey": "2260G#001",
+  "Name": "Rufus Cochran",
+  "Department": "Presenter",
+  "Tagline": "Indiana Sciences"
+}, {
+  "Note": "==================== Entertainer ========================================================================",
+  "Note2": "The Shake Ups / 5YM, Intergalactic Cosmetologist, Klingon Pop Warrior, Myst Brigade"
+}, {
+  "sortKey": "2286G#012",
+  "Name": "Joe Greene",
+  "BadgeName": "Joe Greene",
+  "Department": "Entertainer",
+  "Tagline": "Myst Brigade"
+}, {
+  "Note": "==================== Triumvirate ========================================================================"
+}, {
+  "sortKey": "2290G#002",
+  "Name": "Kim Huff",
+  "Tagline": "Triumvirate / Shadowhunter"
+}, {
+  "sortKey": "2290G#003",
+  "Name": "Judy Eudaley",
+  "Tagline": "Triumvirate"
+}, {
+  "sortKey": "2290G#001",
+  "Name": "Lillian Sams",
+  "Tagline": "Triumvirate"
+}, {
+  "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
+}, {
+  "Note": "template",
+  "sortKey": "",
+  "BadgeName": ""
+}, {
+  "Note": "template",
+  "sortKey": "",
+  "BadgeName": "",
+  "Tagline": ""
+}, {
+  "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
+}, {
+  "Note": "template",
+  "sortKey": "",
+  "BadgeName": "",
+  "Product Form: Real Name": "",
+  "Product Form: Email": "",
+  "Product Form: Badge Name": "",
+  "DepartmentColor": "",
+  "Tagline": ""
+}, {
+  "sortKey": "2280B#002",
+  "BadgeName": "Cheryl",
+  "Tagline": "Purveyor of Information"
+}, {
+  "sortKey": "2203G#001",
+  "BadgeName": "Kit Lynette Malone",
+  "Tagline": "ACLU-IN (she/her)"
+}, {
+  "sortKey": "2287G#002",
+  "BadgeName": "Lilly the Great",
+  "Tagline": "Mistress of Dragons"
+}, {
+  "sortKey": "2089G#001",
+  "BadgeName": "Capt Christina Swanson",
+  "Tagline": "Koala T Control"
+}]
