@@ -73,7 +73,7 @@ const vendors = []; // sourced separately
 const metadata = [];
 
 const fanExperienceRegex = /(Dinner|Celebrity|T-Shirt|V-Neck|Fitted|Hoodie|Tank Top|Photo|Mask|Shot|Tumbler)/;
-const badgeRegex = /(Child|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
+const badgeRegex = /(Child|Friday|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
 const childBadgeRegex = /Child.*Badge/;
 
 // The unique ID generator needs to give us a unique sequence number for every order number
@@ -90,8 +90,8 @@ function getSortKey(orderId, itemType) {
     'Fitted':    '#5F',
     'Tank Top':  '#6TT',
     'Mask':      '#7M',
-    'Shot':      '#8SG',
-    'Tumbler':   '#9BT',
+    'Shot':      '#8S',
+    'Tumbler':   '#9B',
   };
 
   // Make badge items sort deterministically so we can traverse all badge types in a given order deterministically while assigning badge numbers.
@@ -104,6 +104,7 @@ function getSortKey(orderId, itemType) {
     'Student':  'E',
     'Sunday':   'F',
     'Weekend':  'G', // no suffix for weekend badges
+    'Friday':   'H',
   };
 
   const fanXPMatch = (itemType.match(fanExperienceRegex) || [])[1];
