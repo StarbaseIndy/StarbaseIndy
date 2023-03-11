@@ -55,7 +55,7 @@ const getItemHeight = (item1) => {
 
 const getDisplayTime = (item) => {
   const [hour, minute] = item.time.split(':').map(it => +it);
-  return (new Date( 0, 0, 1, hour, minute)).toLocaleTimeString().replace(':00 ', '').toLowerCase();
+  return (new Date( 0, 0, 1, hour, minute)).toLocaleTimeString().replace(/:00\s/, '').toLowerCase();
 };
 
 const getEndTime = (item) => {
