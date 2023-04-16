@@ -1,0 +1,19 @@
+{
+  "name": "csv-parsing",
+  "version": "0.1.0",
+  "description": "CSV parsing POC",
+  "engines": {
+    "npm": ">=7.0.2",
+    "node": ">=15.0.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "health-check": "npm outdated & nsp check"
+  },
+  "dependencies": {
+    "@hapi/wreck": "^17.1.0",
+    "bluebird": "^3.7.2",
+    "csv": "^5.5.0",
+    "yargs": "^17.6.0"
+  }
+}
