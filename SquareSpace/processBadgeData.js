@@ -256,24 +256,24 @@ function synthesizeMetadata() {
   });
 }
 
-function mixinMetadata() {
+function mixinMetadata(badgeItems) {
   // Split badge name on unicode character '»' to facilitate entering taglines via the store.
   // Mixin the metadata to get new badgeName, tagline, and department, and departmentColor.
-  getAllBadgeItems().forEach(item => {
+  badgeItems.forEach(item => {
     const metaItem = metadata.find(entry => entry.sortKey === item.sortKey) || {};
     const [ badgeName, tagline = '' ] = (metaItem.BadgeName || item[BADGENAME_KEY] || '').split('»');
 
     // Object.assign(item, metaItem); // allow any spreadsheet value to be overridden by the metadata
     item[BADGENAME_KEY] = badgeName;
     item.tagline = metaItem.Tagline || tagline;
-    item.department = metaItem.Department;
-    item.departmentColor = metaItem.DepartmentColor;
+    item.department = metaItem.Department || item.department;
+    item.departmentColor = metaItem.DepartmentColor || item.departmentColor;
   });
 }
 
 function verifyMetadata() {
   // Do validation on the metadata
-  const allKeys = getAllBadgeItems().map(item => item.sortKey);
+  const allKeys = getAllBadgeItems().concat(getVendorGroup()).map(item => item.sortKey);
   metadata
     .filter(entry => !entry.Note) // skip validation for entries with notes
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
@@ -311,7 +311,7 @@ function processInputData(folder, metadataFile) {
   return readSpreadsheets(folder)
     .then(generateBadgeNumbers) // preserve badge count by using tap() below.
     .tap(() => readMetadata(metadataFile))
-    .tap(mixinMetadata)
+    .tap(() => mixinMetadata(getAllBadgeItems()))
     .tap(synthesizeMetadata);
 }
 
@@ -573,15 +573,15 @@ function getVendorStartingBadgeNumber() {
 // DPM TODO: source from presenter spreadsheet to generate presenter badges
 
 function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
-  return vendors
+  const vendorGroup = vendors
     .concat({ [VENDORNUMBADGES_KEY]: 42, [VENDORNAME_KEY]: '\t' }) // Note: This reserves some blank badges
-    .map(item => {
+    .map((item, index) => {
       const numBadges = parseInt(item[VENDORNUMBADGES_KEY], 10)
         || parseInt(item[VENDORBADGECOUNT_KEY], 10)
         || parseInt((item[VENDORCONFIRMED_KEY] || '').split(/\s+-\s+/, 2)[1] || '0', 10)
         || 0;
-      return [...Array(numBadges)].map(() => ({
-        sortKey: 'none',
+      return [...Array(numBadges)].map((_, subIndex) => ({
+        sortKey: `vend.${index}.${subIndex}`,
         badgeNum: startingBadgeNum++,
         [BADGENAME_KEY]: item[VENDORNAME_KEY] || item[VENDORNAME2_KEY],
         tagline: '',
@@ -589,6 +589,8 @@ function getVendorGroup(startingBadgeNum = getVendorStartingBadgeNumber()) {
       }));
     })
     .reduce((acc, badges) => acc.concat(badges), []);
+    mixinMetadata(vendorGroup);
+    return vendorGroup;
 }
 
 function generatePurchaserEmailList() {
