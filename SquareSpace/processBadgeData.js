@@ -268,6 +268,7 @@ function mixinMetadata(badgeItems) {
     item.tagline = metaItem.Tagline || tagline;
     item.department = metaItem.Department || item.department;
     item.departmentColor = metaItem.DepartmentColor || item.departmentColor;
+    item[REALNAME_KEY] = metaItem[REALNAME_KEY] || item[REALNAME_KEY];
   });
 }
 
