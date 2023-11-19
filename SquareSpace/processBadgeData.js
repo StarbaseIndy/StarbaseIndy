@@ -182,10 +182,16 @@ function processCSV(filename, group = [{}]) {
       transactionData[orderId] = transactionData[orderId] || {};
 
       // Calculate a responsibleParty name (last name first)
-      item.responsibleParty = transactionData[orderId].name =
-        reverseName(item[BILLINGNAME_KEY]) ||
-        transactionData[orderId].name ||
-        reverseName(item[REALNAME_KEY]); // Used when no billing name is associated with a free order.
+      // DPM TODO: orders under admin@starbaseindy.org should IGNORE the BILLINGNAME_KEY
+      transactionData.email = item[BILLINGEMAIL_KEY] || transactionData.email; 
+      if (transactionData.email === 'admin@starbaseindy.org') {
+        item.responsibleParty = reverseName(item[REALNAME_KEY]); // Used when no billing name is associated with a free order.
+      } else {
+        item.responsibleParty = transactionData[orderId].name =
+          reverseName(item[BILLINGNAME_KEY]) ||
+          transactionData[orderId].name ||
+          reverseName(item[REALNAME_KEY]);
+      }
 
       // Also replicate the billing email
       item[BILLINGEMAIL_KEY] = transactionData[orderId].email =
@@ -268,7 +274,9 @@ function mixinMetadata(badgeItems) {
     item.tagline = metaItem.Tagline || tagline;
     item.department = metaItem.Department || item.department;
     item.departmentColor = metaItem.DepartmentColor || item.departmentColor;
+    item.responsibleParty = metaItem.responsibleParty || item.responsibleParty;
     item[REALNAME_KEY] = metaItem[REALNAME_KEY] || item[REALNAME_KEY];
+    item[UNIFYING_EMAIL] = metaItem[UNIFYING_EMAIL] || item[UNIFYING_EMAIL];
   });
 }
 
