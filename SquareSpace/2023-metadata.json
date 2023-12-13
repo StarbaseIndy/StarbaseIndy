@@ -1,0 +1,426 @@
+[{
+    "Note": "This file should be used to adorn badges for the following Departments: Board, [Staff], VIP, Press, and Presenter",
+    "Note2": "Note that Vendor data is sourced separately, and metadata in this file is not (currently) applied to that data set."
+  }, {
+    "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
+  }, {
+    "Note": "==================== Board ==============================================================================",
+    "Note2": "President, Ambassador, Treasurer, Chief Operations Officer, Con Chair, Secretary, Webmaster, Chair-Apparent"
+  }, {
+    "sortKey": "2295G#001",
+    "Name": "Mark Gaddo",
+    "Department": "Board",
+    "Tagline": "Convention Chair"
+  }, {
+    "sortKey": "2296G#001",
+    "Name": "Amanda Elsner",
+    "Department": "Board",
+    "Tagline": "Board Secretary / Vendor Coordinator"
+  }, {
+    "sortKey": "2404G#002",
+    "Name": "Tom Rathjen",
+    "Department": "Board",
+    "Tagline": "Board Treasurer"
+  }, {
+    "sortKey": "2405G#001",
+    "Name": "Amber Skaggs",
+    "Department": "Board",
+    "Tagline": "Board President / Vendor Coordinator"
+  }, {
+    "sortKey": "2385G#001",
+    "Name": "Beth Ann Broadhurst",
+    "Department": "Board",
+    "Tagline": "Board Member / Programming"
+  }, {
+    "sortKey": "2330G#001",
+    "Name": "Scott Johnson",
+    "Department": "Board",
+    "Tagline": "Board Member / Engineering"
+  }, {
+    "sortKey": "2429G#002",
+    "Name": "Timo Johnson",
+    "Product Form: Real Name": "Timo Johnson",
+    "Department": "Board",
+    "Tagline": "Board Member / Security"
+  }, {
+    "sortKey": "2410G#001",
+    "Name": "Michelle Mussoni",
+    "Department": "Board",
+    "Tagline": "Board Member"
+  }, {
+    "sortKey": "2409G#001",
+    "Name": "Scott Thien",
+    "Department": "Board",
+    "Tagline": "Board Member"
+  }, {
+    "Note": "==================== [Staff] Finance ====================================================================",
+    "Note2": "Process Enforcement, Registration, Vendor Coordinator, Silent Auction"
+  }, {
+    "sortKey": "2339D#001",
+    "Name": "David Mott",
+    "Department": "Finance",
+    "Tagline": "IT/Data Management/Registration"
+  }, {
+    "Note": "==================== [Staff] Marketing ==================================================================",
+    "Note2": "Attendee Recruitment, Graphic Design, Webmaster, Publications, Photographer"
+  }, {
+    "sortKey": "2436G#001",
+    "Name": "Nick Ramey",
+    "Product Form: Real Name": "Nick Ramey",
+    "Department": "Finance",
+    "Tagline": "Social Media"
+  }, {
+    "Note": "==================== [Staff] Facilities =================================================================",
+    "Note2": "Audio Visual, Engineering"
+  }, {
+    "sortKey": "2429G#003",
+    "Name": "Ricky Lile",
+    "Product Form: Real Name": "Ricky Lile",
+    "Department": "Facilities",
+    "Tagline": "Audio/Visual"
+  }, {
+    "sortKey": "2399G#001",
+    "Name": "Ryan Howe",
+    "Department": "Facilities",
+    "Tagline": "Hotel Liaison"
+  }, {
+    "Note": "==================== [Staff] Programming ================================================================",
+    "Note2": "Media Guest Relations, Party Liaison, Panel Coordinator, Hall Tables, Uhura Training Academy, Masquerade, Stage Manager"
+  }, {
+    "sortKey": "2339D#002",
+    "Name": "Lisa Meece",
+    "Department": "Programming",
+    "Tagline": "Programming/Podcast"
+  }, {
+    "Note": "==================== [Staff] Tactical ===================================================================",
+    "Note2": "Operations, Security, Volunteer Coordinator"
+  }, {
+    "sortKey": "2363G#001",
+    "Name": "Carol Anderson",
+    "Department": "Tactical",
+    "Tagline": "Volunteer Coordinator"
+  }, {
+    "Note": "need husband's name",
+    "sortKey": "2425G#001",
+    "Name": "Jade Young",
+    "Department": "Tactical",
+    "Tagline": "Operations"
+  }, {
+    "sortKey": "2363G#002",
+    "Name": "Alan Anderson",
+    "Department": "Tactical",
+    "Tagline": "IT/Webmaster"
+  }, {
+    "sortKey": "2426G#001",
+    "Name": "Chris Ludden",
+    "Department": "Graphics",
+    "Tagline": "Graphic Design"
+  }, {
+    "Note": "==================== VIP (Media Guests, DWTS) =================================================================",
+    "Note2": "Geeky Astrophysicist, Klingon Linguist, Master of Ceremonies"
+  }, {
+    "sortKey": "2404G#004",
+    "Name": "Nayr",
+    "Department": "VIP",
+    "Tagline": "StarPodLog"
+  }, {
+    "sortKey": "2404G#019",
+    "Name": "Kavura",
+    "Department": "VIP",
+    "Tagline": "StarPodLog"
+  }, {
+    "sortKey": "2404G#012",
+    "Name": "Larry Nemecek",
+    "Department": "VIP",
+    "Tagline": "Dr. Trek"
+  }, {
+    "sortKey": "2404G#025",
+    "Name": "Mohamed Noor",
+    "Department": "VIP",
+    "Tagline": "The Bio Trekkie"
+  }, {
+    "sortKey": "2404G#021",
+    "Name": "John Scalzi",
+    "Department": "VIP",
+    "Tagline": "Author/DJ"
+  }, {
+    "sortKey": "2429G#006",
+    "Name": "Shannon Eichorn",
+    "Product Form: Real Name": "Shannon Eichorn",
+    "Department": "VIP",
+    "Tagline": "Author"
+  }, {
+    "sortKey": "2404G#006",
+    "Name": "John Schuck",
+    "Department": "VIP",
+    "Tagline": "Ambassador Kamarag"
+  }, {
+    "sortKey": "2404G#003",
+    "Name": "Demetrius Witherspoon",
+    "Department": "VIP",
+    "Tagline": "Submerge Universe"
+  }, {
+    "sortKey": "2404G#026",
+    "Name": "Moxie Anne Magnus",
+    "Department": "VIP",
+    "Tagline": "Chief Xenocosmetology Officer"
+  }, {
+    "sortKey": "2404G#028",
+    "Name": "Bonnie Gordon",
+    "Department": "VIP",
+    "Tagline": "NX-76884 USS Protostar"
+  }, {
+    "sortKey": "2404G#010",
+    "Name": "Travis",
+    "Department": "VIP",
+    "Tagline": "Starship Tempest"
+  }, {
+    "Note": "==================== Presenter ========================================================================"
+  }, {
+    "sortKey": "2404G#011",
+    "Name": "Nykki Boersma",
+    "Department": "Programming",
+    "Tagline": "Motley Kids"
+  }, {
+    "sortKey": "2404G#014",
+    "Name": "Matt Boersma",
+    "Department": "Programming",
+    "Tagline": "Motley Kids"
+  }, {
+    "sortKey": "2429G#007",
+    "Name": "Paul Kwiat",
+    "Product Form: Real Name": "Paul Kwiat",
+    "Department": "Programming",
+    "Tagline": "LabEscape"
+  }, {
+    "sortKey": "2430G#001",
+    "BadgeName": "Tara",
+    "Department": "Programming",
+    "Tagline": "Starship Tempest"
+  }, {
+    "sortKey": "2431G#001",
+    "BadgeName": "Ryan",
+    "Department": "Programming",
+    "Tagline": "Starship Tempest"
+  }, {
+    "Note": "==================== Entertainer ========================================================================",
+    "Note2": "The Shake Ups / 5YM, Intergalactic Cosmetologist, Klingon Pop Warrior, Myst Brigade"
+  }, {
+    "sortKey": "2404G#009",
+    "Name": "Rebekah Lawson",
+    "Department": "Entertainer",
+    "Tagline": "Celtic Rain"
+  }, {
+    "sortKey": "2404G#029",
+    "Name": "Samuel Lawson",
+    "Department": "Entertainer",
+    "Tagline": "Celtic Rain"
+  }, {
+    "Note": "==================== Triumvirate ========================================================================"
+  }, {
+    "sortKey": "2360D#001",
+    "Name": "Lillian Sams",
+    "Tagline": "Triumvirate"
+  }, {
+    "sortKey": "2429G#001",
+    "Name": "Kim Huff",
+    "Product Form: Real Name": "Kim Huff",
+    "Tagline": "Triumvirate"
+  }, {
+    "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
+  }, {
+    "Note": "template",
+    "sortKey": "",
+    "BadgeName": ""
+  }, {
+    "Note": "template",
+    "sortKey": "",
+    "BadgeName": "",
+    "Tagline": ""
+  }, {
+    "sortKey": "2338G#001",
+    "BadgeName": "Peter Roberson",
+    "responsibleParty": "Peter Roberson"
+  }, {
+    "sortKey": "2338G#002",
+    "BadgeName": "Madlyn Taylor",
+    "Tagline": "Party Host"
+  }, {
+    "sortKey": "2331G#002",
+    "BadgeName": "Chris Lipscombe",
+    "Tagline": "Party Host"
+  }, {
+    "sortKey": "2398G#001",
+    "BadgeName": "Kevin Stickford"
+  }, {
+    "sortKey": "2311G#001",
+    "BadgeName": "Spock Bear & Mary Beth",
+    "Tagline": "Co-founder, The Janeway Collective",
+    "responsibleParty": "Aich Beth Mary",
+    "Product Form: Real Name": "Mary Beth Aich"
+  }, {
+    "sortKey": "2372G#001",
+    "BadgeName": "USS Terminus",
+    "Tagline": "Commanding Officer"
+  }, {
+    "sortKey": "vend.1.0",
+    "BadgeName": "Pookers Fairy Baubles",
+    "Tagline": "CreationsbyPFB"
+  }, {
+    "sortKey": "vend.1.1",
+    "BadgeName": "Pookers Fairy Baubles",
+    "Tagline": "CreationsbyPFB"
+  }, {
+    "sortKey": "vend.8.0",
+    "BadgeName": "The Enterprise Project",
+    "Tagline": "(pending) Indiana Chapter"
+  }, {
+    "sortKey": "vend.8.1",
+    "BadgeName": "The Enterprise Project",
+    "Tagline": "(pending) Indiana Chapter"
+  }, {
+    "sortKey": "vend.16.0",
+    "BadgeName": "The Great Yarn Dragon",
+    "Tagline": "with J.R. Froemling"
+  }, {
+    "sortKey": "vend.16.1",
+    "BadgeName": "The Great Yarn Dragon",
+    "Tagline": "with J.R. Froemling"
+  }, {
+    "sortKey": "2429G#004",
+    "Product Form: Real Name": "James McGrath"
+  }, {
+    "sortKey": "2429G#005",
+    "Product Form: Real Name": "James McCoy"
+  }, {
+    "sortKey": "2429G#008",
+    "Product Form: Real Name": "Jordan Thayer"
+  }, {
+    "sortKey": "2441G#001",
+    "Product Form: Real Name": "Shawn Green"
+  }, {
+    "sortKey": "2441G#002",
+    "Product Form: Real Name": "Diamond Ramey"
+  }, {
+    "sortKey": "2441G#003",
+    "Product Form: Real Name": "Jennie Clements"
+  }, {
+    "sortKey": "2441G#004",
+    "Product Form: Real Name": "Kathy Ramey"
+  }, {
+    "sortKey": "2441G#005",
+    "Product Form: Real Name": "Jay Deaver"
+  }, {
+    "sortKey": "2441G#006",
+    "Product Form: Real Name": "Holly Davis"
+  }, {
+    "sortKey": "2441G#007",
+    "Product Form: Real Name": "Vicki Deaver"
+  }, {
+    "sortKey": "2441G#008",
+    "Product Form: Real Name": "Logan Rollin"
+  }, {
+    "sortKey": "2441G#009",
+    "Product Form: Real Name": "Selah Clements"
+  }, {
+    "sortKey": "2441G#010",
+    "Product Form: Real Name": "David Melton"
+  }, {
+    "sortKey": "2441G#011",
+    "Product Form: Real Name": "Melissa Boyer"
+  }, {
+    "sortKey": "2441G#012",
+    "Product Form: Real Name": "Aaron Clements"
+  }, {
+    "sortKey": "2441G#013",
+    "Product Form: Real Name": "Anne Lute"
+  }, {
+    "sortKey": "2441G#014",
+    "Product Form: Real Name": "Judah Clements"
+  }, {
+    "sortKey": "2441G#015",
+    "Product Form: Real Name": "Rosiland Wells"
+  }, {
+    "sortKey": "2441G#016",
+    "Product Form: Real Name": "Landon Ramey"
+  }, {
+    "sortKey": "2441G#017",
+    "Product Form: Real Name": "Linda Voronetsky"
+  }, {
+    "sortKey": "2441G#018",
+    "Product Form: Real Name": "Natasha Trexler"
+  }, {
+    "sortKey": "2441G#019",
+    "Product Form: Real Name": "Courtney Pierce"
+  }, {
+    "sortKey": "2441G#020",
+    "Product Form: Real Name": "Derick Clements"
+  }, {
+    "sortKey": "2441G#021",
+    "Product Form: Real Name": "Timothy Taylor"
+  }, {
+    "sortKey": "2441G#022",
+    "Product Form: Real Name": "Natalie Long"
+  }, {
+    "sortKey": "2441G#023",
+    "Product Form: Real Name": "Cadence Ramey"
+  }, {
+    "sortKey": "2429G#009",
+    "Product Form: Real Name": "Nick Ramey"
+  }, {
+    "sortKey": "2441G#024",
+    "Product Form: Real Name": "Norah Ramey"
+  }, {
+    "sortKey": "2446G#001",
+    "Product Form: Real Name": "Terry Cunningham"
+  }, {
+    "sortKey": "2440A#001",
+    "responsibleParty": "Aich Beth Mary"
+  }, {
+    "sortKey": "2444G#001",
+    "responsibleParty": "John Stephens",
+    "Product Form: Real Name": "Mrs. Stephens",
+    "BadgeName": "Mrs. Stephens"
+  }, {
+    "sortKey": "2444G#002",
+    "responsibleParty": "John Stephens"
+  }, {
+    "sortKey": "2450G#001",
+    "responsibleParty": "Dylan Schaefer"
+  }, {
+    "sortKey": "2450G#002",
+    "responsibleParty": "Dylan Schaefer"
+  }, {
+    "sortKey": "2450G#003",
+    "responsibleParty": "Dylan Schaefer"
+  }, {
+    "sortKey": "2450G#004",
+    "responsibleParty": "Dylan Schaefer"
+  }, {
+    "sortKey": "2450G#005",
+    "responsibleParty": "Dylan Schaefer"
+  }, {
+    "sortKey": "2450G#006",
+    "responsibleParty": "Dylan Schaefer"
+  }, {
+    "sortKey": "2450G#007",
+    "responsibleParty": "Dylan Schaefer"
+  }, {
+    "sortKey": "2450G#008",
+    "responsibleParty": "Dylan Schaefer"
+  }, {
+    "sortKey": "2451G#001",
+    "responsibleParty": "Rodney Carlstrom"
+  }, {
+    "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
+  }, {
+    "Note": "template",
+    "sortKey": "",
+    "BadgeName": "",
+    "Product Form: Real Name": "",
+    "Product Form: Email": "",
+    "Product Form: Badge Name": "",
+    "DepartmentColor": "",
+    "Tagline": ""
+  }]
+  
