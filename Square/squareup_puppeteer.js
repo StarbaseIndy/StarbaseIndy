@@ -40,7 +40,7 @@ async function pause(timeout = 1000) {
 // ==========================================================================
 // Login
 async function login(page) {
-  await page.waitForSelector('input[id="email"]', { timeout: 5000 })
+  await page.waitForSelector('input[id="email"]', { timeout: 30000 })
   .then(() => page.type('input[id="email"]', 'vendors@starbaseindy.org'))
   .then(() => page.type('input[id="password"]', process.env.SQUAREPWD))
   .then(() => page.click('#login-standard-submit'))
@@ -114,31 +114,45 @@ async function selectLocation(page) {
 }
 
 // ==========================================================================
+async function clickDetailCSVButton(page) {
+  const [exportDetailButton] = await page.$x('//div[@value="Items Detail CSV"]//market-button');
+  exportDetailButton.click(); 
+}
+
+// ==========================================================================
+async function clickTransactionsCSVButton(page) {
+  const [exportTransactionsButton] = await page.$x('//div[@value="Transactions CSV"]//market-button');
+  exportTransactionsButton.click();
+}
+
+// ==========================================================================
 // Export Reports
 async function exportReports(page) {
-  const [exportButton] = await page.$x('//div[contains(@class, "filter-bar__actions")]//button[contains(., "Export")]');
-  
+  // Export button is now in a shadow DOM, but we can still click the containing DOM elements to get what we need
+
+  const [exportButton] = await page.$x('//market-button[@aria-label="Export"]');
   exportButton.click(); // expand export options
   console.log('Export options should be expanded');
+
   await pause();
 
-  const [exportDetailButton] = await page.$x('//div[contains(@class, "filter-bar__actions")]//button[contains(., "Items Detail CSV")]');
-  const [exportTransactionsButton] = await page.$x('//div[contains(@class, "filter-bar__actions")]//button[contains(., "Transactions CSV")]');
-
-  console.log('FIRST CLICK');
-  exportDetailButton.click(); 
-  await page.waitForNetworkIdle();
-
-  exportButton.click(); // expand export options again 
+  console.log('Clicking the generate buttons');
+  await clickDetailCSVButton(page);
   await pause();
-  console.log('Export options should be expanded');
+  await clickTransactionsCSVButton(page);
 
-  console.log('SECOND CLICK');
-  exportTransactionsButton.click();
-  await page.waitForNetworkIdle();
+  console.log('Waiting for reports to be generated');
+  await pause(30000);
+
+  console.log('Clicking the download buttons');
+  await clickDetailCSVButton(page);
+  await pause();
+  await clickTransactionsCSVButton(page);
+
   console.log('DONE CLICKING');
 
   await pause(5000);
+  await pause(120000);
 }
 
 // ==========================================================================
@@ -157,12 +171,16 @@ async function setDownloadBehavior(page, downloadDir) {
 async function main() {
   const dates = getSBIDates(process.argv[2]);
 
+  console.log('Getting browser');
   const browser = await getNewBrowser('./session');
+  console.log('Getting page');
   const page = (await browser.pages())[0];
   // const page = await browser.newPage();
+  console.log('Navigating to squareup page', page);
   await page.goto("https://squareup.com/dashboard/sales/transactions");
 
 
+  console.log('Waiting for login');
   await login(page);
 
   await setDownloadBehavior(page, './download');
