@@ -1,0 +1,18 @@
+CACHE MANIFEST
+# 2023-12-13 03:55:44
+
+CACHE:
+data/program.js
+data/people.js
+konopas.min.js
+data/favicon.192.png
+data/title.jpg
+skin/icons.png
+skin/konopas.css
+skin/Oswald400.ttf
+skin/Roboto300.ttf
+skin/Roboto500.ttf
+favicon.ico
+
+NETWORK:
+*
