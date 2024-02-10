@@ -8,6 +8,7 @@ MJPGSTREAMER_INPUT_RASPICAM="input_raspicam.so"
 camera="auto"
 camera_usb_options="-r 640x480 -f 10"
 camera_raspi_options="-fps 10"
+camera_device=""
 
 if [ -e "/boot/octopi.txt" ]; then
     source "/boot/octopi.txt"
@@ -30,8 +31,20 @@ function startRaspi {
 
 # starts up the USB webcam
 function startUsb {
-    logger "Starting USB webcam"
-    runMjpgStreamer "$MJPGSTREAMER_INPUT_USB $camera_usb_options"
+    logger "Starting USB webcam $1"
+    runMjpgStreamer "$MJPGSTREAMER_INPUT_USB $camera_usb_options -d $1"
+}
+
+# finds the video device supporting MJPG
+function findMjpgDevice {
+    FILES="/dev/video*"
+    for f in $FILES
+    do
+        `v4l2-ctl --list-formats-ext -d "$f" | grep -q 'MJPG'`
+        if (( $? == 0 )) ; then
+            camera_device="$f"
+        fi
+    done
 }
 
 # we need this to prevent the later calls to vcgencmd from blocking
@@ -46,8 +59,9 @@ echo raspi options: $camera_raspi_options
 
 # keep mjpg streamer running if some camera is attached
 while true; do
-    if [ -e "/dev/video0" ] && { [ "$camera" = "auto" ] || [ "$camera" = "usb" ] ; }; then
-        startUsb
+    findMjpgDevice
+    if [  ! -z "$camera_device" ] && [ -e "$camera_device" ] && { [ "$camera" = "auto" ] || [ "$camera" = "usb" ] ; }; then
+        startUsb "$camera_device"
     elif [ "`vcgencmd get_camera`" = "supported=1 detected=1" ] && { [ "$camera" = "auto" ] || [ "$camera" = "raspi" ] ; }; then
         startRaspi
     fi
