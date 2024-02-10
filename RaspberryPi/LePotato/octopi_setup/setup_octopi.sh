@@ -153,7 +153,7 @@ function webcam_config {
   DAEMON_SCRIPT=/home/pi/scripts/webcamDaemon
   mkdir -p "$(dirname $DAEMON_SCRIPT)"
   sudo cp ./webcamd.service /etc/systemd/system/webcamd.service
-  cp ./webcamDaemon_video1 $DAEMON_SCRIPT
+  cp ./webcamDaemon_video0 $DAEMON_SCRIPT
   chmod +x $DAEMON_SCRIPT
 
   # Tell the system to read the new file:
