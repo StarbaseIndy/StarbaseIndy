@@ -40,9 +40,10 @@ function findMjpgDevice {
     FILES="/dev/video*"
     for f in $FILES
     do
-        `v4l2-ctl --list-formats-ext -d "$f" | grep -q 'MJPG'`
+        `v4l2-ctl --list-formats-ext -d "$f" | awk '{ if(/MJPG/) print $0 }' RS="\[.\]: " | grep -q fps`
         if (( $? == 0 )) ; then
             camera_device="$f"
+            break
         fi
     done
 }
