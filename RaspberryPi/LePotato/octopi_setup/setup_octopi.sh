@@ -90,6 +90,7 @@ function enable_port_80 {
   sudo apt install haproxy
   sudo cp ./haproxy_2.x.cfg /etc/haproxy/haproxy.cfg
   sudo service haproxy start
+  systemctl status haproxy
 }
 
 ################################################################################
@@ -176,6 +177,7 @@ function webcam_config {
 
   # The webcam should automatically start on boot, but it can also be started manually:
   sudo systemctl start webcamd
+  systemctl status webcamd
 
   # list capabilities of all video devices
   ls -d /dev/* | grep video | xargs -L1 -d '\n' sh -c 'echo $0 && v4l2-ctl --list-formats-ext -d $0'
