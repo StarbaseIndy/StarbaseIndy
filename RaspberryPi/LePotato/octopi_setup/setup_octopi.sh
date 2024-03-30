@@ -4,13 +4,25 @@
 #
 # Instructions are here: https://community.octoprint.org/t/setting-up-octoprint-on-a-raspberry-pi-running-raspberry-pi-os-debian/2337
 #
-#
+# You can use this script directly:
+# curl -s https://raw.githubusercontent.com/StarbaseIndy/StarbaseIndy/master/RaspberryPi/LePotato/octopi_setup/setup_octopi.sh | bash -s
 #
 
 INSTALL_DIR=`pwd`
 CONFIG=~/.octoprint/config.yaml
 IP_ADDR=`ifconfig wlan0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'`
 
+
+################################################################################
+# Download Resources
+################################################################################
+function download_resources {
+  echo NOTICE: Downloading resources
+  curl -s -O https://raw.githubusercontent.com/StarbaseIndy/StarbaseIndy/master/RaspberryPi/LePotato/octopi_setup/webcamDaemon_video0
+  curl -s -O https://raw.githubusercontent.com/StarbaseIndy/StarbaseIndy/master/RaspberryPi/LePotato/octopi_setup/webcamd.service
+  curl -s -O https://raw.githubusercontent.com/StarbaseIndy/StarbaseIndy/master/RaspberryPi/LePotato/octopi_setup/octoprint.service
+  curl -s -O https://raw.githubusercontent.com/StarbaseIndy/StarbaseIndy/master/RaspberryPi/LePotato/octopi_setup/haproxy_2.x.cfg
+}
 
 ################################################################################
 # Basic Installation
@@ -164,7 +176,7 @@ function webcam_config {
 
   # The webcam should automatically start on boot, but it can also be started manually:
   sudo systemctl start webcamd
-  
+
   # list capabilities of all video devices
   ls -d /dev/* | grep video | xargs -L1 -d '\n' sh -c 'echo $0 && v4l2-ctl --list-formats-ext -d $0'
 }
@@ -177,7 +189,7 @@ function install_octoprint_plugins {
   echo NOTICE: Installing plugins
 
   source ~/OctoPrint/venv/bin/activate
-  
+
   # Change Filament plugin
   pip install https://github.com/jim-p/Change_Filament/archive/master.zip
 
@@ -197,7 +209,7 @@ function install_octoprint_plugins {
   pip install https://github.com/larsjuhw/OctoPrint-SlicerSettingsTab/archive/master.zip
 
   # Slicer Settings Parser
-  pip install https://github.com/larsjuhw/OctoPrint-SlicerSettingsParser/archive/master.zip  
+  pip install https://github.com/larsjuhw/OctoPrint-SlicerSettingsParser/archive/master.zip
 
   # FileManager
   pip install https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip
@@ -213,7 +225,7 @@ function install_octoprint_plugins {
 
   # Dragon Order
   # pip install https://github.com/jneilliii/OctoPrint-DragonOrder/archive/master.zip
-  
+
   sudo service octoprint restart
 }
 
@@ -225,6 +237,7 @@ function install_octoprint_plugins {
 PWD=`pwd`
 echo PWD:$PWD
 
+download_resources
 basic_installation
 automatic_startup
 enable_port_80
