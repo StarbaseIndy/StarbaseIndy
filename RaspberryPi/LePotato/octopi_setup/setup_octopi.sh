@@ -222,6 +222,9 @@ function install_octoprint_plugins {
   # Octolapse
   pip install https://github.com/FormerLurker/Octolapse/archive/master.zip
 
+  # Bed Level Visualizer
+  pip install https://github.com/jneilliii/OctoPrint-BedLevelVisualizer/archive/master.zip
+
   # Malyan Connection Fix Plugin
   # pip install https://github.com/OctoPrint/OctoPrint-MalyanConnectionFix/archive/master.zip
 
