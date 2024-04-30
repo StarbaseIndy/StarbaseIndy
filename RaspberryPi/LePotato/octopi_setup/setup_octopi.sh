@@ -38,8 +38,8 @@ function basic_installation {
   # dependencies and the virtual environment, run the following.
 
   cd ~
-  sudo apt update
-  sudo apt install python3 python3-pip python3-dev python3-setuptools python3-venv git libyaml-dev build-essential libffi-dev libssl-dev
+  sudo apt -y update
+  sudo apt -y install python3 python3-pip python3-dev python3-setuptools python3-venv git libyaml-dev build-essential libffi-dev libssl-dev
   mkdir OctoPrint
   cd OctoPrint
   python3 -m venv venv
@@ -47,8 +47,8 @@ function basic_installation {
 
   # OctoPrint and it's Python dependencies can then be installed using pip:
 
-  pip install --upgrade pip wheel
-  pip install octoprint
+  yes | pip install --upgrade pip wheel
+  yes | pip install octoprint
 
   # You may need to add the pi user to the dialout group and tty so that the user can access the serial ports, before starting OctoPrint:
 
@@ -87,7 +87,7 @@ function enable_port_80 {
   # Setup on Raspbian is as follows:
   sudo service haproxy stop || true
 
-  sudo apt install haproxy
+  sudo apt -y install haproxy
   sudo cp ./haproxy_2.x.cfg /etc/haproxy/haproxy.cfg
   sudo service haproxy start
   systemctl status haproxy
@@ -153,7 +153,7 @@ function webcam_config {
 
   # If you also want webcam and timelapse support, you'll need to download and compile MJPG-Streamer:
   cd ~
-  sudo apt install subversion libjpeg62-turbo-dev imagemagick ffmpeg libv4l-dev cmake libraspberrypi-bin
+  sudo apt -y install subversion libjpeg62-turbo-dev imagemagick ffmpeg libv4l-dev cmake libraspberrypi-bin
   if [ ! -e mjpg-streamer ]; then
     git clone https://github.com/jacksonliam/mjpg-streamer.git
   fi
@@ -193,43 +193,43 @@ function install_octoprint_plugins {
   source ~/OctoPrint/venv/bin/activate
 
   # Change Filament plugin
-  pip install https://github.com/jim-p/Change_Filament/archive/master.zip
+  yes | pip install https://github.com/jim-p/Change_Filament/archive/master.zip
 
   # ipOnConnect
-  pip install https://github.com/jneilliii/OctoPrint-ipOnConnect/archive/master.zip
+  yes | pip install https://github.com/jneilliii/OctoPrint-ipOnConnect/archive/master.zip
 
   # Extra File Info
-  pip install https://github.com/larsjuhw/OctoPrint-Extrafileinfo/archive/master.zip
+  yes | pip install https://github.com/larsjuhw/OctoPrint-Extrafileinfo/archive/master.zip
 
   # Display Layer Progress
-  pip install https://github.com/OllisGit/OctoPrint-DisplayLayerProgress/releases/latest/download/master.zip
+  yes | pip install https://github.com/OllisGit/OctoPrint-DisplayLayerProgress/releases/latest/download/master.zip
 
   # Tab Order
-  pip install https://github.com/jneilliii/OctoPrint-TabOrder/archive/master.zip
+  yes | pip install https://github.com/jneilliii/OctoPrint-TabOrder/archive/master.zip
 
   # Slicer Settings Tab
-  pip install https://github.com/larsjuhw/OctoPrint-SlicerSettingsTab/archive/master.zip
+  yes | pip install https://github.com/larsjuhw/OctoPrint-SlicerSettingsTab/archive/master.zip
 
   # Slicer Settings Parser
-  pip install https://github.com/larsjuhw/OctoPrint-SlicerSettingsParser/archive/master.zip
+  yes | pip install https://github.com/larsjuhw/OctoPrint-SlicerSettingsParser/archive/master.zip
 
   # FileManager
-  pip install https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip
+  yes | pip install https://github.com/Salandora/OctoPrint-FileManager/archive/master.zip
 
   # OctoApp
-  pip install https://github.com/crysxd/OctoApp-Plugin/archive/refs/heads/release.zip
+  yes | pip install https://github.com/crysxd/OctoApp-Plugin/archive/refs/heads/release.zip
 
   # Octolapse
-  pip install https://github.com/FormerLurker/Octolapse/archive/master.zip
+  yes | pip install https://github.com/FormerLurker/Octolapse/archive/master.zip
 
   # Bed Level Visualizer
-  pip install https://github.com/jneilliii/OctoPrint-BedLevelVisualizer/archive/master.zip
+  yes | pip install https://github.com/jneilliii/OctoPrint-BedLevelVisualizer/archive/master.zip
 
   # Malyan Connection Fix Plugin
-  # pip install https://github.com/OctoPrint/OctoPrint-MalyanConnectionFix/archive/master.zip
+  # yes | pip install https://github.com/OctoPrint/OctoPrint-MalyanConnectionFix/archive/master.zip
 
   # Dragon Order
-  # pip install https://github.com/jneilliii/OctoPrint-DragonOrder/archive/master.zip
+  # yes | pip install https://github.com/jneilliii/OctoPrint-DragonOrder/archive/master.zip
 
   sudo service octoprint restart
 }
