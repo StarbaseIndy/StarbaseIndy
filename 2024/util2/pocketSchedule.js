@@ -142,7 +142,7 @@ const nestedDateLocTimeData = program.reduce((acc, it) => {
 
   let item = acc[date][time][location];
   if (item && item.title) {
-    if (it.mins < item.mins) [it, item] = [item, it]; // swap items
+    if (+it.mins < +item.mins) [it, item] = [item, it]; // swap items
     overlapItems(it, item);
   }
 
