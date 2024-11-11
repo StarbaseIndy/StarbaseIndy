@@ -17,7 +17,8 @@
           2020: { start: '2019-11-29T00:00:00.000Z', end: '2021-11-26T00:00:00.000Z'},
           2021: { start: '2019-11-29T00:00:00.000Z', end: '2021-11-26T00:00:00.000Z'},
           2022: { start: '2021-11-26T00:00:00.001Z', end: '2022-11-25T00:00:00.000Z'},
-          2023: { start: '2022-11-25T00:00:00.001Z', end: '2023-11-24T00:00:00.000Z'}
+          2023: { start: '2022-11-25T00:00:00.001Z', end: '2023-11-24T00:00:00.000Z'},
+          2024: { start: '2023-11-24T00:00:00.001Z', end: '2024-11-29T00:00:00.000Z'}
         };
         
         return ranges[year];
@@ -35,6 +36,7 @@
           2021: { start: '2021-11-26', end: '2021-11-29', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2022: { start: '2022-11-25', end: '2022-11-28', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2023: { start: '2023-11-24', end: '2023-11-27', location: 'WR6MC29WH0P5Z' }, // 'SBI'
+          2024: { start: '2024-11-29', end: '2024-12-02', location: 'WR6MC29WH0P5Z' }, // 'SBI'
         };
         
         return ranges[year];
@@ -78,15 +80,20 @@
       //    Note: there's NO NEED to actually download the CSV.  All needed data is in the filter query response.
       // 6. In Chrome Developer Tools (F12), in the Network tab, look at the response to the "products?searchQuery=" network call.
       //    This JSON payload will include product IDs (field "id") and product names/descriptions
+	  // 7. Need to capture URLs launched in a popup?  Try chrome://net-export/
       function getSquareSpaceUrl(year, productId = '') {
         return 'https://starbaseindy-org.squarespace.com/api/commerce/orders/export' +
                '?orderStates=' + (year===2020 ? 'PENDING' : 'PENDING%2CFULFILLED') +
-               '&productType=' +
+               //'&productType=' +
                '&includeProductForm=' + (productId ? 'true' : 'false') +
-			         '&productId=' + productId +
-               // '&productId=5dca06846cd8232bdf6fdd26' + // DPM TESTING
+			   //'&productId=' + productId +
+			   (productId ? '&productId=' + productId : '') + 
                '&orderSubmittedOnMin=' + encodeURIComponent(getSquareSpaceYearDateRange(year).start) +
-               '&orderSubmittedOnMax=' + encodeURIComponent(getSquareSpaceYearDateRange(year).end);
+               '&orderSubmittedOnMax=' + encodeURIComponent(getSquareSpaceYearDateRange(year).end) + 
+			   '&includeOrderItemTypes=PHYSICAL' +
+			   '&includeOrderItemTypes=SERVICE' +
+			   '&includeOrderItemTypes=DIGITAL' +
+			   '&includeOrderItemTypes=GIFT_CARD';
       }
 
       function appendCopyLink(elementId) {
@@ -288,8 +295,6 @@
 
 
         // 2023
-        // TODO: add 2022 items here.
-        // TODO: add the other items here3
 
         assignSquareSpaceHref(2023, 'BadgeWeekend', '637c39a7eed37816a47e9414');
         assignSquareSpaceHref(2023, 'BadgeStar',    '64a2cadf9862b62fab173c48');
@@ -323,6 +328,48 @@
         assignGoogleHref(2023, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1P07zEQcAq1erIcu3V3HONIMQj1iE34NexNUKE-BSBtE/export?format=csv&gid=0');
 
 
+
+        // 2024
+
+        assignSquareSpaceHref(2024, 'BadgeWeekend', '656d27e8190c5e2711ce7d39');
+        assignSquareSpaceHref(2024, 'BadgeStar',    '656d4b8386f85932141391b5');
+        assignSquareSpaceHref(2024, 'BadgeChild',   '656d2f5f263fd234be04e37e');
+        assignSquareSpaceHref(2024, 'BadgeStudent', '656d3019263fd234be04e44a');
+        assignSquareSpaceHref(2024, 'Summary');
+
+        // DWTS: Celebrity Mixer
+        assignSquareSpaceHref(2024, 'DWTSMixer', '670b0011c9218340ab5d563e');
+
+        // Merch
+		
+        assignSquareSpaceHref(2024, 'MerchVeeNeck24',     '670afd8d9809d677f19cb16a');
+        assignSquareSpaceHref(2024, 'MerchTeeShirt24',    '670af435c9218340ab5d4f32');
+        assignSquareSpaceHref(2024, 'MerchHoodie24',      '670afa73cee3e009ace34088');
+		
+        // assignSquareSpaceHref(2024, 'MerchMask',           '6124fb61a1cb315ed1c95875');
+        // assignSquareSpaceHref(2024, 'MerchShotGlass',      '635d8ee00e079e070a5ae026');
+        // assignSquareSpaceHref(2024, 'MerchTumbler',        '635d8d970e079e070a5adfad');
+        // assignSquareSpaceHref(2024, 'MerchHat',            '631e3204e6db603407dcebf8');
+        // assignSquareSpaceHref(2024, 'MerchTeeShirt23',     '6539a5f15b45c074f2ee01b1');
+        // assignSquareSpaceHref(2024, 'MerchHoodie23',       '6539aa805b45c074f2ee04e4');
+        // Merch (Old Stock)
+        // assignSquareSpaceHref(2024, 'MerchHoodie22',         '635d87050e079e070a5add20');
+        // assignSquareSpaceHref(2024, 'MerchTeeShirt22',       '635d8200cb17ea3a16d83353');
+        // assignSquareSpaceHref(2024, 'MerchTeeShirtFitted22', '635d84d8cb17ea3a16d834a3');
+        // assignSquareSpaceHref(2024, 'MerchTeeShirt21',   '60ca97a2389caf28eb4d3fc2');
+        // assignSquareSpaceHref(2024, 'MerchVeeNeck21',    '60ca9fdbfc131831a73e1daf');
+        // assignSquareSpaceHref(2024, 'MerchTeeShirt19',   '5dae361ecf12162d5dc9aa34');
+        // assignSquareSpaceHref(2024, 'MerchVeeNeck19',    '5dae386b34270331589b65ae');
+        // assignSquareSpaceHref(2024, 'MerchTeeShirt18',   '5baabb389140b7701afad52d');
+        // assignSquareSpaceHref(2024, 'MerchSweatshirt17', '5a2f2d378165f5f9bf617234');
+        // assignSquareSpaceHref(2024, 'MerchTeeShirt17',   '5baa3b6953450af1f8e4a042');
+
+        // Vendors come from google sheets, and not Square or SquareSpace.
+        assignGoogleHref(2024, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1aR8Q2ArRJ_gZpoDDIin11rTIVUiqogjqNK9zwc4_5vU/export?format=csv&gid=0');
+
+
+
+
         // This no longer works
         // assignSquareHref(2022, 'Transactions');
         // assignSquareHref(2022, 'Items');
@@ -349,6 +396,30 @@
     </ul>
     Note: The Past-Year-Badge-Data.xlsx is located in the <a target="_blank" href="https://drive.google.com/drive/folders/0APUQzYMACYslUk9PVA">Data</a> folder.<br/>
     <br/>
+
+
+    <hr/>
+    <button onclick="downloadYearData(2024, 'SquareSpace', 2000)">Download 2024 SquareSpace + Google Drive data</button>
+    <br/>
+    <br/>
+    <a href="#" id="2024BadgeStar"     >2024 Badge Star.csv</a><br/>
+    <a href="#" id="2024BadgeStudent"  >2024 Badge Student.csv</a><br/>
+    <a href="#" id="2024BadgeWeekend"  >2024 Badge Weekend.csv</a><br/>
+    <a href="#" id="2024BadgeChild"    >2024 Badge Child.csv</a><br/>
+    <a href="#" id="2024Summary"       >2024 Summary.csv</a><br/>
+    <a href="#" id="2024BadgeVendor"   >2024 Badge Vendor.csv</a> (Google Drive)<br/>
+    <br/>
+
+    <a href="#" id="2024DWTSMixer"     >2024 DWTS Celebrity Mixer.csv</a><br/>
+
+    <a href="#" id="2024MerchTeeShirt24" >2024 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2024MerchVeeNeck24"  >2024 Merch Vee Neck Tee.csv</a><br/>
+    <a href="#" id="2024MerchHoodie24"   >2024 Merch Hoodie.csv</a><br/>
+
+    <br/>
+
+
+
 
     <hr/>
     <button onclick="downloadYearData(2023, 'SquareSpace', 2000)">Download 2023 SquareSpace + Google Drive data</button>
