@@ -285,12 +285,17 @@ function verifyMetadata() {
   const allKeys = getAllBadgeItems().concat(getVendorGroup()).map(item => item.sortKey);
   metadata
     .filter(entry => !entry.Note) // skip validation for entries with notes
+    .filter(entry => {
+      if (!entry.sortKey) {
+        console.error(`WARNING: Metadata missing sortKey for name: ${entry.Name}`);
+        return false;
+      }
+      return true;
+    })
     .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
     .map(entry => {
       // verify that all sortKey values in the metadata actually exist
-      if (!entry.sortKey) {
-        console.error(`WARNING: Metadata missing sortKey for name: ${entry.Name}`);
-      } else if (!allKeys.find(sortKey => sortKey === entry.sortKey)) {
+      if (!allKeys.find(sortKey => sortKey === entry.sortKey)) {
         console.error(`WARNING: Metadata invalid sortKey: ${entry.sortKey}`);
       }
     });
@@ -839,7 +844,8 @@ function main() {
     processInputData(folder, metadataFile)
       .then(() => getAllBadgeItems()
         .sort((a,b) => a.sortKey.localeCompare(b.sortKey))
-        .filter(item => item[REALNAME_KEY].match(new RegExp(name, 'i')))
+        //.filter(item => item[REALNAME_KEY].match(new RegExp(name, 'i')))
+        .filter( item => Object.values(item).filter(v => v && typeof v === 'string').some(val => val.match(new RegExp(name, 'i'))) )
         .map(item => console.log(`${item.sortKey}: ${item[REALNAME_KEY]}: ${item.badgeNum}: ${item[BADGENAME_KEY]}: ${item[UNIFYING_EMAIL]}`)));
 
     return;
