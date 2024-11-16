@@ -58,6 +58,7 @@ const VENDORNAME2_KEY = 'Company Name';
 const VENDORCONFIRMED_KEY = 'Confirmed';
 // 2021 vendor keys
 const VENDORCONFIRMED2_KEY = 'Confirmed?';
+const VENDORCONFIRMED3_KEY = 'Status';
 const VENDORBADGECOUNT_KEY = 'How many badges do you need';
 
 const ORDERID_KEY = 'Order ID';
@@ -72,7 +73,7 @@ const summary = [];
 const vendors = []; // sourced separately
 const metadata = [];
 
-const fanExperienceRegex = /(Dinner|Celebrity|T-Shirt|V-Neck|Fitted|Hoodie|Tank Top|Photo|Mask|Shot|Tumbler)/;
+const fanExperienceRegex = /(Dinner|Celebrity|T[-\s]Shirt|V-Neck|Fitted|Hoodie|Sweatshirt|Tank Top|Photo|Mask|Shot|Tumbler)/;
 const badgeRegex = /(Child|Friday|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
 const childBadgeRegex = /Child.*Badge/;
 
@@ -154,9 +155,15 @@ function processCSV(filename, group = [{}]) {
     return;
   }
 
+  const vendorPaid = (item) => 
+	   (item[VENDORCONFIRMED3_KEY] || '').match(/paid/i)
+	|| (item[VENDORCONFIRMED2_KEY] || '').match(/^[yY]/)
+	|| (item[VENDORCONFIRMED_KEY] || '').match(/^[yY]/);
+
   // Look for the 2019 vendor CSV file.  It's a different format.
   if ((group[0] || {})[VENDORNAME2_KEY]) {
-    vendors.push(...group.filter(item => !!(item[VENDORCONFIRMED_KEY] || item[VENDORCONFIRMED2_KEY] || '').match(/^[yY]/)));
+	console.log("DPM ============================================");
+    vendors.push(...group.filter(vendorPaid));
     return;
   }
 
