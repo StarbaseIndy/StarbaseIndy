@@ -20,12 +20,12 @@ const Promise = require('bluebird');
 const Fs = require('fs');
 
 const DepartmentColors = {
-  'Vendor': { department: 'Vendor', departmentColor: 'Yellow' },
+  'Vendor': { department: 'Vendor', departmentColor: 'Vendor' },
   'VIP': { department: 'VIP', departmentColor: 'Red' },
   'Entertainer': { department: 'VIP', departmentColor: 'Red' },
   'Presenter': { department: 'Presenter', departmentColor: 'Red' },
-  'GeneralAdorned': { department: '', departmentColor: 'Blue' },
-  'General': { department: '', departmentColor: 'Blue' },
+  'GeneralAdorned': { department: '', departmentColor: 'Red' },
+  'General': { department: '', departmentColor: 'General' },
   // Staff: Orange
   // Board: Green
 
