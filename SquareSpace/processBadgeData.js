@@ -73,6 +73,7 @@ const summary = [];
 const vendors = []; // sourced separately
 const metadata = [];
 
+const adminEmails = ['admin@starbaseindy.org', 'starbase.indy@gmail.com'];
 const fanExperienceRegex = /(Dinner|Celebrity|T[-\s]Shirt|V-Neck|Fitted|Hoodie|Sweatshirt|Tank Top|Photo|Mask|Shot|Tumbler)/;
 const badgeRegex = /(Child|Friday|Saturday|Shopping|Star|Student|Sunday|Weekend).*Badge/;
 const childBadgeRegex = /Child.*Badge/;
@@ -85,8 +86,8 @@ function getSortKey(orderId, itemType) {
     'Dinner':    '#1D',
     'Celebrity': '#1C',
     'Photo':     '#2P',
-    'Hoodie':    '#3H',
-    'T-Shirt':   '#4T',
+    'Hoodie':    '#3H', 'Sweatshirt':'#3H',
+    'T-Shirt':   '#4T', 'T Shirt':   '#4T',
     'V-Neck':    '#5V',
     'Fitted':    '#5F',
     'Tank Top':  '#6TT',
@@ -189,9 +190,9 @@ function processCSV(filename, group = [{}]) {
       transactionData[orderId] = transactionData[orderId] || {};
 
       // Calculate a responsibleParty name (last name first)
-      // DPM TODO: orders under admin@starbaseindy.org should IGNORE the BILLINGNAME_KEY
+      // DPM TODO: orders under an admin email should IGNORE the BILLINGNAME_KEY
       transactionData.email = item[BILLINGEMAIL_KEY] || transactionData.email; 
-      if (transactionData.email === 'admin@starbaseindy.org') {
+      if (adminEmails.includes(transactionData.email)) {
         item.responsibleParty = reverseName(item[REALNAME_KEY]); // Used when no billing name is associated with a free order.
       } else {
         item.responsibleParty = transactionData[orderId].name =
