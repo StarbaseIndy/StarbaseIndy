@@ -153,7 +153,7 @@ function webcam_config {
 
   # If you also want webcam and timelapse support, you'll need to download and compile MJPG-Streamer:
   cd ~
-  sudo apt install subversion libjpeg62-turbo-dev imagemagick ffmpeg libv4l-dev cmake libraspberrypi-bin
+  sudo apt install subversion libjpeg62-turbo-dev imagemagick ffmpeg libv4l-dev cmake
   if [ ! -e mjpg-streamer ]; then
     git clone https://github.com/jacksonliam/mjpg-streamer.git
   fi
