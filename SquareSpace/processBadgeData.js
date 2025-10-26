@@ -163,7 +163,6 @@ function processCSV(filename, group = [{}]) {
 
   // Look for the 2019 vendor CSV file.  It's a different format.
   if ((group[0] || {})[VENDORNAME2_KEY]) {
-	console.log("DPM ============================================");
     vendors.push(...group.filter(vendorPaid));
     return;
   }
@@ -448,7 +447,7 @@ function generateChildBadgeMailMerge(filename, group) {
         [ADULTPHONE_KEY]: adultPhone,
         [ADULTEMAIL_KEY]: adultEmail
       } = item;
-      return [sortKey, zeroPad(badgeNum), adultName, adultPhone.trim(), adultEmail];
+      return [sortKey, zeroPad(badgeNum), adultName, adultPhone?.trim(), adultEmail];
     });
 
   if (!records.length) return;

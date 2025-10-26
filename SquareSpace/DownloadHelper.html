@@ -13,12 +13,13 @@
           //   start: last year show's Friday morning 00:00
           //   end: this year's show's Friday morning 00:00
           2018: { start: '2018-04-20T00:00:00.000Z', end: '2018-11-23T00:00:00.000Z' },
-          2019: { start: '2018-11-23T00:00:00.001Z', end: '2019-11-29T00:00:00.000Z' },
+          2019: { start: '2018-11-23T00:00:00.000Z', end: '2019-11-29T00:00:00.000Z' },
           2020: { start: '2019-11-29T00:00:00.000Z', end: '2021-11-26T00:00:00.000Z'},
           2021: { start: '2019-11-29T00:00:00.000Z', end: '2021-11-26T00:00:00.000Z'},
-          2022: { start: '2021-11-26T00:00:00.001Z', end: '2022-11-25T00:00:00.000Z'},
-          2023: { start: '2022-11-25T00:00:00.001Z', end: '2023-11-24T00:00:00.000Z'},
-          2024: { start: '2023-11-24T00:00:00.001Z', end: '2024-11-29T00:00:00.000Z'}
+          2022: { start: '2021-11-26T00:00:00.000Z', end: '2022-11-25T00:00:00.000Z'},
+          2023: { start: '2022-11-25T00:00:00.000Z', end: '2023-11-24T00:00:00.000Z'},
+          2024: { start: '2023-11-27T00:00:00.000Z', end: '2024-11-29T00:00:00.000Z'},
+          2025: { start: '2024-12-02T00:00:00.000Z', end: '2025-11-28T00:00:00.000Z'},
         };
         
         return ranges[year];
@@ -37,6 +38,7 @@
           2022: { start: '2022-11-25', end: '2022-11-28', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2023: { start: '2023-11-24', end: '2023-11-27', location: 'WR6MC29WH0P5Z' }, // 'SBI'
           2024: { start: '2024-11-29', end: '2024-12-02', location: 'WR6MC29WH0P5Z' }, // 'SBI'
+          2025: { start: '2025-11-28', end: '2025-12-01', location: 'WR6MC29WH0P5Z' }, // 'SBI'
         };
         
         return ranges[year];
@@ -105,6 +107,7 @@
       
       function assignSquareSpaceHref(year, linkId, productId = '') {
         const elementId = year + linkId;
+        // console.log(`assignSquareSpaceHeref: looking for '${elementId}'`);
         document.getElementById(elementId).href = getSquareSpaceUrl(year, productId);
         
         // Queue linkID to click on it later.
@@ -131,7 +134,9 @@
 
       function assignGoogleHref(year, type, url) {
         const elementId = year + type;
-        document.getElementById(elementId).href = url;
+        // console.log(`assignGoogleHref: looking for element: '${elementId}'`);
+        const elem = document.getElementById(elementId);
+        elem.href = url;
 
         // Queue linkID to click on it later.
         linkIDs['SquareSpace'] = linkIDs['SquareSpace'] || {};
@@ -368,11 +373,26 @@
         assignGoogleHref(2024, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1aR8Q2ArRJ_gZpoDDIin11rTIVUiqogjqNK9zwc4_5vU/export?format=csv&gid=0');
 
 
+        // 2025
 
+        assignSquareSpaceHref(2025, 'BadgeWeekend', '67686b6495d51430b536c20c');
+        assignSquareSpaceHref(2025, 'BadgeStar',    '689a928d22a0825e12e44d68');
+        assignSquareSpaceHref(2025, 'BadgeSun',     '689a99392352f55305faa495');
+        assignSquareSpaceHref(2025, 'BadgeSatSun',  '689a95e02352f55305faa223');
+        assignSquareSpaceHref(2025, 'BadgeSat',     '689a969418bdd572a34db1ac');
+        assignSquareSpaceHref(2025, 'BadgeFri',     '689a9cca22a0825e12e454b2');
+        
+        assignSquareSpaceHref(2025, 'BadgeChild',   '689a9e5d18bdd572a34db75a');
+        assignSquareSpaceHref(2025, 'BadgeStudent', '689a9f4a18bdd572a34db7f6');
+        assignSquareSpaceHref(2025, 'Summary');
 
-        // This no longer works
-        // assignSquareHref(2022, 'Transactions');
-        // assignSquareHref(2022, 'Items');
+        // DWTS: Celebrity Mixer
+        // assignSquareSpaceHref(2025, 'DWTSMixer', '');
+
+        // Merch - sold on vender site in 2025
+		
+        // Vendors come from google sheets, and not Square or SquareSpace.
+        assignGoogleHref(2025, 'BadgeVendor', 'https://docs.google.com/spreadsheets/d/1tW-xXDXqAiOTdXvtnTy3SXRwU2CZuYyBeoDbQZNV2qQ/export?format=csv&gid=0');
 
       }
     </script>
@@ -396,6 +416,36 @@
     </ul>
     Note: The Past-Year-Badge-Data.xlsx is located in the <a target="_blank" href="https://drive.google.com/drive/folders/0APUQzYMACYslUk9PVA">Data</a> folder.<br/>
     <br/>
+
+    <hr/>
+    <button onclick="downloadYearData(2025, 'SquareSpace', 2000)">Download 2025 SquareSpace + Google Drive data</button>
+    <br/>
+    <br/>
+    <a href="#" id="2025BadgeVendor"   >2025 Badge Vendor.csv</a> (Google Drive)<br/>
+    <a href="#" id="2025BadgeStar"     >2025 Badge Star.csv</a><br/>
+    <a href="#" id="2025BadgeStudent"  >2025 Badge Student.csv</a><br/>
+    <a href="#" id="2025BadgeWeekend"  >2025 Badge Weekend.csv</a><br/>
+    <a href="#" id="2025BadgeFri"      >2025 Badge Friday.csv</a><br/>
+    <a href="#" id="2025BadgeSat"      >2025 Badge Saturday.csv</a><br/>
+    <a href="#" id="2025BadgeSatSun"   >2025 Badge Saturday + Sunday.csv</a><br/>
+    <a href="#" id="2025BadgeSun"      >2025 Badge Sunday.csv</a><br/>
+    <a href="#" id="2025BadgeChild"    >2025 Badge Child.csv</a><br/>
+    <a href="#" id="2025Summary"       >2025 Summary.csv</a><br/>
+
+    <!-- <a href="#" id="2025DWTSMixer"     >2024 DWTS Celebrity Mixer.csv</a><br/> -->
+
+    <br/>
+
+    <!--
+    <a href="#" id="2025DWTSMixer"     >2025 DWTS Celebrity Mixer.csv</a><br/>
+    <a href="#" id="2025MerchTeeShirt25" >2025 Merch Tee Shirt.csv</a><br/>
+    <a href="#" id="2025MerchVeeNeck25"  >2025 Merch Vee Neck Tee.csv</a><br/>
+    <a href="#" id="2025MerchHoodie25"   >2025 Merch Hoodie.csv</a><br/>
+    -->
+
+    <br/>
+
+
 
 
     <hr/>
