@@ -64,6 +64,11 @@ const getEndTime = (item) => {
     return item.time;
   }
 
+  if (!item.time) {
+    console.warn(`WARNING: ${item.date} ${item.loc[0]}: ${item.originalTitle || item.title}: invalid/missing start time`);
+    return '00:00';
+  }
+
   const [hour, minute] = item.time.split(':').map(it => +it);
   const timeOfDay = new Date(0, 0, 1, hour, minute + +item.mins);
   const midnightOffset = (timeOfDay.getDate() - 1) * 24;
