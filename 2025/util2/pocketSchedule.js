@@ -44,6 +44,9 @@ const argv = require('yargs')
 // It's okay for items to overlap - this can happen in an activity room where planned and general events take place.
 // - For this reason, a location has two columns, and most entries will colspan=2, except for overlapping events.
 
+// Global array to track overlapped events for later reporting
+const overlappedEvents = [];
+
 const timeDiff = (time1, time2 = time1) => {
   const [date1, date2] = [time1, time2].map(it => new Date( 0, 0, 1, ...it.split(':', 2)))
   return (date2 - date1) / 60000; // milliseconds to minutes
@@ -86,11 +89,6 @@ const getHashFromArgs = (arg, val) => arg.filter(it => it).reduce((acc, it) => {
 const overlapItems = (existingItem, newItem) => {
   // Sometimes overlap is okay.
   // Represent this by "nesting" the later entry into the earlier entry.
-  console.warn(`
-OVERLAP DETECTED:
-  ${existingItem.date} ${existingItem.loc[0]}: ${existingItem.originalTitle || existingItem.title}  ${existingItem.time}-${getEndTime(existingItem)} ${existingItem.status || ''} 
-  overlaps
-  ${newItem.originalTitle || newItem.title} ${newItem.time}-${getEndTime(newItem)} ${newItem.status || ''}`)
   
   // Keep track of nested items, and bring sub-nested items up
   existingItem.originalTitle ||= existingItem.title;
@@ -98,6 +96,26 @@ OVERLAP DETECTED:
   existingItem.container.push(newItem, ...(newItem.container || []));
   newItem.container = [];
   newItem.skip = true;
+
+  // Record this overlap for later reporting
+  const endTimeDiff = timeDiff(getEndTime(existingItem), getEndTime(newItem));
+  overlappedEvents.push({
+    existingItem: {
+      date: existingItem.date,
+      location: existingItem.loc[0],
+      title: existingItem.originalTitle || existingItem.title,
+      time: existingItem.time,
+      endTime: getEndTime(existingItem),
+      status: existingItem.status || ''
+    },
+    newItem: {
+      title: newItem.originalTitle || newItem.title,
+      time: newItem.time,
+      endTime: getEndTime(newItem),
+      status: newItem.status || ''
+    },
+    timeExtension: endTimeDiff > 0 ? endTimeDiff : null
+  });
 
   // Completely reconstruct the title for existingItem 
   existingItem.title = existingItem.originalTitle;
@@ -107,179 +125,310 @@ OVERLAP DETECTED:
     existingItem.title += `<br/><br/><div class="nested" style="${divStyle}">${it.originalTitle || it.title} ${getDisplayTime(it)}</div>`;
   })
 
-  const endTimeDiff = timeDiff(getEndTime(existingItem), getEndTime(newItem)); // DPM TODO: verify
   if (endTimeDiff > 0) {
     // Existing item ends BEFORE new item end time: extend existing end time
     existingItem.mins = +existingItem.mins + endTimeDiff;
-    console.warn(`  WARNING: time extended by ${endTimeDiff} minutes; new end time: ${getEndTime(existingItem)}`);
   }
 }
 
-const programFile = path.resolve(argv.program);
-const code = fs.readFileSync(programFile, 'utf8');
-const data = vm.runInNewContext(code + '; program');
-data.forEach(it => it.loc || console.log(`WARNING: ${it.title} has no location!`))
-const program = data.filter(it => it.id && it.loc?.at(0) && !(it.status || '').match(/Cancelled/i))
-const locationsHash = { // provided headers will be defined first, thus establishing table column order
-  ...getHashFromArgs(argv.locations, true),
-  ...program.reduce((acc, it) => { it.loc.forEach(loc => acc[loc] = true); return acc; }, {}),
-  ...getHashFromArgs(argv.exclude, false),
+const generateHTML = (dayGrids) => {
+  // DPM TODO: See if we can tell table rows to page-break-before: avoid, but tell rows with a rowspan to page-break-before: auto
+
+  const makeTableElement = (elementName, content, attrs=[]) => `<${elementName} ${attrs.join(' ')}>${content}</${elementName}>`;
+  const getTR = (content) => makeTableElement('tr', content);
+  const getTD = (content, attr=[]) => makeTableElement('td', content, attr);
+  const getTH = (content, attr=[]) => makeTableElement('th', content, attr);
+  const getTHead = (content) => makeTableElement('thead', content);
+  const getTBody = (content) => makeTableElement('tbody', content);
+  const getDiv = (content, minHeight = 20, elClass = 'div') => `<div class="${elClass}" style="min-height: ${minHeight}px;">${content}</div>`;
+  const getTable = (content) => makeTableElement('table', content);
+  const html = {};
+  Object.entries(dayGrids).forEach(([date, {grid, locCounters}]) => {
+    const filteredLocations = Object.keys(locCounters).filter((key) => locCounters[key]);
+    const headers = ['', ...filteredLocations].map(it => getTH(it));
+    const headerRows = [
+      getTR(getTH(`<h2>${ getWeekdayName(date) }</h2>`, [`colspan=${headers.length}`, `style="border: 0px; text-align: left"`])),
+      getTR(`\n\t\t${headers.join('\n\t\t')}\n\t`)
+    ];
+    const rows = [];
+    grid.forEach((_row, timeIndex) => {
+      const columns = [''];
+      grid[timeIndex].forEach((item, locIndex) => {
+        if (locIndex === 0) columns.push(getTH(getDisplayTime(item))); // event time
+        if (item.skip || !locCounters[item.location]) return;
+        const rowSpan = item.rowSpan ? `rowspan=${item.rowSpan + 1}` : '';
+        const tdClass = item.title ? '' : 'class="empty"';
+        columns.push(
+          getTD(
+            item.title ? getDiv(item.title || '', getItemHeight(item)) : '', 
+            [rowSpan, tdClass],
+          )
+        );
+      });
+      rows.push(getTR(columns.join('\n\t\t')));
+    });
+    html[date] = getTable(
+      getTHead(headerRows.join('\n\t'))
+      + 
+      getTBody(rows.join('\n\t')));
+  });
+
+  let output = `<html>
+  <head>
+    <style>
+      .empty {
+        background-color: lightgray
+      }
+      .nested {
+        width:80%;
+        border:1px solid black; 
+        border-right: none; 
+        margin-left: auto; 
+        margin-right: 0; 
+        padding: 2px; 
+      } 
+      .tableContainer {
+        page-break-after: always;
+      }
+      table { 
+        border-collapse: collapse; 
+      }
+      tr {
+        page-break-inside: avoid;
+      }
+      td, th {
+        border: 1px solid black; 
+        vertical-align: top; 
+        padding: 2px; 
+        padding-right: 0px;
+        page-break-inside: avoid;
+      }
+    </style>
+  </head>
+  <body>
+  `;
+  Object.entries(html).forEach(([date, table]) => {
+    output += getDiv(table, 0, 'tableContainer');
+  });
+  output += '</body></html>'
+
+  return output;
 };
-const allLocations = Object.keys(locationsHash).filter(it => locationsHash[it]);
 
-
-// Arrange data per: date => time => location
-// { date: { location: {time: entry} } }
-const nestedDateLocTimeData = program.reduce((acc, it) => {
-  const { date, time } = it;
-  const location = it.loc[0];
-
-  // If the item location is excluded, don't make an entry for it
-  if (!locationsHash[location]) return acc;
-
-  acc[date] ||= {};
-  acc[date][time] ||= {};
-
-  // Also insert a placeholder event for the end date, which can be overwritten by actual events
-  const endTime = getEndTime(it);
-  acc[date][endTime] ||= {};
-  acc[date][endTime][location] ||= {};
-
-  let item = acc[date][time][location];
-  if (item && item.title) {
-    if (+it.mins < +item.mins) [it, item] = [item, it]; // swap items
-    overlapItems(it, item);
-  }
-
-  acc[date][time][location] = it;
-  return acc;
-}, {});
-
-// Arrange data into a 2d array per day, with each axis sorted
-// { date: Array.from(Array(#locations), () => new Array(#timeslots)) }
-const dayGrids = {};
-Object.entries(nestedDateLocTimeData).sort((a,b) => a[0].localeCompare(b[0])).forEach(([date, times]) => {
-  const numTimeSlots = Object.keys(times).length;
-  dayGrids[date] = { 
-    grid: Array.from(Array(numTimeSlots), () => new Array(allLocations.length)),
-    locCounters: allLocations.reduce((acc, it) => { acc[it] = 0; return acc; }, {}),
+const generatePocketSchedule = (program) => {
+  const locationsHash = { // provided headers will be defined first, thus establishing table column order
+    ...getHashFromArgs(argv.locations, true),
+    ...program.reduce((acc, it) => { it.loc.forEach(loc => acc[loc] = true); return acc; }, {}),
+    ...getHashFromArgs(argv.exclude, false),
   };
-  Object.entries(times).sort((a,b) => a[0].localeCompare(b[0])).forEach(([time, locations], timeIndex) => {
-    allLocations.forEach((location, locIndex) => {
-      const entry = locations[location];
-      const defaults = { date, time, mins: 0, location, rowSpan: 0, skip: false };
-      dayGrids[date].grid[timeIndex][locIndex] = Object.assign({}, defaults, entry);
-      dayGrids[date].locCounters[location] += entry?.title ? 1 : 0; // track if a location on a given day has programming
+  const allLocations = Object.keys(locationsHash).filter(it => locationsHash[it]);
+
+
+  // Arrange data per: date => time => location
+  // { date: { location: {time: entry} } }
+  const nestedDateLocTimeData = program.reduce((acc, it) => {
+    const { date, time } = it;
+    const location = it.loc[0];
+
+    // If the item location is excluded, don't make an entry for it
+    if (!locationsHash[location]) return acc;
+
+    acc[date] ||= {};
+    acc[date][time] ||= {};
+
+    // Also insert a placeholder event for the end date, which can be overwritten by actual events
+    const endTime = getEndTime(it);
+    acc[date][endTime] ||= {};
+    acc[date][endTime][location] ||= {};
+
+    let item = acc[date][time][location];
+    if (item && item.title) {
+      if (+it.mins < +item.mins) [it, item] = [item, it]; // swap items
+      overlapItems(it, item);
+    }
+
+    acc[date][time][location] = it;
+    return acc;
+  }, {});
+
+  // Arrange data into a 2d array per day, with each axis sorted
+  // { date: Array.from(Array(#locations), () => new Array(#timeslots)) }
+  const dayGrids = {};
+  Object.entries(nestedDateLocTimeData).sort((a,b) => a[0].localeCompare(b[0])).forEach(([date, times]) => {
+    const numTimeSlots = Object.keys(times).length;
+    dayGrids[date] = { 
+      grid: Array.from(Array(numTimeSlots), () => new Array(allLocations.length)),
+      locCounters: allLocations.reduce((acc, it) => { acc[it] = 0; return acc; }, {}),
+    };
+    Object.entries(times).sort((a,b) => a[0].localeCompare(b[0])).forEach(([time, locations], timeIndex) => {
+      allLocations.forEach((location, locIndex) => {
+        const entry = locations[location];
+        const defaults = { date, time, mins: 0, location, rowSpan: 0, skip: false };
+        dayGrids[date].grid[timeIndex][locIndex] = Object.assign({}, defaults, entry);
+        dayGrids[date].locCounters[location] += entry?.title ? 1 : 0; // track if a location on a given day has programming
+      });
     });
   });
-});
 
-// Demark row span areas, and entries to skip 
-Object.entries(dayGrids).forEach(([_date, {grid}]) => {
-  grid.forEach((_row, timeIndex, rowAry) => {
-    grid[timeIndex].forEach((item, locIndex) => {
-      if (!item.title || item.skip) return;
-      // See if this item spans any rows
-      for (let idx = timeIndex + 1; idx < rowAry.length; idx++) {
-        const itemEndTime = getEndTime(item); // Note: end time can change if it's merged with another event
-        const nextEntry = grid[idx][locIndex];
-        if (1 === itemEndTime.localeCompare(nextEntry.time)) {
-          // end > start overlap detected
-          nextEntry.skip = true;
-          item.rowSpan++;
-          if (nextEntry.title) {
-            // Manage overlapping events
-            overlapItems(item, nextEntry);
+  // Demark row span areas, and entries to skip 
+  Object.entries(dayGrids).forEach(([_date, {grid}]) => {
+    grid.forEach((_row, timeIndex, rowAry) => {
+      grid[timeIndex].forEach((item, locIndex) => {
+        if (!item.title || item.skip) return;
+        // See if this item spans any rows
+        for (let idx = timeIndex + 1; idx < rowAry.length; idx++) {
+          const itemEndTime = getEndTime(item); // Note: end time can change if it's merged with another event
+          const nextEntry = grid[idx][locIndex];
+          if (1 === itemEndTime.localeCompare(nextEntry.time)) {
+            // end > start overlap detected
+            nextEntry.skip = true;
+            item.rowSpan++;
+            if (nextEntry.title) {
+              // Manage overlapping events
+              overlapItems(item, nextEntry);
+            }
           }
         }
+      });
+    });
+  });
+
+  // Generate the HTML
+  const output = generateHTML(dayGrids);
+
+  // Write to output file
+  fs.writeFileSync('../pocketSchedule.html', output);
+}
+
+const detectDoubleBookedParticipants = (program) => {
+  // Build a map of person -> list of events they're in
+  const personEvents = {};
+
+  program.forEach(item => {
+    if (!item.people || item.people.length === 0) return;
+    
+    item.people.forEach(person => {
+      if (!person.name || !person.id) return;
+      
+      const personKey = `${person.name} (${person.id})`;
+      if (!personEvents[personKey]) {
+        personEvents[personKey] = [];
       }
+      
+      personEvents[personKey].push({
+        id: item.id,
+        title: item.title,
+        date: item.date,
+        time: item.time,
+        mins: item.mins,
+        endTime: getEndTime(item),
+        loc: item.loc?.[0] || 'Unknown'
+      });
     });
   });
-});
 
-// Generate the HTML
+  // Function to check if two events overlap
+  const eventsOverlap = (event1, event2) => {
+    // Must be on the same date
+    if (event1.date !== event2.date) return false;
+    
+    // Must both have valid times
+    if (!event1.time || !event2.time) return false;
+    
+    const start1 = event1.time;
+    const end1 = event1.endTime;
+    const start2 = event2.time;
+    const end2 = event2.endTime;
+    
+    // Check if the time ranges overlap
+    // Event 1 starts before event 2 ends AND event 1 ends after event 2 starts
+    return (start1 < end2 && end1 > start2);
+  };
 
-// DPM TODO: See if we can tell table rows to page-break-before: avoid, but tell rows with a rowspan to page-break-before: auto
+  // Find overlapping events for each person
+  const doubleBookedParticipants = {};
 
-const makeTableElement = (elementName, content, attrs=[]) => `<${elementName} ${attrs.join(' ')}>${content}</${elementName}>`;
-const getTR = (content) => makeTableElement('tr', content);
-const getTD = (content, attr=[]) => makeTableElement('td', content, attr);
-const getTH = (content, attr=[]) => makeTableElement('th', content, attr);
-const getTHead = (content) => makeTableElement('thead', content);
-const getTBody = (content) => makeTableElement('tbody', content);
-const getDiv = (content, minHeight = 20, elClass = 'div') => `<div class="${elClass}" style="min-height: ${minHeight}px;">${content}</div>`;
-const getTable = (content) => makeTableElement('table', content);
-const html = {};
-Object.entries(dayGrids).forEach(([date, {grid, locCounters}]) => {
-  const filteredLocations = Object.keys(locCounters).filter((key) => locCounters[key]);
-  const headers = ['', ...filteredLocations].map(it => getTH(it));
-  const headerRows = [
-    getTR(getTH(`<h2>${ getWeekdayName(date) }</h2>`, [`colspan=${headers.length}`, `style="border: 0px; text-align: left"`])),
-    getTR(`\n\t\t${headers.join('\n\t\t')}\n\t`)
-  ];
-  const rows = [];
-  grid.forEach((_row, timeIndex) => {
-    const columns = [''];
-    grid[timeIndex].forEach((item, locIndex) => {
-      if (locIndex === 0) columns.push(getTH(getDisplayTime(item))); // event time
-      if (item.skip || !locCounters[item.location]) return;
-      const rowSpan = item.rowSpan ? `rowspan=${item.rowSpan + 1}` : '';
-      const tdClass = item.title ? '' : 'class="empty"';
-      columns.push(
-        getTD(
-          item.title ? getDiv(item.title || '', getItemHeight(item)) : '', 
-          [rowSpan, tdClass],
-        )
-      );
-    });
-    rows.push(getTR(columns.join('\n\t\t')));
+  Object.entries(personEvents).forEach(([personKey, events]) => {
+    if (events.length < 2) return; // Can't be double-booked with only one event
+    
+    const overlaps = [];
+    
+    // Compare each event with every other event
+    for (let i = 0; i < events.length; i++) {
+      for (let j = i + 1; j < events.length; j++) {
+        if (eventsOverlap(events[i], events[j])) {
+          overlaps.push([events[i], events[j]]);
+        }
+      }
+    }
+    
+    if (overlaps.length > 0) {
+      doubleBookedParticipants[personKey] = overlaps;
+    }
   });
-  html[date] = getTable(
-    getTHead(headerRows.join('\n\t'))
-    + 
-    getTBody(rows.join('\n\t')));
-});
 
-let output = `<html>
-<head>
-  <style>
-    .empty {
-      background-color: lightgray
-    }
-    .nested {
-      width:80%;
-      border:1px solid black; 
-      border-right: none; 
-      margin-left: auto; 
-      margin-right: 0; 
-      padding: 2px; 
-    } 
-    .tableContainer {
-      page-break-after: always;
-    }
-    table { 
-      border-collapse: collapse; 
-    }
-    tr {
-      page-break-inside: avoid;
-    }
-    td, th {
-      border: 1px solid black; 
-      vertical-align: top; 
-      padding: 2px; 
-      padding-right: 0px;
-      page-break-inside: avoid;
-    }
-  </style>
-</head>
-<body>
-`;
-Object.entries(html).forEach(([date, table]) => {
-  output += getDiv(table, 0, 'tableContainer');
-});
-output += '</body></html>'
+  // Report the results
+  if (Object.keys(doubleBookedParticipants).length === 0) {
+    console.log('\n\n✓ No double-booked participants found!');
+  } else {
+    console.log(`\n\n⚠ Found ${Object.keys(doubleBookedParticipants).length} participant(s) with scheduling conflicts:`);
+    
+    Object.entries(doubleBookedParticipants).forEach(([personKey, overlaps]) => {
+      console.log(`\n${personKey}:`);
+      
+      overlaps.forEach(([event1, event2], idx) => {
+        console.log(`  Conflict ${idx + 1}:`);
+        console.log(`    Event ${event1.id}: "${event1.title}"`);
+        console.log(`      ${event1.date} ${event1.time}-${event1.endTime} @ ${event1.loc}`);
+        console.log(`    Event ${event2.id}: "${event2.title}"`);
+        console.log(`      ${event2.date} ${event2.time}-${event2.endTime} @ ${event2.loc}`);
+      });
+    });
+    
+    // Generate summary format as requested: Person, [id,id], [id,id]
+    console.log('\n\n--- SUMMARY FORMAT ---\n');
+    Object.entries(doubleBookedParticipants).forEach(([personKey, overlaps]) => {
+      const conflictGroups = overlaps.map(([event1, event2]) => `[${event1.id},${event2.id}]`);
+      console.log(`${personKey}, ${conflictGroups.join(', ')}`);
+    });
+  }
+}
 
-// Write to output file
-fs.writeFileSync('../pocketSchedule.html', output);
+const reportOverlappedEvents = () => {
+  // Report all overlapped events that were collected during processing
+  if (overlappedEvents.length === 0) {
+    console.log('\n✓ No overlapped events found!');
+    return;
+  }
 
-console.log('\nDone!');
+  console.log(`\n⚠ Found ${overlappedEvents.length} overlapped event(s):`);
+  
+  overlappedEvents.forEach((overlap, idx) => {
+    console.log(`\nOVERLAP ${idx + 1}:`);
+    console.log(`  ${overlap.existingItem.date} ${overlap.existingItem.location}: ${overlap.existingItem.title}  ${overlap.existingItem.time}-${overlap.existingItem.endTime} ${overlap.existingItem.status}`);
+    console.log(`  overlaps`);
+    console.log(`  ${overlap.newItem.title} ${overlap.newItem.time}-${overlap.newItem.endTime} ${overlap.newItem.status}`);
+    
+    if (overlap.timeExtension) {
+      console.log(`  WARNING: time extended by ${overlap.timeExtension} minutes; new end time: ${overlap.existingItem.endTime}`);
+    }
+  });
+}
+
+const loadProgramData = () => {
+  const programFile = path.resolve(argv.program);
+  const code = fs.readFileSync(programFile, 'utf8');
+  const data = vm.runInNewContext(code + '; program');
+  data.forEach(it => it.loc || console.log(`WARNING: ${it.title} has no location!`))
+  return data.filter(it => it.id && it.loc?.at(0) && !(it.status || '').match(/Cancelled/i));
+};
+
+function main() {
+  const program = loadProgramData();
+  generatePocketSchedule(program);
+  reportOverlappedEvents();
+  detectDoubleBookedParticipants(program);
+  console.log('\nDone!');
+}
+
+main();
