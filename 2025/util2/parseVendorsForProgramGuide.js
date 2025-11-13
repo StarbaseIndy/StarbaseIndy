@@ -9,6 +9,7 @@ const writeFile = Promise.promisify(Fs.writeFile);
 
 const VENDORNAME2_KEY = 'Company Name';
 const VENDORCONFIRMED3_KEY = 'Status'
+const VENDORCONFIRMED4_KEY = 'Paid'
 const VENDORSELL_KEY = 'What would you like to sell';
 const VENDORWEB_KEY = 'Website';
 const VENDORBIO_KEY = 'Short Bio for Promotional Material';
@@ -22,13 +23,15 @@ const vendors = [];
 function processCSV(filename, group = [{}]) {
   // Look for the 2019 vendor CSV file.  It's a different format.
   if ((group[0] || {})[VENDORNAME2_KEY]) {
-	const confirmed = group.filter(item => !!(item[VENDORCONFIRMED3_KEY].match(/paid/i)));
+	  const confirmed = group.filter(item => {
+      const status = item[VENDORCONFIRMED4_KEY] || item[VENDORCONFIRMED3_KEY] || ''; 
+      return !!(status.match(/paid|^[YyXx]/i));
+    });
 
-	// Collect artists, then authors, then vendors
+	  // Collect artists, then authors, then vendors
     artists.push(...confirmed.filter(item => !!(item[VENDORTYPE_KEY].match(/artist/i))));
     authors.push(...confirmed.filter(item => !!(item[VENDORTYPE_KEY].match(/author/i))));
     vendors.push(...confirmed.filter(item => !!(item[VENDORTYPE_KEY].match(/vendor/i))));
-
 
     return;
   }
@@ -43,7 +46,7 @@ function readCSV(filename) {
 
 function generateHTML(label, data) {
   const year = (new Date()).getFullYear();
-  return `\n\n    <!-- Authors -->\n    <h2>${label}</h2>\n` + 
+  return `\n\n    <!-- ${label} -->\n    <h2>${label}</h2>\n` + 
   data.map(item => {
     const bizName = item[VENDORNAME2_KEY];
     const bizPic = bizName.replace(/[^a-zA-Z0-9 ]/g, '').replace(/[ ]/g, '_') + '.png';
@@ -79,7 +82,7 @@ function main() {
 	//.then(html => console.log('Authors: \n', generateHTML('Authors', authors)))
 	//.then(html => console.log('Vendors: \n', generateHTML('Vendors', vendors)))
 	.then(data => writeFile('vendors.html', generateHTML('Artists', artists) + generateHTML('Authors', authors) + generateHTML('Vendors', vendors), { encoding: 'utf8' }))
-    .then(() => console.log('\nDone!'))
+    .then(() => console.log('\nDone!  Output written to vendors.html'))
     .catch((err) => console.log('Error!', err));
 }
 
