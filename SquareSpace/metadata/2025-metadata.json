@@ -1,0 +1,18 @@
+[{
+    "Note": "This file should be used to adorn badges for the following Departments: Board, [Staff], VIP, Press, and Presenter",
+    "Note2": "Note that Vendor data is sourced separately, and metadata in this file is not (currently) applied to that data set."
+  }, {
+    "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
+  }, {
+    "Note": "==================== Board ==============================================================================",
+    "Note2": "President, Ambassador, Treasurer, Chief Operations Officer, Con Chair, Secretary, Webmaster, Chair-Apparent"
+  }, {
+    "Note": "template",
+    "sortKey": "",
+    "BadgeName": "",
+    "Product Form: Real Name": "",
+    "Product Form: Email": "",
+    "Product Form: Badge Name": "",
+    "DepartmentColor": "",
+    "Tagline": ""
+}]

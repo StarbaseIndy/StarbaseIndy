@@ -8,7 +8,13 @@
 **/*.docx
 **/*.pdf
 **/*.xls*
+**/*.xz
 supervisord.log
 supervisord.pid
 prototyping
 **/configs
+
+SquareSpace/output/*
+!SquareSpace/blanks/*
+
+Square/square_report_*.txt

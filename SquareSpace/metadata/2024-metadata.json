@@ -1,0 +1,295 @@
+[{
+    "Note": "This file should be used to adorn badges for the following Departments: Board, [Staff], VIP, Press, and Presenter",
+    "Note2": "Note that Vendor data is sourced separately, and metadata in this file is not (currently) applied to that data set."
+  }, {
+    "Note": "==================== USE ENTRIES BELOW TO ADD Department & Tagline (Name is ignored) ===================="
+  }, {
+    "Note": "==================== Board ==============================================================================",
+    "Note2": "President, Ambassador, Treasurer, Chief Operations Officer, Con Chair, Secretary, Webmaster, Chair-Apparent"
+  }, {
+    "sortKey": "2454G#001",
+    "Name": "Mark Gaddo",
+    "Department": "Board",
+    "Tagline": "Board Member"
+  }, {
+    "sortKey": "2540G#001",
+    "Name": "Amanda Elsner",
+    "Department": "Board",
+    "Tagline": "Board Secretary / Vendor Coordinator"
+  }, {
+    "sortKey": "2551G#001",
+    "Name": "Tom Rathjen",
+    "Department": "Board",
+    "Tagline": "Board Treasurer"
+  }, {
+    "sortKey": "2554G#001",
+    "Name": "Amber Skaggs",
+    "Department": "Board",
+    "Tagline": "Board Member"
+  }, {
+    "sortKey": "2541G#001",
+    "Name": "Beth Ann Broadhurst",
+    "Department": "Board",
+    "Tagline": "Board President"
+  }, {
+	"Note": "ignore",
+    "sortKey": "",
+    "Name": "Scott Johnson",
+    "Department": "Board",
+    "Tagline": "Board Member"
+  }, {
+    "sortKey": "2538G#003",
+    "Name": "Michelle Mussoni",
+    "Department": "Board",
+    "Tagline": "Board Member"
+  }, {
+    "sortKey": "2534D#001",
+    "Name": "Ryan Howe",
+    "Department": "Board",
+    "Tagline": "Board Member / Hotel Liaison"
+  }, {
+    "sortKey": "2586G#001",
+    "Name": "Marvin Harrington",
+    "Department": "Board",
+    "Tagline": "Board Member"
+  }, {
+    "Note": "==================== [Staff] Finance ====================================================================",
+    "Note2": "Process Enforcement, Registration, Vendor Coordinator, Silent Auction"
+  }, {
+    "sortKey": "2521D#002",
+    "Name": "David Mott",
+    "Department": "Finance",
+    "Tagline": "IT/Data Management/Registration"
+  }, {
+    "Note": "==================== [Staff] Marketing ==================================================================",
+    "Note2": "Attendee Recruitment, Graphic Design, Webmaster, Publications, Photographer"
+  }, {
+    "sortKey": "2569G#001",
+    "Name": "Nick Ramey",
+    "Department": "Marketing",
+    "Tagline": "Social Media"
+  }, {
+    "Note": "==================== [Staff] Facilities =================================================================",
+    "Note2": "Audio Visual, Engineering"
+  }, {
+	"Note": "ignore",
+    "sortKey": "",
+    "Name": "Ricky Lile",
+    "Department": "Facilities",
+    "Tagline": "Audio/Visual"
+  }, {
+    "Note": "==================== [Staff] Programming ================================================================",
+    "Note2": "Media Guest Relations, Party Liaison, Panel Coordinator, Hall Tables, Uhura Training Academy, Masquerade, Stage Manager"
+  }, {
+    "sortKey": "2521D#001",
+    "Name": "Lisa Meece",
+    "Department": "Programming",
+    "Tagline": "Programming/Podcast"
+  }, {
+    "sortKey": "2567G#001",
+    "Name": "Madlyn Taylor",
+    "Tagline": "Party Host"
+  }, {
+    "sortKey": "2492G#002",
+    "Name": "Chris Lipscombe",
+    "Tagline": "Party Host"
+  }, {
+    "Note": "==================== [Staff] Tactical ===================================================================",
+    "Note2": "Operations, Security, Volunteer Coordinator"
+  }, {
+    "sortKey": "2518G#002",
+    "Name": "Carol Anderson",
+    "Department": "Tactical",
+    "Tagline": "Volunteer Coordinator"
+  }, {
+    "sortKey": "2560G#001",
+    "Name": "Mona Mehas",
+    "Department": "Tactical",
+    "Tagline": "Operations"
+  }, {
+    "sortKey": "2518G#001",
+    "Name": "Alan Anderson",
+    "Department": "Tactical",
+    "Tagline": "IT/Webmaster"
+  }, {
+	"Note": "ignore",
+    "sortKey": "",
+    "Name": "Chris Ludden",
+    "Department": "Graphics",
+    "Tagline": "Graphic Design"
+  }, {
+    "sortKey": "2553G#001",
+    "Name": "Timo Johnson",
+    "Department": "Tactical",
+    "Tagline": "Security"
+  }, {
+    "Note": "==================== VIP (Media Guests, DWTS) =================================================================",
+    "Note2": "Geeky Astrophysicist, Klingon Linguist, Master of Ceremonies"
+  }, {
+    "sortKey": "2586G#011",
+    "Name": "Nayr",
+	"BadgeName": "Nayr",
+    "Department": "VIP",
+    "Tagline": "StarPod Trek"
+  }, {
+    "sortKey": "2586G#004",
+    "Name": "Kavura",
+	"BadgeName": "Kavura",
+    "Department": "VIP",
+    "Tagline": "StarPod Trek"
+  }, {
+    "sortKey": "2486D#001",
+    "Name": "Demetrius Witherspoon",
+    "Department": "VIP",
+    "Tagline": "Submerge Universe"
+  }, {
+    "sortKey": "2586G#013",
+    "Name": "Moxie Anne Magnus",
+    "Department": "VIP",
+    "Tagline": "Chief Xenocosmetology Officer"
+  }, {
+    "sortKey": "2538G#004",
+    "Name": "Bonnie Gordon",
+    "Department": "VIP",
+    "Tagline": "NX-76884 USS Protostar"
+  }, {
+    "Note": "==================== Presenter ========================================================================"
+  }, {
+    "sortKey": "2552G#001",
+    "Name": "James McGrath"
+  }, {
+    "sortKey": "2546D#001",
+    "Name": "Paul Kwiat",
+    "Department": "Programming",
+    "Tagline": "LabEscape"
+  }, {
+	"Note": "ignore",
+    "sortKey": "",
+    "Name": "Tara",
+    "Department": "Programming",
+    "Tagline": "Starship Tempest"
+  }, {
+	"Note": "ignore",
+    "sortKey": "",
+    "Name": "Ryan",
+    "Department": "Programming",
+    "Tagline": "Starship Tempest"
+  }, {
+	"Note": "ignore",
+    "sortKey": "",
+    "Name": "Travis",
+    "Department": "VIP",
+    "Tagline": "Starship Tempest"
+  }, {
+    "Note": "==================== Entertainer ========================================================================",
+    "Note2": "The Shake Ups / 5YM, Intergalactic Cosmetologist, Klingon Pop Warrior, Myst Brigade"
+  }, {
+    "Note": "==================== Triumvirate ========================================================================"
+  }, {
+    "sortKey": "2519G#001",
+    "Name": "Lillian Sams",
+    "Tagline": "Triumvirate"
+  }, {
+    "sortKey": "2586G#012",
+    "Name": "Kim Huff",
+	"BadgeName": "Kim Huff",
+    "Tagline": "Always here in spirit, always in our hearts"
+  }, {
+    "Note": "==================== USE ENTRIES BELOW TO CORRECT BADGE NAMES ==========================================="
+  }, {
+    "Note": "template",
+    "sortKey": "",
+	"Name": "",
+    "BadgeName": ""
+  }, {
+    "Note": "template",
+    "sortKey": "",
+    "BadgeName": "",
+    "Tagline": ""
+  }, {
+    "sortKey": "2467G#001",
+	"Name": "Ginger",
+    "Product Form: Real Name": "Ginger",
+	"BadgeName": "Ginger"
+  }, {
+    "sortKey": "2512G#001",
+	"Name": "David Croy",
+    "BadgeName": "David Croy"
+  }, {
+    "sortKey": "2512G#002",
+	"Name": "Threasa Croy",
+    "BadgeName": "Threasa Croy"
+  }, {
+    "sortKey": "2493G#001",
+	"Name": "Joseph Fugate",
+    "BadgeName": "Joseph Fugate"
+  }, {
+    "sortKey": "2474G#001",
+	"Name": "Debra Henderson",
+    "BadgeName": "Debra Henderson"
+  }, {
+    "sortKey": "2461G#001",
+	"Name": "Taylor Foreman",
+    "BadgeName": "Nova Kamar"
+  }, {
+    "sortKey": "2459G#001",
+	"Name": "Janice Whitehead",
+    "BadgeName": "Janice Whitehead"
+  }, {
+    "sortKey": "2459G#002",
+	"Name": "Jim Whitehead",
+    "BadgeName": "Jim Whitehead"
+  }, {
+    "sortKey": "2557G#001",
+    "BadgeName": "Chris M. Barkley",
+    "Tagline": "2023 Hugo Award - Best Fan Writer Cincinnati, OH"
+  }, {
+    "sortKey": "2576G#001",
+    "BadgeName": "LTC Kelly McDermott",
+    "Tagline": "\"The Honey Badger\""
+  }, {
+    "sortKey": "vend.6.0",
+    "BadgeName": "Pookers Fairy Baubles",
+    "Tagline": "Creations by PFB"
+  }, {
+    "sortKey": "vend.6.1",
+    "BadgeName": "Pookers Fairy Baubles",
+    "Tagline": "Creations by PFB"
+  }, {
+    "sortKey": "2586G#003",
+    "Name": "Ryan Olson",
+    "BadgeName": "Ryan Olson",
+    "Tagline": "Starship Edsel"
+  }, {
+    "sortKey": "2586G#006",
+    "Name": "Amanda Kawa",
+    "BadgeName": "Amanda Kawa",
+    "Tagline": "Starship Edsel"
+  }, {
+    "sortKey": "2586G#009",
+    "Name": "Matthew Kawa",
+    "BadgeName": "Matthew Kawa",
+    "Tagline": "Starship Edsel"
+  }, {
+    "sortKey": "2586G#010",
+    "Name": "Dylan",
+    "BadgeName": "Commander Stillwell",
+    "Tagline": "Starship Edsel"
+  }, {
+    "sortKey": "2586G#005",
+    "Name": "Logan Rollin",
+    "BadgeName": "Logan Rollin",
+    "Tagline": "Wild Snowman's Workshop"
+  }, {
+    "Note": "==================== USE ENTRIES BELOW TO OVERRIDE METADATA ============================================="
+  }, {
+    "Note": "template",
+    "sortKey": "",
+    "BadgeName": "",
+    "Product Form: Real Name": "",
+    "Product Form: Email": "",
+    "Product Form: Badge Name": "",
+    "DepartmentColor": "",
+    "Tagline": ""
+  }]
+  
