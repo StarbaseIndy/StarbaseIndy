@@ -59,6 +59,7 @@ const VENDORCONFIRMED_KEY = 'Confirmed';
 // 2021 vendor keys
 const VENDORCONFIRMED2_KEY = 'Confirmed?';
 const VENDORCONFIRMED3_KEY = 'Status';
+const VENDORCONFIRMED4_KEY = 'Paid'
 const VENDORBADGECOUNT_KEY = 'How many badges do you need';
 
 const ORDERID_KEY = 'Order ID';
@@ -157,7 +158,8 @@ function processCSV(filename, group = [{}]) {
   }
 
   const vendorPaid = (item) => 
-	   (item[VENDORCONFIRMED3_KEY] || '').match(/paid/i)
+     (item[VENDORCONFIRMED4_KEY] || '').match(/[YyXx]/)
+	|| (item[VENDORCONFIRMED3_KEY] || '').match(/paid/i)
 	|| (item[VENDORCONFIRMED2_KEY] || '').match(/^[yY]/)
 	|| (item[VENDORCONFIRMED_KEY] || '').match(/^[yY]/);
 
