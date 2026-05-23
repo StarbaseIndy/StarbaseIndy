@@ -1,0 +1,17 @@
+<div id="allEpisodes"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  if (!window.PodcastFeed) {
+    console.error('PodcastFeed not loaded');
+    return;
+  }
+
+  PodcastFeed.renderFeed({
+    containerId: 'allEpisodes',
+    limit: 25
+  });
+
+});
+</script>

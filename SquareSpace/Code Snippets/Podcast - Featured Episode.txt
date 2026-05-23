@@ -1,0 +1,17 @@
+<div id="featuredEpisode"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  if (!window.PodcastFeed) {
+    console.error('PodcastFeed not loaded');
+    return;
+  }
+
+  PodcastFeed.renderEpisode({
+    containerId: 'featuredEpisode',
+    episodeId: '936a6e31-5691-4d78-a304-0382e7397b54'
+  });
+
+});
+</script>
